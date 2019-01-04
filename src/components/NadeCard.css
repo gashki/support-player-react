@@ -1,0 +1,9 @@
+.nade-card {
+  display: inline-block;
+  height: 190px;
+  margin: 12px;
+  overflow: hidden;
+  width: 280px;
+
+  background-color: red;
+}

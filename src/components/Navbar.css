@@ -1,0 +1,90 @@
+.navbar {
+  background-color: #d4006a;
+  height: 50px;
+}
+
+.navbar-logo {
+  cursor: pointer;
+  display: inline-block;
+  height: 100%;
+  padding: 0 10px 0 20px;
+  text-decoration: none;
+}
+
+.navbar-logo > h1 {
+  color: #f7f5f7;
+  display: inline-block;
+  font-family: "Permanent Marker", sans-serif;
+  font-size: 30px;
+  margin: 0;
+  text-shadow: 0 0 2px rgba(0,0,0,0.4);
+  vertical-align: middle;
+}
+
+.navbar-login, .navbar-account {
+  float: right;
+  height: 100%;
+}
+
+.navbar-login-button {
+  color: #ffadd6;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: bold;
+  height: 100%;
+  line-height: 52px;
+  margin: 0 12px 0 0;
+  padding: 0 12px;
+  text-decoration: none;
+  text-shadow: 0 0 1px rgba(0,0,0,0.4);
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+.navbar-account {
+  padding: 0 16px;
+}
+
+.navbar-user {
+  color: #f5f5f5;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: normal;
+  height: 100%;
+  line-height: 52px;
+  margin: 0;
+  padding: 0 12px;
+  text-shadow: 0 0 1px rgba(0,0,0,0.4);
+  vertical-align: middle;
+}
+
+.navbar-divider {
+  background-color: #ffadd6;
+  display: inline-block;
+  height: 32px;
+  margin: 0 12px;
+  vertical-align: middle;
+  width: 1px;
+}
+
+.navbar-account-button {
+  border: 1px solid transparent;
+  border-radius: 4px;
+  display: inline-block;
+  height: 20px;
+  margin: 0 4px;
+  padding: 4px;
+  text-decoration: none;
+  vertical-align: middle;
+  width: 20px;
+}
+
+.navbar-account-button:hover {
+  border: 1px solid #f5f5f5;
+}
+
+.navbar-account-button > img {
+  height: 100%;
+  pointer-events: none;
+  width: 100%;
+}

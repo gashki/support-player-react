@@ -1,0 +1,7 @@
+.nade-list {
+  flex-grow: 1;
+  font-size: 0;
+  list-style: none;
+  padding: 20px;
+  text-align: center;
+}

@@ -1,0 +1,21 @@
+.sidebar {
+  background-color: #202020;
+  display: flex;
+  flex-flow: column;
+  min-width: 240px;
+  width: 240px;
+}
+
+.sidebar-inner {
+  flex-grow: 1;
+  margin: 20px;
+}
+
+.sidebar-section {
+  color: #d4006a;
+  font-size: 12px;
+  font-weight: normal;
+  margin: 0;
+  padding: 2px 0;
+  text-transform: uppercase;
+}
