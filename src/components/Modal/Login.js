@@ -1,30 +1,36 @@
 import React, { Component } from "react";
 import { auth } from "../../firebase";
-import { FormInput, FormSubmit, FormError } from "./Form";
-import Close from "./Close";
 
-function Login(props) {
+// Components
+import Close from "./Close";
+import { FormLabel, FormInput, FormSubmit, FormError } from "./Form";
+
+
+// The login content for the modal.
+function Login({ index, changeContent }) {
+  // Prevents the modal from closing when the content is clicked.
   const handleClick = (e) => {
     e.stopPropagation();
   };
 
   return (
     <div className="modal-content-tabs" onClick={handleClick}>
-      <input defaultChecked={0 === props.index} id="modal-radio-login" name="modal-tab-login" type="radio" />
-      <label className="modal-tab unselectable" htmlFor="modal-radio-login">Login</label>
-      <input defaultChecked={1 === props.index} id="modal-radio-register" name="modal-tab-login" type="radio" />
-      <label className="modal-tab unselectable" htmlFor="modal-radio-register">Register</label>
-      <LoginForm isLogin={true} toggleModal={props.toggleModal} />
-      <LoginForm isLogin={false} toggleModal={props.toggleModal} />
-      <Close toggleModal={props.toggleModal} />
+      <FormLabel checked={0 === index} label="Login" />
+      <FormLabel checked={1 === index} label="Register" />
+      <LoginForm isLogin={true} changeContent={changeContent} />
+      <LoginForm isLogin={false} changeContent={changeContent} />
+      <Close changeContent={changeContent} />
     </div>
   );
 }
 
+
+// The login and registration form.
 class LoginForm extends Component {
   constructor(props) {
     super(props);
 
+    // The default state of the form.
     this.state = {
       email: "",
       password: "",
@@ -32,29 +38,36 @@ class LoginForm extends Component {
     };
   }
 
+  // Changes the value of the text inputs.
   handleChange = (e, input) => {
     this.setState({
       [input]: e.target.value
     });
   };
 
+  // Handles the form submission.
   handleSubmit = (e) => {
+    const { isLogin, changeContent } = this.props;
+    const { email, password } = this.state;
+
     e.preventDefault();
 
     this.setState({
       error: null
     });
 
+    // Determines the user authentication method.
     const authenticateUser = (a, b) => {
-      if (this.props.isLogin) {
+      if (isLogin) {
         return auth.signInWithEmailAndPassword(a, b);
       }
 
       return auth.createUserWithEmailAndPassword(a, b);
     }
 
-    authenticateUser(this.state.email, this.state.password).then(() => {
-      this.props.toggleModal(null);
+    // Authenticates the user and closes the modal.
+    authenticateUser(email, password).then(() => {
+      changeContent("contentModal", null);
     }).catch((error) => {
       console.log(error);
 
@@ -65,12 +78,29 @@ class LoginForm extends Component {
   };
 
   render() {
-    if (this.props.isLogin) {
+    const isLogin = this.props.isLogin;
+    const { email, password, error } = this.state;
+    const handleChange = this.handleChange;
+    const handleSubmit = this.handleSubmit;
+
+    if (isLogin) {
       return (
-        <form className="modal-form" id="modal-form-login" onSubmit={this.handleSubmit}>
-          {this.state.error && <FormError error={this.state.error} />}
-          <FormInput label="Email" input="email" type="email" value={this.state.email} onChange={this.handleChange} />
-          <FormInput label="Password" input="password" type="password" value={this.state.password} onChange={this.handleChange} />
+        <form className="modal-form" id="modal-form-login" onSubmit={handleSubmit}>
+          {error && <FormError error={error} />}
+          <FormInput
+            label="Email"
+            input="email"
+            type="email"
+            value={email}
+            onChange={handleChange}
+          />
+          <FormInput
+            label="Password"
+            input="password"
+            type="password"
+            value={password}
+            onChange={handleChange}
+          />
           <button className="modal-login-forgot" type="button">Forgot Password?</button>
           <FormSubmit value="Log in" />
         </form>
@@ -78,10 +108,22 @@ class LoginForm extends Component {
     }
 
     return (
-      <form className="modal-form" id="modal-form-register" onSubmit={this.handleSubmit}>
-        {this.state.error && <FormError error={this.state.error} />}
-        <FormInput label="Email" input="email" type="email" value={this.state.email} onChange={this.handleChange} />
-        <FormInput label="Password" input="password" type="password" value={this.state.password} onChange={this.handleChange} />
+      <form className="modal-form" id="modal-form-register" onSubmit={handleSubmit}>
+        {error && <FormError error={error} />}
+        <FormInput
+          label="Email"
+          input="email"
+          type="email"
+          value={email}
+          onChange={handleChange}
+        />
+        <FormInput
+          label="Password"
+          input="password"
+          type="password"
+          value={password}
+          onChange={handleChange}
+        />
         <p className="modal-user-agreement">By clicking Sign Up, you are indicating that you have read and agree to our Terms of Service and Privacy Policy.</p>
         <FormSubmit value="Sign up" />
       </form>

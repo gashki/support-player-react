@@ -1,26 +1,39 @@
 import React from "react";
 
+// The label used for tabs.
+export function FormLabel({ checked, label }) {
+  const temp = label.toLowerCase();
+
+  return ([
+    <input key={`FormLabel-input-${temp}`} defaultChecked={checked} id={`modal-radio-${temp}`} name="modal-tab" type="radio" />,
+    <label key={`FormLabel-label-${temp}`} className="modal-tab unselectable" htmlFor={`modal-radio-${temp}`}>{label}</label>
+  ]);
+}
+
+// The text input used on forms.
 export function FormInput(props) {
-  function handleChange(e) {
-    props.onChange(e, props.input);
-  }
+  const { label, input, type, value, onChange } = props;
 
+  const handleChange = (e) => {
+    onChange(e, input);
+  };
+
+  return ([
+    <label key={`FormInput-label-${input}`}>{label}</label>,
+    <input key={`FormInput-input-${input}`} className="modal-form-input border-box" type={type} value={value} onChange={handleChange} required />
+  ]);
+}
+
+// The submit button for forms.
+export function FormSubmit({ value }) {
   return (
-    <div>
-      <label>{props.label}</label>
-      <input className="modal-form-input border-box" type={props.type} value={props.value} onChange={handleChange} required />
-    </div>
+    <input className="modal-form-submit border-box" type="submit" value={value} />
   );
 }
 
-export function FormSubmit(props) {
+// Used for displaying error messages.
+export function FormError({ error }) {
   return (
-    <input className="modal-form-submit border-box" type="submit" value={props.value} />
-  );
-}
-
-export function FormError(props) {
-  return (
-    <p className="modal-form-error">{props.error.message}</p>
+    <p className="modal-form-error">{error.message}</p>
   );
 }

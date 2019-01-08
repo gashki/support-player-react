@@ -1,23 +1,30 @@
 import React, { Component } from "react";
 import { auth } from "./firebase";
 import "./App.css";
-import Navbar from "./components/Navbar";
+
+// Components
 import Content from "./components/Content";
 import Modal from "./components/Modal/Modal";
+import Navbar from "./components/Navbar";
 
+
+// The root component of the application.
 class App extends Component {
   constructor(props) {
     super(props);
 
+    // The default state of the application.
     this.state = {
-      currentUser: null,
-      mainContent: null,
-      modalContent: null
+      contentMain: { type: null },
+      contentModal: null,
+      currentUser: null
     };
   }
 
   componentDidMount() {
+    // Observes changes to the user's sign-in state.
     auth.onAuthStateChanged((user) => {
+      // Checks if a user is signed in.
       if (user) {
         this.setState({
           currentUser: user
@@ -31,18 +38,34 @@ class App extends Component {
     });
   }
 
-  toggleModal = (modalContent) => {
+  // Changes the state of the content.
+  changeContent = (type, content) => {
     this.setState({
-      modalContent: modalContent
+      [type]: content
     });
-  };
+  }
 
   render() {
+    const { contentMain, contentModal, currentUser } = this.state;
+    const changeContent = this.changeContent;
+
     return (
       <div style={{ display: "flex", flexFlow: "column", height: "100%" }}>
-        <Navbar currentUser={this.state.currentUser} toggleModal={this.toggleModal} />
-        <Content />
-        {this.state.modalContent && <Modal modalContent={this.state.modalContent} toggleModal={this.toggleModal} />}
+        <Navbar
+          currentUser={currentUser}
+          changeContent={changeContent}
+        />
+        <Content
+          contentMain={contentMain}
+          currentUser={currentUser}
+          changeContent={changeContent}
+        />
+        {contentModal &&
+          <Modal
+            contentModal={contentModal}
+            changeContent={changeContent}
+          />
+        }
       </div>
     );
   }

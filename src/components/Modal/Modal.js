@@ -1,10 +1,15 @@
 import React from "react";
 import "./Modal.css";
 
-function Modal(props) {
+// The modal to display over the main content.
+function Modal({ contentModal, changeContent }) {
+  const handleClick = () => {
+    changeContent("contentModal", null);
+  };
+
   return (
-    <div className="modal" onClick={() => props.toggleModal(null)}>
-      {props.modalContent}
+    <div className="modal" onClick={handleClick}>
+      {contentModal}
     </div>
   );
 }
