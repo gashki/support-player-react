@@ -1,85 +1,185 @@
 import React from "react";
-import Vertical from "../Vertical";
 
+// Components
+import {
+  UploadSelect,
+  UploadInput,
+  UploadRadio,
+  UploadSwitch,
+  UploadSubmit
+} from "./Form";
 
-export function UploadSelect({ label, input, options, onChange }) {
-  const optionList = options.map((option, index) => {
-    const id = `upload-select-${input}-${index}`;
+function Details(props) {
+  const { nade, movement, handleChange, handleSubmit } = props;
 
-    return (
-      <option key={id} value={option.value}>{option.title}</option>
-    );
-  });
+  const nades = [
+    { value: "", title: "Select a Grenade" },
+    { value: "weapon_smokegrenade", title: "Smoke Grenade" },
+    { value: "weapon_firegrenade", title: "Incendiary/Molotov" },
+    //{ value: "weapon_molotov", title: "Molotov Cocktail" },
+    //{ value: "weapon_incgrenade", title: "Incendiary Grenade" },
+    { value: "weapon_flashbang", title: "Flashbang" },
+    { value: "weapon_hegrenade", title: "HE Grenade" },
+    //{ value: "weapon_decoy", title: "Decoy Grenade" }
+  ];
 
-  const handleChange = (e) => {
-    onChange(e, input);
-  };
+  const maps = [
+    { value: "", title: "Select a Map" },
+    { value: "de_cache", title: "Cache" },
+    { value: "de_cbble", title: "Cobblestone" },
+    { value: "de_dust2", title: "Dust II" },
+    { value: "de_inferno", title: "Inferno" },
+    { value: "de_mirage", title: "Mirage" },
+    { value: "de_nuke", title: "Nuke" },
+    { value: "de_overpass", title: "Overpass" },
+    { value: "de_train", title: "Train" }
+  ];
 
   return (
-    <div>
-      <label className="upload-label">{label}</label>
-      <select className="upload-select border-box" onChange={handleChange}>
-        {optionList}
-      </select>
-    </div>
-  );
-}
-
-export function UploadInput({ label, input, hint, onChange }) {
-  const handleChange = (e) => {
-    onChange(e, input);
-  };
-
-  return (
-    <div>
-      <label className="upload-label">{label}</label>
-      <input className="upload-input border-box" type="text" placeholder={hint} onChange={handleChange} />
-    </div>
-  );
-}
-
-export function UploadRadio({ label, input, options, onChange }) {
-  const name = `upload-radio-${input}`;
-
-  const optionList = options.map((option, index) => {
-    const id = `${name}-${index}`;
-
-    const handleChange = (e) => {
-      e.target.value = index;
-      onChange(e, input);
-    };
-
-    return (
-      <div key={id}>
-        <input id={id} name={name} type="radio" onChange={handleChange} required />
-        <label htmlFor={id}>{option}</label>
+    <form onSubmit={handleSubmit}>
+      <h3>General Information</h3>
+      <div className="upload-row">
+        <UploadSelect
+          label="Grenade"
+          input="nade"
+          options={nades}
+          onChange={handleChange}
+        />
+        <UploadSelect
+          label="Map"
+          input="map"
+          options={maps}
+          onChange={handleChange}
+        />
       </div>
-    );
-  });
-
-  return (
-    <div>
-      <label className="upload-label">{label}</label>
-      <div className="upload-radio border-box">
-        {optionList}
+      <div className="upload-row">
+        <UploadInput
+          label="Start Location"
+          input="start"
+          hint="Tetris, T Spawn, etc."
+          onChange={handleChange}
+        />
+        <UploadInput
+          label="End Location"
+          input="end"
+          hint=""
+          onChange={handleChange}
+        />
       </div>
-    </div>
+      <div className="upload-row">
+        <UploadInput
+          label="Source"
+          input="source"
+          hint="Twitter, Reddit, YouTube, etc. (Optional)"
+          onChange={handleChange}
+        />
+      </div>
+      <h3>Characteristics</h3>
+      {nade === "weapon_smokegrenade" &&
+        <div className="upload-row">
+          <UploadSwitch
+            label="Does this smoke grenade create a one-way?"
+            input="oneway"
+            onChange={handleChange}
+          />
+        </div>
+      }
+      <div className="upload-row">
+        <UploadSwitch
+          label="Does throwing this grenade require movement such as running or jumping?"
+          input="movement"
+          onChange={handleChange}
+        />
+      </div>
+      <div style={{ height: 4 }}></div>
+      {movement &&
+        <div className="upload-row">
+          <UploadRadio
+            label="Movement"
+            input="move"
+            options={["Jump", "Run/Walk", "Both"]}
+            onChange={handleChange}
+          />
+        </div>
+      }
+      <div className="upload-row">
+        <UploadRadio
+          label="Throw Variation"
+          input="throw"
+          options={["Left Click", "Right Click", "Both"]}
+          onChange={handleChange}
+        />
+      </div>
+      <div className="upload-row">
+        <UploadRadio
+          label="Tick Rate"
+          input="tick"
+          options={["64 Tick", "128 Tick", "Both"]}
+          onChange={handleChange}
+        />
+      </div>
+      <div className="upload-row">
+        <UploadRadio
+          label="Team"
+          input="team"
+          options={["Counter-Terrorist", "Terrorist", "Both"]}
+          onChange={handleChange}
+        />
+      </div>
+      <h3>Minimum Video Settings</h3>
+      <div className="upload-row">
+        <UploadSelect
+          label="Global Shadow Quality"
+          input="shadow"
+          options={[
+            { value: 0, title: "" },
+            { value: 1, title: "Very Low" },
+            { value: 2, title: "Low" },
+            { value: 3, title: "Medium" },
+            { value: 4, title: "High" }
+          ]}
+          onChange={handleChange}
+        />
+        <UploadSelect
+          label="Model/Texture Detail"
+          input="texture"
+          options={[
+            { value: 0, title: "" },
+            { value: 2, title: "Low" },
+            { value: 3, title: "Medium" },
+            { value: 4, title: "High" }
+          ]}
+          onChange={handleChange}
+        />
+      </div>
+      <div className="upload-row">
+        <UploadSelect
+          label="Effect Detail"
+          input="effect"
+          options={[
+            { value: 0, title: "" },
+            { value: 2, title: "Low" },
+            { value: 3, title: "Medium" },
+            { value: 4, title: "High" }
+          ]}
+          onChange={handleChange}
+        />
+        <UploadSelect
+          label="Shader Detail"
+          input="shader"
+          options={[
+            { value: 0, title: "" },
+            { value: 2, title: "Low" },
+            { value: 3, title: "Medium" },
+            { value: 4, title: "High" },
+            { value: 5, title: "Very High" }
+          ]}
+          onChange={handleChange}
+        />
+      </div>
+      <UploadSubmit value="Continue" />
+    </form>
   );
 }
 
-export function UploadSwitch({ label, input, onChange }) {
-  const id = `upload-switch-${input}`;
-
-  const handleChange = (e) => {
-    onChange(e, input);
-  };
-
-  return (
-    <div>
-      <label className="upload-switch-label">{label}</label>
-      <input className="upload-switch-input" id={id} type="checkbox" onChange={handleChange} />
-      <label htmlFor={id}></label>
-      <Vertical />
-    </div>
-  );
-}
+export default Details;

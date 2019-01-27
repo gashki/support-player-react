@@ -70,9 +70,9 @@
   display: block;
   font-family: "Roboto", sans-serif;
   font-size: 13px;
-  height: 30px;
+  height: 32px;
   outline: none;
-  padding: 0 8px;
+  padding: 0 10px;
   width: 100%;
 }
 
@@ -87,7 +87,7 @@
   color: #d4006a;
   cursor: pointer;
   font-family: "Roboto", sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   margin: 8px 0;
   padding: 0;
   outline: none;
@@ -101,7 +101,7 @@
   cursor: pointer;
   font-family: "Roboto", sans-serif;
   font-size: 12px;
-  height: 30px;
+  height: 32px;
   margin: 24px 0 0;
   outline: none;
   padding: 0;
