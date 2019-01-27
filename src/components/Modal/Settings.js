@@ -3,7 +3,7 @@ import firebase from "../../firebase";
 
 // Components
 import Close from "./Close";
-import { FormLabel, FormInput, FormSubmit, FormError } from "./Form";
+import { ModalLabel, ModalInput, ModalSubmit, ModalError } from "./Form";
 
 
 // The settings content for the modal.
@@ -15,8 +15,8 @@ function Settings({ currentUser, changeContent }) {
 
   return (
     <div className="modal-content-tabs" onClick={handleClick}>
-      <FormLabel checked={true} label="Email" />
-      <FormLabel checked={false} label="Password" />
+      <ModalLabel checked={true} label="Email" />
+      <ModalLabel checked={false} label="Password" />
       <SettingsForm
         isEmail={true}
         currentUser={currentUser}
@@ -102,15 +102,15 @@ class SettingsForm extends Component {
     if (isEmail) {
       return (
         <form className="modal-form" id="modal-form-email" onSubmit={handleSubmit}>
-          {error && <FormError error={error} />}
-          <FormInput
+          {error && <ModalError error={error} />}
+          <ModalInput
             label="New Email"
             input="newEmail"
             type="email"
             value={newEmail}
             onChange={handleChange}
           />
-          <FormInput
+          <ModalInput
             label="Current Password"
             input="currentPassword"
             type="password"
@@ -118,29 +118,29 @@ class SettingsForm extends Component {
             onChange={handleChange}
           />
           <div style={{ height: 12 }}></div>
-          <FormSubmit value="Save" />
+          <ModalSubmit value="Save" />
         </form>
       );
     }
 
     return (
       <form className="modal-form" id="modal-form-password" onSubmit={handleSubmit}>
-        {error && <FormError error={error} />}
-        <FormInput
+        {error && <ModalError error={error} />}
+        <ModalInput
           label="Current Password"
           input="currentPassword"
           type="password"
           value={currentPassword}
           onChange={handleChange}
         />
-        <FormInput
+        <ModalInput
           label="New Password"
           input="newPassword"
           type="password"
           value={newPassword}
           onChange={handleChange}
         />
-        <FormInput
+        <ModalInput
           label="Confirm Password"
           input="confirmPassword"
           type="password"
@@ -148,7 +148,7 @@ class SettingsForm extends Component {
           onChange={handleChange}
         />
         <div style={{ height: 12 }}></div>
-        <FormSubmit value="Save" />
+        <ModalSubmit value="Save" />
       </form>
     );
   }

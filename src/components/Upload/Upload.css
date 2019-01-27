@@ -1,0 +1,163 @@
+.upload {
+  background-color: #202020;
+  margin: 32px auto 80px;
+  padding: 42px 60px 60px;
+  width: 600px;
+}
+
+.upload > h2 {
+  color: #bdbdbd;
+  display: block;
+  font-size: 20px;
+  margin: 0;
+}
+
+.upload > h3 {
+  color: #d4006a;
+  display: block;
+  font-size: 12px;
+  font-weight: normal;
+  margin: 24px 0 16px;
+  text-transform: uppercase;
+}
+
+.upload-row {
+  display: flex;
+  flex-flow: row;
+  padding: 0 0 0 24px;
+}
+
+.upload-row:not(:last-child) {
+  margin: 0 0 16px;
+}
+
+.upload-row > div {
+  flex: 1;
+}
+
+.upload-row > div:not(:last-child) {
+  margin: 0 24px 0 0;
+}
+
+.upload-label {
+  color: #f5f5f5;
+  display: block;
+  font-size: 14px;
+  margin: 0 0 4px;
+}
+
+.upload-select, .upload-input {
+  background-color: #f5f5f5;
+  border: 1px solid #424242;
+  border-radius: 4px;
+  display: block;
+  font-family: "Roboto", sans-serif;
+  font-size: 13px;
+  height: 36px;
+  outline: none;
+  padding: 0 12px;
+  width: 100%;
+}
+
+.upload-select:focus, .upload-input:focus {
+  border-color: #d4006a;
+  box-shadow: 0 0 2px #d4006a;
+}
+
+.upload-select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.upload-switch-label {
+  color: #f5f5f5;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.upload-switch-input {
+  display: none;
+}
+
+.upload-switch-input + label {
+  background-color: grey;
+  border-radius: 20px;
+  cursor: pointer;
+  float: right;
+  height: 24px;
+  position: relative;
+  width: 40px;
+}
+
+.upload-switch-input + label:after {
+  background-color: white;
+  border-radius: 20px;
+  content: "";
+  height: 20px;
+  left: 2px;
+  position: absolute;
+  top: 2px;
+  transition: 0.3s;
+  width: 20px;
+}
+
+.upload-switch-input:checked + label {
+  background-color: #d4006a;
+}
+
+.upload-switch-input:checked + label:after {
+  left: calc(100% - 2px);
+  transform: translateX(-100%);
+}
+
+.upload-radio {
+  background-color: #f5f5f5;
+  border: 1px solid #424242;
+  border-radius: 4px;
+  display: flex;
+  flex-flow: row;
+  font-family: "Roboto", sans-serif;
+  font-size: 13px;
+  height: 36px;
+  outline: none;
+  padding: 0;
+  width: 100%;
+}
+
+.upload-radio > div {
+  flex: 1;
+  position: relative;
+  text-align: center;
+  z-index: 1;
+}
+
+.upload-radio > div:not(:last-child) {
+  border-right: 1px solid #424242;
+}
+
+.upload-radio input {
+  display: none;
+}
+
+.upload-radio label {
+  cursor: pointer;
+  display: block;
+  line-height: 34px;
+}
+
+.upload-radio input:checked + label {
+  color: #f5f5f5;
+}
+
+.upload-radio input:checked + label:before {
+  background-color: #d4006a;
+  border-radius: 2px;
+  bottom: 4px;
+  content: "";
+  left: 4px;
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  z-index: -1;
+}

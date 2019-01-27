@@ -3,7 +3,7 @@ import { auth } from "../../firebase";
 
 // Components
 import Close from "./Close";
-import { FormLabel, FormInput, FormSubmit, FormError } from "./Form";
+import { ModalLabel, ModalInput, ModalSubmit, ModalError } from "./Form";
 
 
 // The login content for the modal.
@@ -15,8 +15,8 @@ function Login({ index, changeContent }) {
 
   return (
     <div className="modal-content-tabs" onClick={handleClick}>
-      <FormLabel checked={0 === index} label="Login" />
-      <FormLabel checked={1 === index} label="Register" />
+      <ModalLabel checked={0 === index} label="Login" />
+      <ModalLabel checked={1 === index} label="Register" />
       <LoginForm isLogin={true} changeContent={changeContent} />
       <LoginForm isLogin={false} changeContent={changeContent} />
       <Close changeContent={changeContent} />
@@ -86,15 +86,15 @@ class LoginForm extends Component {
     if (isLogin) {
       return (
         <form className="modal-form" id="modal-form-login" onSubmit={handleSubmit}>
-          {error && <FormError error={error} />}
-          <FormInput
+          {error && <ModalError error={error} />}
+          <ModalInput
             label="Email"
             input="email"
             type="email"
             value={email}
             onChange={handleChange}
           />
-          <FormInput
+          <ModalInput
             label="Password"
             input="password"
             type="password"
@@ -102,22 +102,22 @@ class LoginForm extends Component {
             onChange={handleChange}
           />
           <button className="modal-login-forgot" type="button">Forgot Password?</button>
-          <FormSubmit value="Log in" />
+          <ModalSubmit value="Log in" />
         </form>
       );
     }
 
     return (
       <form className="modal-form" id="modal-form-register" onSubmit={handleSubmit}>
-        {error && <FormError error={error} />}
-        <FormInput
+        {error && <ModalError error={error} />}
+        <ModalInput
           label="Email"
           input="email"
           type="email"
           value={email}
           onChange={handleChange}
         />
-        <FormInput
+        <ModalInput
           label="Password"
           input="password"
           type="password"
@@ -125,7 +125,7 @@ class LoginForm extends Component {
           onChange={handleChange}
         />
         <p className="modal-user-agreement">By clicking Sign Up, you are indicating that you have read and agree to our Terms of Service and Privacy Policy.</p>
-        <FormSubmit value="Sign up" />
+        <ModalSubmit value="Sign up" />
       </form>
     );
   }
