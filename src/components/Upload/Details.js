@@ -43,12 +43,14 @@ function Details(props) {
           label="Grenade"
           input="nade"
           options={nades}
+          require={true}
           onChange={handleChange}
         />
         <UploadSelect
           label="Map"
           input="map"
           options={maps}
+          require={true}
           onChange={handleChange}
         />
       </div>
@@ -57,12 +59,14 @@ function Details(props) {
           label="Start Location"
           input="start"
           hint="Tetris, T Spawn, etc."
+          require={true}
           onChange={handleChange}
         />
         <UploadInput
           label="End Location"
           input="end"
           hint=""
+          require={true}
           onChange={handleChange}
         />
       </div>
@@ -105,7 +109,7 @@ function Details(props) {
       <div className="upload-row">
         <UploadRadio
           label="Throw Variation"
-          input="throw"
+          input="thrw"
           options={["Left Click", "Right Click", "Both"]}
           onChange={handleChange}
         />
@@ -132,7 +136,7 @@ function Details(props) {
           label="Global Shadow Quality"
           input="shadow"
           options={[
-            { value: 0, title: "" },
+            { value: 0, title: "N/A" },
             { value: 1, title: "Very Low" },
             { value: 2, title: "Low" },
             { value: 3, title: "Medium" },
@@ -144,7 +148,7 @@ function Details(props) {
           label="Model/Texture Detail"
           input="texture"
           options={[
-            { value: 0, title: "" },
+            { value: 0, title: "N/A" },
             { value: 2, title: "Low" },
             { value: 3, title: "Medium" },
             { value: 4, title: "High" }
@@ -157,7 +161,7 @@ function Details(props) {
           label="Effect Detail"
           input="effect"
           options={[
-            { value: 0, title: "" },
+            { value: 0, title: "N/A" },
             { value: 2, title: "Low" },
             { value: 3, title: "Medium" },
             { value: 4, title: "High" }
@@ -168,7 +172,7 @@ function Details(props) {
           label="Shader Detail"
           input="shader"
           options={[
-            { value: 0, title: "" },
+            { value: 0, title: "N/A" },
             { value: 2, title: "Low" },
             { value: 3, title: "Medium" },
             { value: 4, title: "High" },

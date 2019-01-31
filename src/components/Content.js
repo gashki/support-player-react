@@ -12,7 +12,7 @@ function Content(props) {
   function renderContent() {
     switch (props.contentMain.type) {
       case "upload":
-        return <Scroll><Upload /></Scroll>;
+        return <Scroll><Upload changeContent={props.changeContent} /></Scroll>;
       default:
         return [<Sidebar key={1} />, <NadeList key={2} />];
     }

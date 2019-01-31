@@ -12,6 +12,14 @@
   margin: 0;
 }
 
+.upload > h4 {
+  color: #ff4755;
+  float: right;
+  font-size: 12px;
+  font-weight: normal;
+  margin: 0;
+}
+
 .upload h3 {
   color: #d4006a;
   display: block;
@@ -153,12 +161,12 @@
 .upload-radio input:checked + label:before {
   background-color: #d4006a;
   border-radius: 2px;
-  bottom: 4px;
+  bottom: 2px;
   content: "";
-  left: 4px;
+  left: 2px;
   position: absolute;
-  right: 4px;
-  top: 4px;
+  right: 2px;
+  top: 2px;
   z-index: -1;
 }
 
@@ -180,5 +188,59 @@
 }
 
 .upload-submit:hover {
+  box-shadow: 0 0 2px #d4006a;
+}
+
+.upload-message {
+  background-color: #202020;
+  border: 1px solid #424242;
+  border-radius: 4px;
+  margin: 20vh auto 0;
+  padding: 32px 40px;
+  width: 580px;
+}
+
+.upload-message > h3 {
+  color: #d4006a;
+  font-size: 16px;
+  font-weight: normal;
+  margin: 0 0 20px;
+}
+
+.upload-message > p {
+  color: #bdbdbd;
+  font-size: 14px;
+  margin: 0 0 16px;
+}
+
+.upload-message ul {
+  margin: 0;
+  padding: 0 0 0 40px;
+}
+
+.upload-message li {
+  color: #bdbdbd;
+  font-size: 14px;
+  margin: 6px 0;
+}
+
+.upload-message button {
+  background-color: #d4006a;
+  border: none;
+  border-radius: 4px;
+  color: #f5f5f5;
+  cursor: pointer;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  height: 32px;
+  margin: 20px 0 0;
+  outline: none;
+  padding: 0;
+  text-align: center;
+  text-transform: uppercase;
+  width: 120px;
+}
+
+.upload-message button:hover {
   box-shadow: 0 0 2px #d4006a;
 }

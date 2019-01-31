@@ -1,7 +1,9 @@
 import React from "react";
 import Vertical from "../Vertical";
 
-export function UploadSelect({ label, input, options, onChange }) {
+export function UploadSelect(props) {
+  const { label, input, options, require = false, onChange } = props;
+
   const optionList = options.map((option, index) => {
     const id = `upload-select-${input}-${index}`;
 
@@ -16,7 +18,7 @@ export function UploadSelect({ label, input, options, onChange }) {
 
   return (
     <div>
-      <label className="upload-label">{label}</label>
+      <label className="upload-label">{label}{require && <Required />}</label>
       <select className="upload-select border-box" onChange={handleChange}>
         {optionList}
       </select>
@@ -24,14 +26,16 @@ export function UploadSelect({ label, input, options, onChange }) {
   );
 }
 
-export function UploadInput({ label, input, hint, onChange }) {
+export function UploadInput(props) {
+  const { label, input, hint, require = false, onChange } = props;
+
   const handleChange = (e) => {
     onChange(e, input);
   };
 
   return (
     <div>
-      <label className="upload-label">{label}</label>
+      <label className="upload-label">{label}{require && <Required />}</label>
       <input className="upload-input border-box" type="text" placeholder={hint} onChange={handleChange} />
     </div>
   );
@@ -50,7 +54,7 @@ export function UploadRadio({ label, input, options, onChange }) {
 
     return (
       <div key={id}>
-        <input id={id} name={name} type="radio" onChange={handleChange} required />
+        <input id={id} name={name} type="radio" onChange={handleChange} />
         <label htmlFor={id}>{option}</label>
       </div>
     );
@@ -58,7 +62,7 @@ export function UploadRadio({ label, input, options, onChange }) {
 
   return (
     <div>
-      <label className="upload-label">{label}</label>
+      <label className="upload-label">{label}<Required /></label>
       <div className="upload-radio border-box">
         {optionList}
       </div>
@@ -75,7 +79,7 @@ export function UploadSwitch({ label, input, onChange }) {
 
   return (
     <div>
-      <label className="upload-switch-label">{label}</label>
+      <label className="upload-switch-label">{label}<Required /></label>
       <input className="upload-switch-input" id={id} type="checkbox" onChange={handleChange} />
       <label htmlFor={id}></label>
       <Vertical />
@@ -88,5 +92,13 @@ export function UploadSubmit({ value }) {
     <div style={{ display: "flex", flexDirection: "row-reverse" }}>
       <input className="upload-submit" type="submit" value={value} />
     </div>
+  );
+}
+
+function Required() {
+  const style = { color: "#ff4755" };
+
+  return (
+    <span style={style}>&nbsp;*</span>
   );
 }
