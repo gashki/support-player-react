@@ -2,7 +2,7 @@ import React from "react";
 import Vertical from "../Vertical";
 
 export function UploadSelect(props) {
-  const { label, input, options, require = false, onChange } = props;
+  const { label, input, options, value, require = false, onChange } = props;
 
   const optionList = options.map((option, index) => {
     const id = `upload-select-${input}-${index}`;
@@ -19,7 +19,7 @@ export function UploadSelect(props) {
   return (
     <div>
       <label className="upload-label">{label}{require && <Required />}</label>
-      <select className="upload-select border-box" onChange={handleChange}>
+      <select className="upload-select border-box" value={value} onChange={handleChange}>
         {optionList}
       </select>
     </div>
@@ -27,7 +27,7 @@ export function UploadSelect(props) {
 }
 
 export function UploadInput(props) {
-  const { label, input, hint, require = false, onChange } = props;
+  const { label, input, value, hint, require = false, onChange } = props;
 
   const handleChange = (e) => {
     onChange(e, input);
@@ -36,16 +36,17 @@ export function UploadInput(props) {
   return (
     <div>
       <label className="upload-label">{label}{require && <Required />}</label>
-      <input className="upload-input border-box" type="text" placeholder={hint} onChange={handleChange} />
+      <input className="upload-input border-box" type="text" value={value} placeholder={hint} onChange={handleChange} />
     </div>
   );
 }
 
-export function UploadRadio({ label, input, options, onChange }) {
+export function UploadRadio({ label, input, options, value, onChange }) {
   const name = `upload-radio-${input}`;
 
   const optionList = options.map((option, index) => {
     const id = `${name}-${index}`;
+    const checked = parseInt(value) === index;
 
     const handleChange = (e) => {
       e.target.value = index;
@@ -54,7 +55,7 @@ export function UploadRadio({ label, input, options, onChange }) {
 
     return (
       <div key={id}>
-        <input id={id} name={name} type="radio" onChange={handleChange} />
+        <input id={id} name={name} type="radio" defaultChecked={checked} onChange={handleChange} />
         <label htmlFor={id}>{option}</label>
       </div>
     );
@@ -70,7 +71,7 @@ export function UploadRadio({ label, input, options, onChange }) {
   );
 }
 
-export function UploadSwitch({ label, input, onChange }) {
+export function UploadSwitch({ label, input, value, onChange }) {
   const id = `upload-switch-${input}`;
 
   const handleChange = (e) => {
@@ -80,7 +81,7 @@ export function UploadSwitch({ label, input, onChange }) {
   return (
     <div>
       <label className="upload-switch-label">{label}<Required /></label>
-      <input className="upload-switch-input" id={id} type="checkbox" onChange={handleChange} />
+      <input className="upload-switch-input" id={id} type="checkbox" defaultChecked={value} onChange={handleChange} />
       <label htmlFor={id}></label>
       <Vertical />
     </div>

@@ -6,7 +6,7 @@ export function ModalLabel({ checked, label }) {
   const id = `modal-radio-${temp}`;
 
   return ([
-    <input key={`ModalLabel-input-${temp}`} defaultChecked={checked} id={id} name="modal-tab" type="radio" />,
+    <input key={`ModalLabel-input-${temp}`} id={id} name="modal-tab" type="radio" defaultChecked={checked} />,
     <label key={`ModalLabel-label-${temp}`} className="modal-tab unselectable" htmlFor={id}>{label}</label>
   ]);
 }

@@ -3,21 +3,26 @@ import "./Upload.css";
 
 // Components
 import Details from "./Details";
+import Media from "./Media";
 
 class Upload extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      content: 0,
       nade: "",
       map: "",
       start: "",
       end: "",
       movement: false,
+      viewmodel: false,
+      vsettings: false,
       move: null,
       thrw: null,
       tick: null,
       team: null,
+      view: 0,
       source: "",
       oneway: false,
       shadow: 0,
@@ -37,7 +42,20 @@ class Upload extends Component {
   };
 
   handleDetails = (e) => {
-    const { nade, map, start, end, movement, move, thrw, tick, team } = this.state;
+    const {
+      nade,
+      map,
+      start,
+      end,
+      movement,
+      viewmodel,
+      move,
+      thrw,
+      tick,
+      team,
+      view
+    } = this.state;
+
     const changeContent = this.props.changeContent;
 
     e.preventDefault();
@@ -76,7 +94,11 @@ class Upload extends Component {
       invalidList.push("Team");
     }
 
-    if (invalidList) {
+    if (viewmodel && parseInt(view) === 0) {
+      invalidList.push("Viewmodel Position");
+    }
+
+    if (invalidList.length > 0) {
       const invalidInput = invalidList.map((invalid, index) => {
         return (
           <li><i style={{ color: "#f5f5f5" }}>{invalid}</i> is a required field</li>
@@ -94,13 +116,15 @@ class Upload extends Component {
       changeContent("contentModal", content);
     }
     else {
-      console.log("no error");
+      // no errors
     }
   };
 
+  // Does the alignment of this grenade require specific video settings?
+  // Does the alignment of this grenade require a specific viewmodel?
+
   render() {
-    const nade = this.state.nade;
-    const movement = this.state.movement;
+    const { content, ...details } = this.state;
     const handleChange = this.handleChange;
     const handleDetails = this.handleDetails;
 
@@ -108,12 +132,13 @@ class Upload extends Component {
       <div className="upload">
         <h2>Submit a Grenade</h2>
         <h4>* indicates required field</h4>
-        <Details
-          nade={nade}
-          movement={movement}
-          handleChange={handleChange}
-          handleSubmit={handleDetails}
-        />
+        {true
+          ? <Details
+            {...details}
+            handleChange={handleChange}
+            handleSubmit={handleDetails}
+          />
+          : <Media />}
       </div>
     );
   }
