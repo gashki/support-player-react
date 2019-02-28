@@ -19,8 +19,8 @@ function Details(props) {
     viewmodel,
     vsettings,
     move,
-    thrw,
     tick,
+    thrw,
     team,
     view,
     source,
@@ -57,13 +57,6 @@ function Details(props) {
     { value: "de_train", title: "Train" }
   ];
 
-  const views = [
-    { value: 0, title: "Select a Viewmodel" },
-    { value: 1, title: "Desktop" },
-    { value: 2, title: "Couch" },
-    { value: 3, title: "Classic" }
-  ];
-
   return (
     <form onSubmit={handleSubmit}>
       <h3>General Information</h3>
@@ -90,7 +83,7 @@ function Details(props) {
           label="Start Location"
           input="start"
           value={start}
-          hint="Tetris, T Spawn, etc."
+          hint="Tetris, T Spawn, A Long, etc."
           require={true}
           onChange={handleChange}
         />
@@ -98,7 +91,7 @@ function Details(props) {
           label="End Location"
           input="end"
           value={end}
-          hint=""
+          hint="Cat, Jungle, Heaven, etc."
           require={true}
           onChange={handleChange}
         />
@@ -108,7 +101,7 @@ function Details(props) {
           label="Source"
           input="source"
           value={source}
-          hint="Twitter, Reddit, YouTube, etc. (Optional)"
+          hint="Reddit, Twitter, YouTube, etc. (Optional)"
           onChange={handleChange}
         />
       </div>
@@ -133,7 +126,7 @@ function Details(props) {
       </div>
       <div className="upload-row">
         <UploadSwitch
-          label="Does the alignment of this grenade require a specific viewmodel?"
+          label="Does aligning this grenade require a specific viewmodel?"
           input="viewmodel"
           value={viewmodel}
           onChange={handleChange}
@@ -141,7 +134,7 @@ function Details(props) {
       </div>
       <div className="upload-row">
         <UploadSwitch
-          label="Does the alignment of this grenade require minimum video settings?"
+          label="Does aligning this grenade require minimum video settings?"
           input="vsettings"
           value={vsettings}
           onChange={handleChange}
@@ -149,14 +142,26 @@ function Details(props) {
       </div>
       <div style={{ height: 4 }}></div>
       {movement &&
-        <div className="upload-row">
-          <UploadRadio
-            label="Movement"
-            input="move"
-            options={["Jump", "Run/Walk", "Both"]}
-            value={move}
-            onChange={handleChange}
-          />
+        <div>
+          <div className="upload-row">
+            <UploadRadio
+              label="Movement"
+              input="move"
+              options={["Jump", "Run/Walk", "Both"]}
+              value={move}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="upload-row">
+            <UploadRadio
+              label="Tick Rate"
+              input="tick"
+              options={["64 Tick", "128 Tick", "Both"]}
+              value={tick}
+              onChange={handleChange}
+            />
+          </div>
+          <Margin />
         </div>
       }
       <div className="upload-row">
@@ -168,15 +173,17 @@ function Details(props) {
           onChange={handleChange}
         />
       </div>
-      <div className="upload-row">
-        <UploadRadio
-          label="Tick Rate"
-          input="tick"
-          options={["64 Tick", "128 Tick", "Both"]}
-          value={tick}
-          onChange={handleChange}
-        />
-      </div>
+      {viewmodel &&
+        <div className="upload-row">
+          <UploadRadio
+            label="Viewmodel"
+            input="view"
+            options={["Desktop", "Couch", "Classic"]}
+            value={view}
+            onChange={handleChange}
+          />
+        </div>
+      }
       <div className="upload-row">
         <UploadRadio
           label="Team"
@@ -186,18 +193,6 @@ function Details(props) {
           onChange={handleChange}
         />
       </div>
-      {viewmodel &&
-        <div className="upload-row">
-          <UploadSelect
-            label="Viewmodel Position"
-            input="view"
-            options={views}
-            value={view}
-            require={true}
-            onChange={handleChange}
-          />
-        </div>
-      }
       {vsettings &&
         <div>
           <h3>Minimum Video Settings</h3>
@@ -255,11 +250,17 @@ function Details(props) {
               onChange={handleChange}
             />
           </div>
-          <div style={{ display: "none" }}>Fixes margin issues</div>
+          <Margin />
         </div>
       }
       <UploadSubmit value="Continue" />
     </form>
+  );
+}
+
+function Margin() {
+  return (
+    <div style={{ display: "none" }}></div>
   );
 }
 

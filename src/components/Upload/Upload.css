@@ -1,6 +1,6 @@
 .upload {
   background-color: #202020;
-  margin: 32px auto 80px;
+  margin: 32px auto 40px;
   padding: 48px 60px 60px;
   width: 600px;
 }
@@ -37,7 +37,7 @@
 }
 
 .upload-row:not(:last-child) {
-  margin: 0 0 16px;
+  margin: 0 0 20px;
 }
 
 .upload-row > div {
@@ -48,7 +48,7 @@
   margin: 0 24px 0 0;
 }
 
-.upload-label {
+.upload-details-label {
   color: #f5f5f5;
   display: block;
   font-size: 14px;
@@ -246,7 +246,131 @@
   box-shadow: 0 0 2px #d4006a;
 }
 
-.upload hr {
-  border: 1px solid #d4006a;
-  margin: 0;
+.upload-media {
+  border-bottom: 1px solid #424242;
+  padding: 20px 0;
+}
+
+.upload-media:first-child {
+  border-top: 1px solid #424242;
+  margin-top: 28px;
+}
+
+.upload-media > label {
+  color: #f5f5f5;
+  display: block;
+  font-size: 16px;
+}
+
+.upload-media > label > span {
+  color: #bdbdbd;
+  float: right;
+  font-size: 12px;
+}
+
+.upload-image {
+  display: flex;
+  flex-flow: row;
+  margin: 8px 0 12px;
+}
+
+.upload-image > div {
+  background-color: #424242;
+  flex: 1;
+  height: 108px;
+}
+
+.upload-image > div:not(:last-child) {
+  margin: 0 12px 0 0;
+}
+
+.upload-media > textarea {
+  background-color: #f5f5f5;
+  border: 1px solid #424242;
+  border-radius: 4px;
+  font-family: "Roboto", sans-serif;
+  font-size: 13px;
+  line-height: 18px;
+  outline: none;
+  padding: 8px 12px;
+  resize: none;
+  width: 100%;
+}
+
+.upload-media > textarea:focus {
+  border-color: #d4006a;
+  box-shadow: 0 0 2px #d4006a;
+}
+
+.upload-media-label {
+  display: block;
+  cursor: pointer;
+  height: 100%;
+  text-align: center;
+  width: 100%;
+}
+
+.upload-media-label > img {
+  height: 20px;
+  pointer-events: none;
+  margin-left: -2px;
+  vertical-align: middle;
+  width: 20px;
+}
+
+.upload-media-label > span {
+  color: #ffadd6;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+.upload-media-file {
+  height: 100%;
+  position: relative;
+  text-align: center;
+  width: 100%;
+}
+
+.upload-media-file > img, .upload-media-file > video {
+  max-height: 100%;
+  max-width: 100%;
+  pointer-events: none;
+  vertical-align: middle;
+}
+
+.upload-media-file > button {
+  background-color: transparent;
+  border: 1px solid #ff4755;
+  border-radius: 4px;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  visibility: hidden;
+}
+
+.upload-media-file > button > img {
+  height: 20px;
+  padding: 2px;
+  pointer-events: none;
+  vertical-align: middle;
+  width: 20px;
+}
+
+.upload-media-file:hover > button {
+  visibility: visible;
+}
+
+.upload-video {
+  margin: 8px 0 0;
+}
+
+.upload-video > div{
+  background-color: #424242;
+  height: 108px;
+  width: 192px;
 }

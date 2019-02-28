@@ -19,25 +19,31 @@ class Upload extends Component {
       viewmodel: false,
       vsettings: false,
       move: null,
-      thrw: null,
       tick: null,
+      thrw: null,
       team: null,
-      view: 0,
+      view: null,
       source: "",
       oneway: false,
       shadow: 0,
       texture: 0,
       effect: 0,
-      shader: 0
+      shader: 0,
+      location: [],
+      alignment: [],
+      result: [],
+      video: null,
+      comments: {
+        location: "",
+        alignment: "",
+        result: ""
+      }
     };
   }
 
-  handleChange = (e, input) => {
-    const target = e.target;
-    const type = target.type === "checkbox";
-
+  handleChange = (input, value) => {
     this.setState({
-      [input]: type ? target.checked : target.value
+      [input]: value
     });
   };
 
@@ -50,8 +56,8 @@ class Upload extends Component {
       movement,
       viewmodel,
       move,
-      thrw,
       tick,
+      thrw,
       team,
       view
     } = this.state;
@@ -82,20 +88,20 @@ class Upload extends Component {
       invalidList.push("Movement");
     }
 
-    if (thrw === null) {
-      invalidList.push("Throw Variation");
+    if (movement && tick === null) {
+      invalidList.push("Tick Rate");
     }
 
-    if (tick === null) {
-      invalidList.push("Tick Rate");
+    if (thrw === null) {
+      invalidList.push("Throw Variation");
     }
 
     if (team === null) {
       invalidList.push("Team");
     }
 
-    if (viewmodel && parseInt(view) === 0) {
-      invalidList.push("Viewmodel Position");
+    if (viewmodel && view === null) {
+      invalidList.push("Viewmodel");
     }
 
     if (invalidList.length > 0) {
@@ -120,11 +126,25 @@ class Upload extends Component {
     }
   };
 
-  // Does the alignment of this grenade require specific video settings?
-  // Does the alignment of this grenade require a specific viewmodel?
-
   render() {
-    const { content, ...details } = this.state;
+    const {
+      content,
+      location,
+      alignment,
+      result,
+      video,
+      comments,
+      ...details
+    } = this.state;
+
+    const media = {
+      location: location,
+      alignment: alignment,
+      result: result,
+      video: video,
+      comments: comments
+    };
+
     const handleChange = this.handleChange;
     const handleDetails = this.handleDetails;
 
@@ -132,13 +152,17 @@ class Upload extends Component {
       <div className="upload">
         <h2>Submit a Grenade</h2>
         <h4>* indicates required field</h4>
-        {true
+        {false
           ? <Details
             {...details}
             handleChange={handleChange}
             handleSubmit={handleDetails}
           />
-          : <Media />}
+          : <Media
+            {...media}
+            handleChange={handleChange}
+          />
+        }
       </div>
     );
   }
