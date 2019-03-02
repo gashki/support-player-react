@@ -1,11 +1,12 @@
 import React from "react";
 import "./Content.css";
 
-// Components
+// React components
 import NadeList from "./NadeList";
 import Scroll from "./Scroll";
 import Sidebar from "./Sidebar";
 import Upload from "./Upload/Upload";
+
 
 function Content(props) {
   //types of content: browse(default/null),search,upload,nade,collection,error
@@ -24,5 +25,6 @@ function Content(props) {
     </div>
   );
 }
+
 
 export default Content;

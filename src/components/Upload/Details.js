@@ -1,6 +1,6 @@
 import React from "react";
 
-// Components
+// React components
 import {
   UploadSelect,
   UploadInput,
@@ -9,6 +9,8 @@ import {
   UploadSubmit
 } from "./Form";
 
+
+// The details form of the upload page
 function Details(props) {
   const {
     nade,
@@ -34,6 +36,8 @@ function Details(props) {
   const handleChange = props.handleChange;
   const handleSubmit = props.handleSubmit;
 
+
+  // The options for the type of grenade
   const nades = [
     { value: "", title: "Select a Grenade" },
     { value: "weapon_smokegrenade", title: "Smoke Grenade" },
@@ -45,6 +49,7 @@ function Details(props) {
     //{ value: "weapon_decoy", title: "Decoy Grenade" }
   ];
 
+  // The options for the map
   const maps = [
     { value: "", title: "Select a Map" },
     { value: "de_cache", title: "Cache" },
@@ -258,10 +263,13 @@ function Details(props) {
   );
 }
 
+
+// A component that fixes margin issues
 function Margin() {
   return (
     <div style={{ display: "none" }}></div>
   );
 }
+
 
 export default Details;

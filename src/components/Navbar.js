@@ -2,7 +2,7 @@ import React from "react";
 import { auth } from "../firebase";
 import "./Navbar.css";
 
-// Components
+// React components
 import Login from "./Modal/Login";
 import Settings from "./Modal/Settings";
 import Vertical from "./Vertical";
@@ -13,7 +13,7 @@ import ic_settings from "../svg/ic_settings.svg";
 import ic_upload from "../svg/ic_upload.svg";
 
 
-// The navigation bar at the top of each page.
+// The navigation bar at the top of each page
 function Navbar({ currentUser, changeContent }) {
   return (
     <nav className="navbar">
@@ -30,17 +30,16 @@ function Navbar({ currentUser, changeContent }) {
 }
 
 
-// The user account section of the navigation bar.
+// The user account section of the navigation bar
 function NavbarAccount({ currentUser, changeContent }) {
-  // Returns an SVG button used in the user account section.
+  // Returns an SVG button used in the user account section
   function AccountButton({ src, href, title, onClick }) {
     const handleClick = (e) => {
       e.preventDefault();
-
       onClick();
     };
 
-    // The attributes for the SVG button.
+    // The attributes for the SVG button
     const attributes = { href: href, title: title, onClick: handleClick };
 
     return (
@@ -50,19 +49,19 @@ function NavbarAccount({ currentUser, changeContent }) {
     );
   }
 
-  // Changes the content to the upload page.
+  // Opens the upload page
   const handleUpload = () => {
     changeContent("contentMain", { "type": "upload" });
   };
 
-  // Opens the user settings modal.
+  // Opens the user settings modal
   const handleSettings = () => {
     changeContent("contentModal",
       <Settings currentUser={currentUser} changeContent={changeContent} />
     );
   };
 
-  // Signs out the user.
+  // Signs out the user
   const authSignOut = () => {
     auth.signOut().catch((error) => {
       console.log(error);
@@ -97,14 +96,14 @@ function NavbarAccount({ currentUser, changeContent }) {
 }
 
 
-// The login section of the navigation bar.
+// The login section of the navigation bar
 function NavbarLogin({ changeContent }) {
-  // Returns a text button used for opening the login modal.
+  // Returns a text button used for opening the login modal
   function LoginButton({ index, href, title }) {
     const handleClick = (e) => {
       e.preventDefault();
 
-      // Opens the login modal.
+      // Opens the login modal
       changeContent("contentModal",
         <Login index={index} changeContent={changeContent} />
       );
@@ -124,5 +123,6 @@ function NavbarLogin({ changeContent }) {
     </div>
   );
 }
+
 
 export default Navbar;

@@ -1,5 +1,6 @@
 import React from "react";
 
+// A component that fixes scrolling issues
 function Scroll(props) {
   return (
     <div className="scroll">

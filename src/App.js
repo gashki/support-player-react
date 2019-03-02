@@ -2,18 +2,18 @@ import React, { Component } from "react";
 import { auth } from "./firebase";
 import "./App.css";
 
-// Components
+// React components
 import Content from "./components/Content";
 import Modal from "./components/Modal/Modal";
 import Navbar from "./components/Navbar";
 
 
-// The root component of the application.
+// The root component of the application
 class App extends Component {
   constructor(props) {
     super(props);
 
-    // The default state of the application.
+    // The default state of the application
     this.state = {
       contentMain: { type: null },
       contentModal: null,
@@ -22,9 +22,9 @@ class App extends Component {
   }
 
   componentDidMount() {
-    // Observes changes to the user's sign-in state.
+    // Observes changes to the user's sign-in state
     auth.onAuthStateChanged((user) => {
-      // Checks if a user is signed in.
+      // Checks if a user is signed in
       if (user) {
         this.setState({
           currentUser: user
@@ -38,7 +38,7 @@ class App extends Component {
     });
   }
 
-  // Changes the state of the content.
+  // Sets the state of the content
   changeContent = (type, content) => {
     this.setState({
       [type]: content
@@ -49,6 +49,7 @@ class App extends Component {
     const { contentMain, contentModal, currentUser } = this.state;
     const changeContent = this.changeContent;
 
+    // Displays the content of the application
     return (
       <div style={{ display: "flex", flexFlow: "column", height: "100%" }}>
         <Navbar

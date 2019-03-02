@@ -1,14 +1,17 @@
 import React, { Component } from "react";
 import "./Upload.css";
 
-// Components
+// React components
 import Details from "./Details";
 import Media from "./Media";
 
+
+// The content for the upload page
 class Upload extends Component {
   constructor(props) {
     super(props);
 
+    // The default state of the upload page
     this.state = {
       content: 0,
       nade: "",
@@ -41,12 +44,14 @@ class Upload extends Component {
     };
   }
 
+  // Sets the state of an input
   handleChange = (input, value) => {
     this.setState({
       [input]: value
     });
   };
 
+  // Verifies the input of the details form
   handleDetails = (e) => {
     const {
       nade,
@@ -64,10 +69,12 @@ class Upload extends Component {
 
     const changeContent = this.props.changeContent;
 
+    // Prevents the form from being submitted
     e.preventDefault();
 
     let invalidList = [];
 
+    // Checks for any missing input
     if (nade === "") {
       invalidList.push("Grenade");
     }
@@ -104,13 +111,18 @@ class Upload extends Component {
       invalidList.push("Viewmodel");
     }
 
+    // Displays an error message if there is missing input
     if (invalidList.length > 0) {
+      // Builds a list of components with the missing inputs
       const invalidInput = invalidList.map((invalid, index) => {
+        const id = `missing-field-${index}`;
+
         return (
-          <li><i style={{ color: "#f5f5f5" }}>{invalid}</i> is a required field</li>
+          <li key={id}><i style={{ color: "#f5f5f5" }}>{invalid}</i> is a required field</li>
         );
       });
 
+      // The error message to display
       const content =
         <UploadMessage
           title="Missing Information"
@@ -122,7 +134,10 @@ class Upload extends Component {
       changeContent("contentModal", content);
     }
     else {
-      // no errors
+      // Continue to the media form
+      this.setState({
+        content: 1
+      });
     }
   };
 
@@ -152,7 +167,7 @@ class Upload extends Component {
       <div className="upload">
         <h2>Submit a Grenade</h2>
         <h4>* indicates required field</h4>
-        {false
+        {content === 0
           ? <Details
             {...details}
             handleChange={handleChange}
@@ -168,8 +183,10 @@ class Upload extends Component {
   }
 }
 
+
+// The error message used for the upload page
 function UploadMessage({ title, message, content, changeContent }) {
-  // Prevents the modal from closing when the content is clicked.
+  // Prevents the modal from closing when the content is clicked
   const handleClick = (e) => {
     e.stopPropagation();
   };
@@ -189,5 +206,6 @@ function UploadMessage({ title, message, content, changeContent }) {
     </div>
   );
 }
+
 
 export default Upload;

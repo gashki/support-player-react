@@ -1,6 +1,6 @@
 import React from "react";
 
-// Used for vertically aligning elements.
+// A component that helps to vertically align elements
 function Vertical() {
   return (
     <div className="vertical"></div>

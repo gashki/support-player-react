@@ -1,6 +1,6 @@
 import React from "react";
 
-// The label used for modal tabs.
+// The label used for modal tabs
 export function ModalLabel({ checked, label }) {
   const temp = label.toLowerCase();
   const id = `modal-radio-${temp}`;
@@ -11,7 +11,7 @@ export function ModalLabel({ checked, label }) {
   ]);
 }
 
-// The text input used on modal forms.
+// The text input used on modal forms
 export function ModalInput(props) {
   const { label, input, type, value, onChange } = props;
 
@@ -25,14 +25,14 @@ export function ModalInput(props) {
   ]);
 }
 
-// The submit button for modal forms.
+// The submit button for modal forms
 export function ModalSubmit({ value }) {
   return (
     <input className="modal-form-submit border-box" type="submit" value={value} />
   );
 }
 
-// Used for displaying error messages.
+// Displays an error message
 export function ModalError({ error }) {
   return (
     <p className="modal-form-error">{error.message}</p>

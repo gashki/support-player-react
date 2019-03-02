@@ -1,6 +1,6 @@
 import React from "react";
 
-// Components
+// React components
 import Required from "./Required";
 import { UploadSubmit } from "./Form";
 import Vertical from "../Vertical";
@@ -9,6 +9,8 @@ import Vertical from "../Vertical";
 import ic_add_box from "../../svg/ic_add_box.svg";
 import ic_delete from "../../svg/ic_delete.svg";
 
+
+// The media form of the upload page
 function Media(props) {
   const {
     location,
@@ -55,13 +57,18 @@ function Media(props) {
   );
 }
 
+
+// The images to be submitted
 function UploadImage({ label, input, images, comments, onChange }) {
+  // Validates the file type and displays the image
   const handleMedia = (e) => {
     const target = e.target;
 
+    // Checks if there is a file selected
     if (target.files && target.files[0]) {
       const file = target.files[0];
 
+      // Checks the file type
       if (/^image\/(jpeg|png)$/.test(file.type)) {
         images.push(file);
         onChange(input, images);
@@ -69,11 +76,13 @@ function UploadImage({ label, input, images, comments, onChange }) {
     }
   };
 
+  // Removes the image from display
   const removeMedia = (index) => {
     images.splice(index, 1);
     onChange(input, images);
   };
 
+  // Stores the comment input
   const handleComment = (e) => {
     const value = { ...comments, [input]: e.target.value };
     onChange("comments", value);
@@ -115,13 +124,18 @@ function UploadImage({ label, input, images, comments, onChange }) {
   );
 }
 
+
+// The video to be submitted
 function UploadVideo({ label, input, video, onChange }) {
+  // Validates the file type and displays the video
   const handleMedia = (e) => {
     const target = e.target;
 
+    // Checks if there is a file selected
     if (target.files && target.files[0]) {
       const file = target.files[0];
 
+      // Checks the file type
       if (/^video\/(mp4)$/.test(file.type)) {
         onChange(input, file);
       }
@@ -133,7 +147,7 @@ function UploadVideo({ label, input, video, onChange }) {
       <label>{label}<span>.mp4</span></label>
       <div className="upload-video">
         <MediaFile
-          id={"test"}
+          id={`media-${input}`}
           image={false}
           media={video}
           handleMedia={handleMedia}
@@ -144,6 +158,8 @@ function UploadVideo({ label, input, video, onChange }) {
   );
 }
 
+
+// Displays the selected media file
 function MediaFile({ id, image = true, media, require = false, handleMedia, removeMedia }) {
   const label = image ? "Add an image" : "Add a video";
   const accept = image ? "image/jpeg,image/png" : "video/mp4";
@@ -171,5 +187,6 @@ function MediaFile({ id, image = true, media, require = false, handleMedia, remo
     </div>
   );
 }
+
 
 export default Media;

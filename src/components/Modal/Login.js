@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { auth } from "../../firebase";
 
-// Components
+// React components
 import Close from "./Close";
 import { ModalLabel, ModalInput, ModalSubmit, ModalError } from "./Form";
 
 
-// The login content for the modal.
+// The login content for the modal
 function Login({ index, changeContent }) {
-  // Prevents the modal from closing when the content is clicked.
+  // Prevents the modal from closing when the content is clicked
   const handleClick = (e) => {
     e.stopPropagation();
   };
@@ -25,12 +25,12 @@ function Login({ index, changeContent }) {
 }
 
 
-// The login and registration form.
+// The login and registration form
 class LoginForm extends Component {
   constructor(props) {
     super(props);
 
-    // The default state of the form.
+    // The default state of the form
     this.state = {
       email: "",
       password: "",
@@ -38,25 +38,26 @@ class LoginForm extends Component {
     };
   }
 
-  // Changes the value of the text inputs.
+  // Changes the value of the text inputs
   handleChange = (e, input) => {
     this.setState({
       [input]: e.target.value
     });
   };
 
-  // Handles the form submission.
+  // Handles the form submission
   handleSubmit = (e) => {
     const { isLogin, changeContent } = this.props;
     const { email, password } = this.state;
 
+    // Prevents the form from being submitted
     e.preventDefault();
 
     this.setState({
       error: null
     });
 
-    // Determines the user authentication method.
+    // Determines the user authentication method
     const authenticateUser = (a, b) => {
       if (isLogin) {
         return auth.signInWithEmailAndPassword(a, b);
@@ -65,7 +66,7 @@ class LoginForm extends Component {
       return auth.createUserWithEmailAndPassword(a, b);
     }
 
-    // Authenticates the user and closes the modal.
+    // Authenticates the user and closes the modal
     authenticateUser(email, password).then(() => {
       changeContent("contentModal", null);
     }).catch((error) => {

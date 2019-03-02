@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import firebase from "../../firebase";
 
-// Components
+// React components
 import Close from "./Close";
 import { ModalLabel, ModalInput, ModalSubmit, ModalError } from "./Form";
 
 
-// The settings content for the modal.
+// The settings content for the modal
 function Settings({ currentUser, changeContent }) {
-  // Prevents the modal from closing when the content is clicked.
+  // Prevents the modal from closing when the content is clicked
   const handleClick = (e) => {
     e.stopPropagation();
   };
@@ -33,12 +33,12 @@ function Settings({ currentUser, changeContent }) {
 }
 
 
-// The user settings form.
+// The user settings form
 class SettingsForm extends Component {
   constructor(props) {
     super(props);
 
-    // The default state of the form.
+    // The default state of the form
     this.state = {
       newEmail: props.currentUser.email,
       newPassword: "",
@@ -48,18 +48,19 @@ class SettingsForm extends Component {
     }
   }
 
-  // Changes the value of the text inputs.
+  // Changes the value of the text inputs
   handleChange = (e, input) => {
     this.setState({
       [input]: e.target.value
     });
   };
 
-  // Handles the form submission.
+  // Handles the form submission
   handleSubmit = (e) => {
     const { isEmail, currentUser, changeContent } = this.props;
     const { newEmail, newPassword, confirmPassword, currentPassword } = this.state;
 
+    // Prevents the form from being submitted
     e.preventDefault();
 
     this.setState({
@@ -71,7 +72,7 @@ class SettingsForm extends Component {
       currentPassword
     );
 
-    // Reauthenticates the user.
+    // Reauthenticates the user
     currentUser.reauthenticateAndRetrieveDataWithCredential(credential).then((_) => {
       if (isEmail) {
         return currentUser.updateEmail(newEmail);

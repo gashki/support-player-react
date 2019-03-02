@@ -1,10 +1,9 @@
 import React from "react";
 
+// Displays a red asterisk for required input fields
 function Required() {
-  const style = { color: "#ff4755" };
-
   return (
-    <span style={style}>&nbsp;*</span>
+    <span style={{ color: "#ff4755" }}>&nbsp;*</span>
   );
 }
 
