@@ -1,9 +1,11 @@
 import React, { Component } from "react";
+import { functions } from "../../firebase";
 import "./Upload.css";
 
 // React components
 import Details from "./Details";
 import Media from "./Media";
+import { UploadMessage } from "./Form";
 
 
 // The content for the upload page
@@ -13,7 +15,7 @@ class Upload extends Component {
 
     // The default state of the upload page
     this.state = {
-      content: 0,
+      content: 1,
       nade: "",
       map: "",
       start: "",
@@ -67,14 +69,11 @@ class Upload extends Component {
       view
     } = this.state;
 
-    const changeContent = this.props.changeContent;
-
     // Prevents the form from being submitted
     e.preventDefault();
 
     let invalidList = [];
 
-    // Checks for any missing input
     if (nade === "") {
       invalidList.push("Grenade");
     }
@@ -111,46 +110,99 @@ class Upload extends Component {
       invalidList.push("Viewmodel");
     }
 
-    // Displays an error message if there is missing input
+    // Check for any missing fields
     if (invalidList.length > 0) {
-      // Builds a list of components with the missing inputs
-      const invalidInput = invalidList.map((invalid, index) => {
-        const id = `missing-field-${index}`;
-
-        return (
-          <li key={id}><i style={{ color: "#f5f5f5" }}>{invalid}</i> is a required field</li>
-        );
-      });
-
-      // The error message to display
-      const content =
-        <UploadMessage
-          title="Missing Information"
-          message="The following information is missing and must be completed before continuing."
-          content={<ul>{invalidInput}</ul>}
-          changeContent={changeContent}
-        />;
-
-      changeContent("contentModal", content);
+      this.displayMissingFields(invalidList);
     }
     else {
       // Continue to the media form
       this.setState({
         content: 1
       });
+
+      // Scroll to the top of the page
+      document.querySelector(".content > .scroll").scrollTop = 0;
     }
   };
 
+  // Verifies the input of the media form
+  handleMedia = (e) => {
+    const { content, location, alignment, result, video, ...details } = this.state;
+
+    // Prevents the form from being submitted
+    e.preventDefault();
+
+    if (content !== 1) {
+      return null;
+    }
+
+    let invalidList = [];
+
+    if (location.length === 0) {
+      invalidList.push("Location");
+    }
+
+    if (alignment.length === 0) {
+      invalidList.push("Alignment");
+    }
+
+    if (result.length === 0) {
+      invalidList.push("Result");
+    }
+
+    // Check for any missing fields
+    if (invalidList.length > 0) {
+      this.displayMissingFields(invalidList);
+    }
+    else {
+      const validate = functions.httpsCallable("submitDetails");
+
+      // The number of images expected to be uploaded to storage
+      details.images = {
+        location: location.length,
+        alignment: alignment.length,
+        result: result.length
+      };
+
+      details.video = video ? true : false;
+
+      console.log(details);
+      /*
+      validate(details).then(result => {
+        console.log(result);
+      }).catch(error => {
+        console.log(error);
+      });*/
+    }
+  };
+
+  // Displays an error message with the missing fields
+  displayMissingFields = (invalidList) => {
+    const changeContent = this.props.changeContent;
+
+    // Builds a list of components with the fields
+    const invalidInput = invalidList.map((invalid, index) => {
+      const id = `missing-field-${index}`;
+
+      return (
+        <li key={id}><i style={{ color: "#f5f5f5" }}>{invalid}</i> is a required field</li>
+      );
+    });
+
+    // The content of the error message
+    const content =
+      <UploadMessage
+        title="Missing Information"
+        message="The following information is missing and must be completed before continuing."
+        content={<ul>{invalidInput}</ul>}
+        changeContent={changeContent}
+      />;
+
+    changeContent("contentModal", content);
+  };
+
   render() {
-    const {
-      content,
-      location,
-      alignment,
-      result,
-      video,
-      comments,
-      ...details
-    } = this.state;
+    const { content, location, alignment, result, video, comments, ...details } = this.state;
 
     const media = {
       location: location,
@@ -162,6 +214,8 @@ class Upload extends Component {
 
     const handleChange = this.handleChange;
     const handleDetails = this.handleDetails;
+    const handleMedia = this.handleMedia;
+    const changeContent = this.props.changeContent;
 
     return (
       <div className="upload">
@@ -172,40 +226,18 @@ class Upload extends Component {
             {...details}
             handleChange={handleChange}
             handleSubmit={handleDetails}
+            changeContent={changeContent}
           />
           : <Media
             {...media}
             handleChange={handleChange}
+            handleSubmit={handleMedia}
+            changeContent={changeContent}
           />
         }
       </div>
     );
   }
 }
-
-
-// The error message used for the upload page
-function UploadMessage({ title, message, content, changeContent }) {
-  // Prevents the modal from closing when the content is clicked
-  const handleClick = (e) => {
-    e.stopPropagation();
-  };
-
-  const closeModal = () => {
-    changeContent("contentModal", null);
-  };
-
-  return (
-    <div className="upload-message" onClick={handleClick}>
-      <h3>{title}</h3>
-      <p>{message}</p>
-      {content}
-      <div style={{ display: "flex", flexDirection: "row-reverse" }}>
-        <button type="button" onClick={closeModal}>Dismiss</button>
-      </div>
-    </div>
-  );
-}
-
 
 export default Upload;

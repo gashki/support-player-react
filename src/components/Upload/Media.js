@@ -1,6 +1,7 @@
 import React from "react";
 
 // React components
+import Help from "./Help";
 import Required from "./Required";
 import { UploadSubmit } from "./Form";
 import Vertical from "../Vertical";
@@ -21,35 +22,45 @@ function Media(props) {
   } = props;
 
   const handleChange = props.handleChange;
+  const handleSubmit = props.handleSubmit;
+  const changeContent = props.changeContent;
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <UploadImage
         label="Location"
         input="location"
         images={location}
         comments={comments}
+        help="The first image in this set will be used in the thumbnail and should be a third-person view of the player in the starting location. Include additional images if the player must align themselves to a wall or the ground."
         onChange={handleChange}
+        changeContent={changeContent}
       />
       <UploadImage
         label="Alignment"
         input="alignment"
         images={alignment}
         comments={comments}
+        help="An image or set of images that should help the player align their crosshair or viewmodel to be able to consistently and successfully throw this grenade."
         onChange={handleChange}
+        changeContent={changeContent}
       />
       <UploadImage
         label="Result"
         input="result"
         images={result}
         comments={comments}
+        help="The first image in this set will be used in the thumbnail and should be an elevated view of the result of the grenade throw."
         onChange={handleChange}
+        changeContent={changeContent}
       />
       <UploadVideo
         label="Demonstration"
         input="video"
         video={video}
+        help="A video demonstration of the grenade throw. This video is intended to be short and to the point."
         onChange={handleChange}
+        changeContent={changeContent}
       />
       <div style={{ height: 16 }}></div>
       <UploadSubmit value="Submit" />
@@ -59,7 +70,7 @@ function Media(props) {
 
 
 // The images to be submitted
-function UploadImage({ label, input, images, comments, onChange }) {
+function UploadImage({ label, input, images, comments, help, onChange, changeContent }) {
   // Validates the file type and displays the image
   const handleMedia = (e) => {
     const target = e.target;
@@ -88,9 +99,19 @@ function UploadImage({ label, input, images, comments, onChange }) {
     onChange("comments", value);
   };
 
+  // Additional content for the help message
+  const helpContent =
+    <ul>
+      <li>Accepted file extensions: jpg, jpeg, png</li>
+      <li>Maximum file size: 2 MB</li>
+    </ul>;
+
   return (
     <section className="upload-media">
-      <label>{label}<span>.jpg, .jpeg, .png</span></label>
+      <label>
+        {label}
+        <Help message={help} content={helpContent} changeContent={changeContent} />
+      </label>
       <div className="upload-image">
         <MediaFile
           id={`media-${input}-0`}
@@ -118,6 +139,7 @@ function UploadImage({ label, input, images, comments, onChange }) {
         placeholder="Comment (Optional)"
         rows="2"
         wrap="soft"
+        maxLength={140}
         onChange={handleComment}
       />
     </section>
@@ -126,7 +148,7 @@ function UploadImage({ label, input, images, comments, onChange }) {
 
 
 // The video to be submitted
-function UploadVideo({ label, input, video, onChange }) {
+function UploadVideo({ label, input, video, help, onChange, changeContent }) {
   // Validates the file type and displays the video
   const handleMedia = (e) => {
     const target = e.target;
@@ -142,9 +164,19 @@ function UploadVideo({ label, input, video, onChange }) {
     }
   };
 
+  // Additional content for the help message
+  const helpContent =
+    <ul>
+      <li>Accepted file extensions: mp4</li>
+      <li>Maximum file size: 50 MB</li>
+    </ul>;
+
   return (
     <section className="upload-media">
-      <label>{label}<span>.mp4</span></label>
+      <label>
+        {label}
+        <Help message={help} content={helpContent} changeContent={changeContent} />
+      </label>
       <div className="upload-video">
         <MediaFile
           id={`media-${input}`}

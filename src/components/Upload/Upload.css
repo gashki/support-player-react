@@ -262,12 +262,6 @@
   font-size: 16px;
 }
 
-.upload-media > label > span {
-  color: #bdbdbd;
-  float: right;
-  font-size: 12px;
-}
-
 .upload-image {
   display: flex;
   flex-flow: row;
@@ -373,4 +367,21 @@
   background-color: #424242;
   height: 108px;
   width: 192px;
+}
+
+.upload-help {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  float: right;
+  height: 16px;
+  outline: none;
+  padding: 0;
+  width: 16px;
+}
+
+.upload-help > img {
+  height: 100%;
+  pointer-events: none;
+  width: 100%;
 }

@@ -1,6 +1,7 @@
 import React from "react";
 
 // React components
+import Help from "./Help";
 import Required from "./Required";
 import Vertical from "../Vertical";
 
@@ -35,7 +36,17 @@ export function UploadSelect(props) {
 
 // The text input used on the details form
 export function UploadInput(props) {
-  const { label, input, value, hint, require = false, onChange } = props;
+  const {
+    label,
+    input,
+    value,
+    hint,
+    length = 0,
+    help,
+    require = false,
+    onChange,
+    changeContent
+  } = props;
 
   // Sets the value of the input
   const handleChange = (e) => {
@@ -45,14 +56,25 @@ export function UploadInput(props) {
 
   return (
     <div>
-      <label className="upload-details-label">{label}{require && <Required />}</label>
-      <input className="upload-input border-box" type="text" value={value} placeholder={hint} onChange={handleChange} />
+      <label className="upload-details-label">
+        {label}
+        {require && <Required />}
+        {help && <Help message={help} changeContent={changeContent} />}
+      </label>
+      <input
+        className="upload-input border-box"
+        type="text"
+        value={value}
+        placeholder={hint}
+        maxLength={length}
+        onChange={handleChange}
+      />
     </div>
   );
 }
 
 // The radio input used on the details form
-export function UploadRadio({ label, input, options, value, onChange }) {
+export function UploadRadio({ label, input, options, value, help, onChange, changeContent }) {
   const name = `upload-radio-${input}`;
 
   // Builds a list of radio options
@@ -68,7 +90,13 @@ export function UploadRadio({ label, input, options, value, onChange }) {
 
     return (
       <div key={id}>
-        <input id={id} name={name} type="radio" defaultChecked={checked} onChange={handleChange} />
+        <input
+          id={id}
+          name={name}
+          type="radio"
+          defaultChecked={checked}
+          onChange={handleChange}
+        />
         <label htmlFor={id}>{option}</label>
       </div>
     );
@@ -76,7 +104,11 @@ export function UploadRadio({ label, input, options, value, onChange }) {
 
   return (
     <div>
-      <label className="upload-details-label">{label}<Required /></label>
+      <label className="upload-details-label">
+        {label}
+        <Required />
+        {help && <Help message={help} changeContent={changeContent} />}
+      </label>
       <div className="upload-radio border-box">
         {optionList}
       </div>
@@ -97,7 +129,12 @@ export function UploadSwitch({ label, input, value, onChange }) {
   return (
     <div>
       <label className="upload-switch-label">{label}<Required /></label>
-      <input className="upload-switch-input" id={id} type="checkbox" defaultChecked={value} onChange={handleChange} />
+      <input
+        className="upload-switch-input"
+        id={id} type="checkbox"
+        defaultChecked={value}
+        onChange={handleChange}
+      />
       <label htmlFor={id}></label>
       <Vertical />
     </div>
@@ -109,6 +146,29 @@ export function UploadSubmit({ value }) {
   return (
     <div style={{ display: "flex", flexDirection: "row-reverse" }}>
       <input className="upload-submit" type="submit" value={value} />
+    </div>
+  );
+}
+
+// The error/help message used for the upload page
+export function UploadMessage({ title, message, content, changeContent }) {
+  // Prevents the modal from closing when the content is clicked
+  const handleClick = (e) => {
+    e.stopPropagation();
+  };
+
+  const closeModal = () => {
+    changeContent("contentModal", null);
+  };
+
+  return (
+    <div className="upload-message" onClick={handleClick}>
+      <h3>{title}</h3>
+      <p>{message}</p>
+      {content}
+      <div style={{ display: "flex", flexDirection: "row-reverse" }}>
+        <button type="button" onClick={closeModal}>Dismiss</button>
+      </div>
     </div>
   );
 }
