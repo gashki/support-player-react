@@ -54,9 +54,14 @@ export function UploadInput(props) {
     onChange(input, value);
   };
 
+  // Prevents the label from opening the help message
+  const handleClick = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <div>
-      <label className="upload-details-label">
+      <label className="upload-details-label" onClick={handleClick}>
         {label}
         {require && <Required />}
         {help && <Help message={help} changeContent={changeContent} />}
@@ -102,9 +107,14 @@ export function UploadRadio({ label, input, options, value, help, onChange, chan
     );
   });
 
+  // Prevents the label from opening the help message
+  const handleClick = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <div>
-      <label className="upload-details-label">
+      <label className="upload-details-label" onClick={handleClick}>
         {label}
         <Required />
         {help && <Help message={help} changeContent={changeContent} />}

@@ -3,7 +3,7 @@ import React from "react";
 // React components
 import Help from "./Help";
 import Required from "./Required";
-import { UploadSubmit } from "./Form";
+import { UploadMessage, UploadSubmit } from "./Form";
 import Vertical from "../Vertical";
 
 // SVG Icons
@@ -13,64 +13,82 @@ import ic_delete from "../../svg/ic_delete.svg";
 
 // The media form of the upload page
 function Media(props) {
-  const {
-    location,
-    alignment,
-    result,
-    video,
-    comments
-  } = props;
-
+  const { location, alignment, result, video, comments } = props;
   const handleChange = props.handleChange;
   const handleSubmit = props.handleSubmit;
   const changeContent = props.changeContent;
 
+  // Returns to the previous page
+  const handleBack = () => {
+    // Changes the content to the details form
+    handleChange("content", 0);
+
+    // Scroll to the top of the page
+    document.querySelector(".content > .scroll").scrollTop = 0;
+  };
+
+  const instructions = "Please use Steam's built-in screenshot feature (F12 by default) and set your in-game resolution to 1920x1080 or the highest common resolution you can run. We recommend to use OBS Studio for recording gameplay if you intend to submit in-game footage. Screenshots and videos may be edited to provide better clarity as long as the files abide by the appropriate file sizes and file types.";
+
   return (
-    <form onSubmit={handleSubmit}>
-      <UploadImage
-        label="Location"
-        input="location"
-        images={location}
-        comments={comments}
-        help="The first image in this set will be used in the thumbnail and should be a third-person view of the player in the starting location. Include additional images if the player must align themselves to a wall or the ground."
-        onChange={handleChange}
-        changeContent={changeContent}
-      />
-      <UploadImage
-        label="Alignment"
-        input="alignment"
-        images={alignment}
-        comments={comments}
-        help="An image or set of images that should help the player align their crosshair or viewmodel to be able to consistently and successfully throw this grenade."
-        onChange={handleChange}
-        changeContent={changeContent}
-      />
-      <UploadImage
-        label="Result"
-        input="result"
-        images={result}
-        comments={comments}
-        help="The first image in this set will be used in the thumbnail and should be an elevated view of the result of the grenade throw."
-        onChange={handleChange}
-        changeContent={changeContent}
-      />
-      <UploadVideo
-        label="Demonstration"
-        input="video"
-        video={video}
-        help="A video demonstration of the grenade throw. This video is intended to be short and to the point."
-        onChange={handleChange}
-        changeContent={changeContent}
-      />
-      <div style={{ height: 16 }}></div>
-      <UploadSubmit value="Submit" />
-    </form>
+    <div>
+      <h3 style={{ marginBottom: "8px" }}>Instructions</h3>
+      <p className="upload-instructions">{instructions}</p>
+      <form onSubmit={handleSubmit}>
+        <UploadImage
+          label="Location"
+          input="location"
+          images={location}
+          comments={comments}
+          help="The first image in this set will be used in the thumbnail and should be a third-person view of the player in the starting location. Include additional images if the player must align themselves to a wall or the ground."
+          onChange={handleChange}
+          changeContent={changeContent}
+        />
+        <UploadImage
+          label="Alignment"
+          input="alignment"
+          images={alignment}
+          comments={comments}
+          help="An image or set of images that should help the player align their crosshair or viewmodel to be able to consistently and successfully throw this grenade."
+          onChange={handleChange}
+          changeContent={changeContent}
+        />
+        <UploadImage
+          label="Result"
+          input="result"
+          images={result}
+          comments={comments}
+          help="The first image in this set will be used in the thumbnail and should be an elevated view of the result of the grenade throw."
+          onChange={handleChange}
+          changeContent={changeContent}
+        />
+        <UploadVideo
+          label="Demonstration"
+          input="video"
+          video={video}
+          help="A video demonstration of the grenade throw. This video is intended to be short and to the point."
+          onChange={handleChange}
+          changeContent={changeContent}
+        />
+        <div style={{ height: 16 }} />
+        <button className="upload-back" type="button" onClick={handleBack}>Go to previous page</button>
+        <UploadSubmit value="Submit" />
+      </form>
+    </div>
   );
 }
 
 
 // The images to be submitted
 function UploadImage({ label, input, images, comments, help, onChange, changeContent }) {
+  // The maximum accepted file size
+  const maxSize = 2;
+
+  const fileRqmts =
+    <ul>
+      <li>Accepted file extensions: jpg, jpeg, png</li>
+      <li>Maximum file size: {maxSize} MB</li>
+    </ul>;
+
   // Validates the file type and displays the image
   const handleMedia = (e) => {
     const target = e.target;
@@ -79,10 +97,22 @@ function UploadImage({ label, input, images, comments, help, onChange, changeCon
     if (target.files && target.files[0]) {
       const file = target.files[0];
 
-      // Checks the file type
-      if (/^image\/(jpeg|png)$/.test(file.type)) {
+      // Checks the file type and size
+      if (/^image\/(jpeg|png)$/.test(file.type) && (file.size < 1024 * 1024 * maxSize)) {
         images.push(file);
         onChange(input, images);
+      }
+      else {
+        // The content of the error message
+        const content =
+          <UploadMessage
+            title="File Requirements"
+            message="The submitted file does not meet one or more of the following requirements."
+            content={fileRqmts}
+            changeContent={changeContent}
+          />;
+
+        changeContent("contentModal", content);
       }
     }
   };
@@ -99,18 +129,16 @@ function UploadImage({ label, input, images, comments, help, onChange, changeCon
     onChange("comments", value);
   };
 
-  // Additional content for the help message
-  const helpContent =
-    <ul>
-      <li>Accepted file extensions: jpg, jpeg, png</li>
-      <li>Maximum file size: 2 MB</li>
-    </ul>;
+  // Prevents the label from opening the help message
+  const handleClick = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <section className="upload-media">
-      <label>
+      <label onClick={handleClick}>
         {label}
-        <Help message={help} content={helpContent} changeContent={changeContent} />
+        <Help message={help} content={fileRqmts} changeContent={changeContent} />
       </label>
       <div className="upload-image">
         <MediaFile
@@ -149,6 +177,15 @@ function UploadImage({ label, input, images, comments, help, onChange, changeCon
 
 // The video to be submitted
 function UploadVideo({ label, input, video, help, onChange, changeContent }) {
+  // The maximum accepted file size
+  const maxSize = 50;
+
+  const fileRqmts =
+    <ul>
+      <li>Accepted file extensions: mp4</li>
+      <li>Maximum file size: {maxSize} MB</li>
+    </ul>;
+
   // Validates the file type and displays the video
   const handleMedia = (e) => {
     const target = e.target;
@@ -157,25 +194,35 @@ function UploadVideo({ label, input, video, help, onChange, changeContent }) {
     if (target.files && target.files[0]) {
       const file = target.files[0];
 
-      // Checks the file type
-      if (/^video\/(mp4)$/.test(file.type)) {
+      // Checks the file type and size
+      if (/^video\/(mp4)$/.test(file.type) && (file.size < 1024 * 1024 * maxSize)) {
         onChange(input, file);
+      }
+      else {
+        // The content of the error message
+        const content =
+          <UploadMessage
+            title="File Requirements"
+            message="The submitted file does not meet one or more of the following requirements."
+            content={fileRqmts}
+            changeContent={changeContent}
+          />;
+
+        changeContent("contentModal", content);
       }
     }
   };
 
-  // Additional content for the help message
-  const helpContent =
-    <ul>
-      <li>Accepted file extensions: mp4</li>
-      <li>Maximum file size: 50 MB</li>
-    </ul>;
+  // Prevents the label from opening the help message
+  const handleClick = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <section className="upload-media">
-      <label>
+      <label onClick={handleClick}>
         {label}
-        <Help message={help} content={helpContent} changeContent={changeContent} />
+        <Help message={help} content={fileRqmts} changeContent={changeContent} />
       </label>
       <div className="upload-video">
         <MediaFile

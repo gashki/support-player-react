@@ -117,12 +117,14 @@
 .modal-user-agreement {
   color: #bdbdbd;
   font-size: 11px;
+  line-height: 14px;
   margin: 16px 0 6px;
 }
 
 .modal-form-error {
   color: #ff4755;
   font-size: 13px;
+  line-height: 16px;
 }
 
 .modal-close {

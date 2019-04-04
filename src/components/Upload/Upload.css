@@ -180,7 +180,7 @@
   font-family: "Roboto", sans-serif;
   font-size: 12px;
   height: 36px;
-  margin: 24px 0 0;
+  margin: 20px 0 0;
   outline: none;
   padding: 0;
   text-align: center;
@@ -211,6 +211,7 @@
 .upload-message > p {
   color: #bdbdbd;
   font-size: 14px;
+  line-height: 18px;
   margin: 0 0 8px;
 }
 
@@ -246,6 +247,13 @@
   box-shadow: 0 0 2px #d4006a;
 }
 
+.upload-instructions {
+  color: #bdbdbd;
+  font-size: 12px;
+  line-height: 16px;
+  margin: 0;
+}
+
 .upload-media {
   border-bottom: 1px solid #424242;
   padding: 20px 0;
@@ -253,7 +261,7 @@
 
 .upload-media:first-child {
   border-top: 1px solid #424242;
-  margin-top: 28px;
+  margin-top: 12px;
 }
 
 .upload-media > label {
@@ -369,6 +377,19 @@
   width: 192px;
 }
 
+.upload-back {
+  background-color: transparent;
+  border: none;
+  color: #d4006a;
+  cursor: pointer;
+  float: left;
+  font-size: 12px;
+  margin: 20px 0 0;
+  outline: none;
+  padding: 0;
+  text-transform: uppercase;
+}
+
 .upload-help {
   background-color: transparent;
   border: none;
@@ -384,4 +405,38 @@
   height: 100%;
   pointer-events: none;
   width: 100%;
+}
+
+.upload-loader {
+  height: inherit;
+  text-align: center;
+  width: inherit;
+}
+
+.upload-progress {
+  background-color: #202020;
+  border: 1px solid #424242;
+  border-radius: 4px;
+  display: inline-block;
+  margin: 24vh auto 0;
+  padding: 24px 10px 18px;
+  text-align: left;
+}
+
+.upload-progress > h3 {
+  color: #d4006a;
+  font-size: 16px;
+  font-weight: normal;
+  margin: 0 18px 20px;
+}
+
+.upload-progress > p {
+  color: #bdbdbd;
+  font-size: 14px;
+  line-height: 18px;
+  margin: 0 18px 4px;
+}
+
+.upload-progress .ldBar-label {
+  display: none;
 }
