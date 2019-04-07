@@ -243,6 +243,12 @@ function MediaFile({ id, image = true, media, require = false, handleMedia, remo
   const label = image ? "Add an image" : "Add a video";
   const accept = image ? "image/jpeg,image/png" : "video/mp4";
 
+  // Resets the value of the input element
+  const handleClick = (_) => {
+    document.getElementById(id).value = "";
+    removeMedia();
+  };
+
   return (
     <div>
       <input style={{ display: "none" }} id={id} type="file" accept={accept} onChange={handleMedia} />
@@ -252,7 +258,7 @@ function MediaFile({ id, image = true, media, require = false, handleMedia, remo
             ? <img src={URL.createObjectURL(media)} alt="" />
             : <video src={URL.createObjectURL(media)} alt="" />
           }
-          <button title="Remove" type="button" onClick={removeMedia}>
+          <button title="Remove" type="button" onClick={handleClick}>
             <img src={ic_delete} alt="" />
           </button>
           <Vertical />
