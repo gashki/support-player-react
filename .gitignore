@@ -24,4 +24,10 @@ yarn-error.log*
 
 .vscode/
 package-lock.json
+public/admin.html
+
+# firebase
+.firebase/
+.firebaserc
+firebase.json
 /src/firebase.js

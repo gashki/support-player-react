@@ -86,11 +86,11 @@ class Upload extends Component {
       invalidList.push("Map");
     }
 
-    if (start === "") {
+    if (start.trim() === "") {
       invalidList.push("Start Location");
     }
 
-    if (end === "") {
+    if (end.trim() === "") {
       invalidList.push("End Location");
     }
 
