@@ -3,7 +3,6 @@ import "./Content.css";
 
 // React components
 import NadeList from "./NadeList";
-import Scroll from "./Scroll";
 import Sidebar from "./Sidebar";
 import Upload from "./Upload/Upload";
 
@@ -13,7 +12,7 @@ function Content(props) {
   function renderContent() {
     switch (props.contentMain.type) {
       case "upload":
-        return <Scroll><Upload changeContent={props.changeContent} /></Scroll>;
+        return <Upload changeContent={props.changeContent} />;
       default:
         return [<Sidebar key={1} />, <NadeList key={2} />];
     }

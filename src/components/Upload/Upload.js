@@ -9,6 +9,7 @@ import "../../lib/loading-bar.js";
 // React components
 import Details from "./Details";
 import Media from "./Media";
+import Scroll from "../Scroll";
 import { UploadMessage } from "./Form";
 
 
@@ -160,6 +161,8 @@ class Upload extends Component {
       this.displayMissingFields(invalidList);
     }
     else {
+      const media = { location, alignment, result, video };
+
       // The number of images expected to be uploaded to storage
       details.images = {
         location: location.length,
@@ -168,8 +171,6 @@ class Upload extends Component {
       };
 
       details.video = video ? true : false;
-
-      const media = { location: location, alignment: alignment, result: result, video: video };
 
       // Displays the loading icon
       changeContent("contentModal", <UploadLoader details={details} media={media} changeContent={changeContent} />);
@@ -203,14 +204,7 @@ class Upload extends Component {
 
   render() {
     const { content, location, alignment, result, video, comments, ...details } = this.state;
-
-    const media = {
-      location: location,
-      alignment: alignment,
-      result: result,
-      video: video,
-      comments: comments
-    };
+    const media = { location, alignment, result, video, comments };
 
     const handleChange = this.handleChange;
     const handleDetails = this.handleDetails;
@@ -218,24 +212,26 @@ class Upload extends Component {
     const changeContent = this.props.changeContent;
 
     return (
-      <div className="upload">
-        <h2>Submit a Grenade</h2>
-        <h4>* indicates required field</h4>
-        {content === 0
-          ? <Details
-            {...details}
-            handleChange={handleChange}
-            handleSubmit={handleDetails}
-            changeContent={changeContent}
-          />
-          : <Media
-            {...media}
-            handleChange={handleChange}
-            handleSubmit={handleMedia}
-            changeContent={changeContent}
-          />
-        }
-      </div>
+      <Scroll>
+        <div className="upload">
+          <h2>Submit a Grenade</h2>
+          <h4>* indicates required field</h4>
+          {content === 0
+            ? <Details
+              {...details}
+              handleChange={handleChange}
+              handleSubmit={handleDetails}
+              changeContent={changeContent}
+            />
+            : <Media
+              {...media}
+              handleChange={handleChange}
+              handleSubmit={handleMedia}
+              changeContent={changeContent}
+            />
+          }
+        </div>
+      </Scroll>
     );
   }
 }

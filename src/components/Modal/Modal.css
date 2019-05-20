@@ -82,7 +82,7 @@
 }
 
 .modal-login-forgot {
-  background-color: transparent;
+  background: none;
   border: none;
   color: #d4006a;
   cursor: pointer;
@@ -128,7 +128,7 @@
 }
 
 .modal-close {
-  background-color: transparent;
+  background: none;
   border: 1px solid transparent;
   border-radius: 4px;
   cursor: pointer;
@@ -143,10 +143,9 @@
   border: 1px solid #bdbdbd;
 }
 
-.modal-close > img {
+.modal-close > svg {
   height: 18px;
   padding: 4px;
-  pointer-events: none;
   vertical-align: middle;
   width: 18px;
 }

@@ -102,7 +102,7 @@ class SettingsForm extends Component {
 
     if (isEmail) {
       return (
-        <form className="modal-form" id="modal-form-email" onSubmit={handleSubmit}>
+        <form id="modal-form-email" className="modal-form" onSubmit={handleSubmit}>
           {error && <ModalError error={error} />}
           <ModalInput
             label="New Email"
@@ -125,7 +125,7 @@ class SettingsForm extends Component {
     }
 
     return (
-      <form className="modal-form" id="modal-form-password" onSubmit={handleSubmit}>
+      <form id="modal-form-password" className="modal-form" onSubmit={handleSubmit}>
         {error && <ModalError error={error} />}
         <ModalInput
           label="Current Password"

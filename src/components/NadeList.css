@@ -2,6 +2,8 @@
   flex-grow: 1;
   font-size: 0;
   list-style: none;
-  padding: 20px;
+  margin: 0 auto;
+  max-width: 1600px;
+  padding: 20px 20px 80px;
   text-align: center;
 }

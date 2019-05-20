@@ -3,12 +3,9 @@ import React from "react";
 // React components
 import Help from "./Help";
 import Required from "./Required";
+import { SvgAddBox, SvgDelete } from "../SvgIcons";
 import { UploadMessage, UploadSubmit } from "./Form";
 import Vertical from "../Vertical";
-
-// SVG Icons
-import ic_add_box from "../../svg/ic_add_box.svg";
-import ic_delete from "../../svg/ic_delete.svg";
 
 
 // The media form of the upload page
@@ -251,20 +248,20 @@ function MediaFile({ id, image = true, media, require = false, handleMedia, remo
 
   return (
     <div>
-      <input style={{ display: "none" }} id={id} type="file" accept={accept} onChange={handleMedia} />
+      <input id={id} style={{ display: "none" }} type="file" accept={accept} onChange={handleMedia} />
       {media
         ? <div className="upload-media-file">
           {image
-            ? <img src={URL.createObjectURL(media)} alt="" />
-            : <video src={URL.createObjectURL(media)} alt="" />
+            ? <img src={URL.createObjectURL(media)} alt="Submitted file" />
+            : <video src={URL.createObjectURL(media)} />
           }
           <button title="Remove" type="button" onClick={handleClick}>
-            <img src={ic_delete} alt="" />
+            <SvgDelete color="#ff4755" />
           </button>
           <Vertical />
         </div>
         : <label className="upload-media-label unselectable" htmlFor={id}>
-          <img src={ic_add_box} alt="" />
+          <SvgAddBox color="#ffadd6" />
           <span>{label}{require && <Required />}</span>
           <Vertical />
         </label>

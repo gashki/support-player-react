@@ -1,6 +1,9 @@
 import React from "react";
+
+// React components
+import { SvgHelp } from "../SvgIcons";
 import { UploadMessage } from "./Form";
-import ic_help from "../../svg/ic_help.svg";
+
 
 // The button used for opening a help message
 function Help({ message, content, changeContent }) {
@@ -22,7 +25,7 @@ function Help({ message, content, changeContent }) {
 
   return (
     <button className="upload-help" {...attributes}>
-      <img src={ic_help} alt="" />
+      <SvgHelp color="#bdbdbd" />
     </button>
   );
 }

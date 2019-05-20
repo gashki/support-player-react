@@ -86,7 +86,7 @@ class LoginForm extends Component {
 
     if (isLogin) {
       return (
-        <form className="modal-form" id="modal-form-login" onSubmit={handleSubmit}>
+        <form id="modal-form-login" className="modal-form" onSubmit={handleSubmit}>
           {error && <ModalError error={error} />}
           <ModalInput
             label="Email"
@@ -109,7 +109,7 @@ class LoginForm extends Component {
     }
 
     return (
-      <form className="modal-form" id="modal-form-register" onSubmit={handleSubmit}>
+      <form id="modal-form-register" className="modal-form" onSubmit={handleSubmit}>
         {error && <ModalError error={error} />}
         <ModalInput
           label="Email"

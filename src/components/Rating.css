@@ -1,0 +1,16 @@
+.rating {
+  position: relative;
+}
+
+.rating svg {
+  height: 18px;
+  width: 18px;
+}
+
+.rating > span:last-child {
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  white-space: nowrap;
+}

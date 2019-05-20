@@ -51,7 +51,7 @@ class App extends Component {
 
     // Displays the content of the application
     return (
-      <div style={{ display: "flex", flexFlow: "column", height: "100%" }}>
+      <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <Navbar
           currentUser={currentUser}
           changeContent={changeContent}

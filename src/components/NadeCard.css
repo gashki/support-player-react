@@ -1,9 +1,124 @@
 .nade-card {
+  background-color: #202020;
   display: inline-block;
   height: 190px;
   margin: 12px;
   overflow: hidden;
   width: 280px;
+}
 
-  background-color: red;
+.nade-card-blank {
+  display: inline-block;
+  height: 0;
+  margin: 0 12px;
+  width: 280px;
+}
+
+.nade-card-media {
+  cursor: pointer;
+  display: block;
+  height: 158px;
+  position: relative;
+  text-decoration: none;
+  width: 100%;
+}
+
+.nade-card-media > img, .nade-card-media > video {
+  max-height: 100%;
+  max-width: 100%;
+  pointer-events: none;
+  vertical-align: middle;
+}
+
+.nade-card-media > video, .nade-card-loader {
+  left: 0;
+  position: absolute;
+  top: 0;
+}
+
+.nade-card-loader {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.nade-card-loader > .loader {
+  animation: fade-in 0.2s ease-in 0.1s 1 normal forwards;
+  margin: 0 auto;
+  opacity: 0;
+}
+
+.nade-card-button {
+  animation: fade-in 0.2s ease-in 0.1s 1 normal forwards;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: none;
+  border-radius: 2px;
+  bottom: 5px;
+  cursor: pointer;
+  opacity: 0;
+  outline: none;
+  padding: 0;
+  position: absolute;
+  right: 5px;
+}
+
+.nade-card-button > svg {
+  height: 24px;
+  opacity: 0.8;
+  padding: 2px;
+  vertical-align: middle;
+  width: 24px;
+}
+
+.nade-card-type {
+  background-color: #f5f5f5;
+  border-radius: 16px;
+  height: 32px;
+  left: 4px;
+  opacity: 0.8;
+  position: absolute;
+  top: 4px;
+  width: 32px;
+}
+
+.nade-card-type > svg {
+  height: 32px;
+  margin: 0 0 0 1px;
+  transform: rotate(20deg);
+  width: 32px;
+}
+
+.nade-card-map {
+  background-color: rgba(0, 0, 0, 0.8);
+  bottom: 4px;
+  color: #f5f5f5;
+  font-size: 14px;
+  left: 4px;
+  padding: 2px 4px;
+  position: absolute;
+}
+
+.nade-card-details {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  height: 32px;
+  padding: 0 8px;
+}
+
+.nade-card-details > span {
+  color: #bdbdbd;
+  flex-grow: 1;
+  font-size: 12px;
+  text-align: left;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

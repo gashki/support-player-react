@@ -5,12 +5,8 @@ import "./Navbar.css";
 // React components
 import Login from "./Modal/Login";
 import Settings from "./Modal/Settings";
+import { SvgExit, SvgSettings, SvgUpload } from "./SvgIcons";
 import Vertical from "./Vertical";
-
-// SVG Icons
-import ic_exit from "../svg/ic_exit.svg";
-import ic_settings from "../svg/ic_settings.svg";
-import ic_upload from "../svg/ic_upload.svg";
 
 
 // The navigation bar at the top of each page
@@ -33,7 +29,7 @@ function Navbar({ currentUser, changeContent }) {
 // The user account section of the navigation bar
 function NavbarAccount({ currentUser, changeContent }) {
   // Returns an SVG button used in the user account section
-  function AccountButton({ src, href, title, onClick }) {
+  function AccountButton({ svg, href, title, onClick }) {
     const handleClick = (e) => {
       e.preventDefault();
       onClick();
@@ -43,9 +39,7 @@ function NavbarAccount({ currentUser, changeContent }) {
     const attributes = { href: href, title: title, onClick: handleClick };
 
     return (
-      <a className="navbar-account-button" {...attributes}>
-        <img src={src} alt="" />
-      </a>
+      <a className="navbar-account-button" {...attributes}>{svg}</a>
     );
   }
 
@@ -73,19 +67,19 @@ function NavbarAccount({ currentUser, changeContent }) {
       <h2 className="navbar-user">{currentUser.email}</h2>
       <div className="navbar-divider"></div>
       <AccountButton
-        src={ic_upload}
+        svg={<SvgUpload color="#f5f5f5" />}
         href="/upload"
         title="Upload"
         onClick={handleUpload}
       />
       <AccountButton
-        src={ic_settings}
+        svg={<SvgSettings color="#f5f5f5" />}
         href="/settings"
         title="Settings"
         onClick={handleSettings}
       />
       <AccountButton
-        src={ic_exit}
+        svg={<SvgExit color="#f5f5f5" />}
         href="/logout"
         title="Log out"
         onClick={authSignOut}

@@ -140,8 +140,9 @@ export function UploadSwitch({ label, input, value, onChange }) {
     <div>
       <label className="upload-switch-label">{label}<Required /></label>
       <input
+        id={id}
         className="upload-switch-input"
-        id={id} type="checkbox"
+        type="checkbox"
         defaultChecked={value}
         onChange={handleChange}
       />

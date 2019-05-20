@@ -1,5 +1,5 @@
 import React from "react";
-import ic_close from "../../svg/ic_close.svg";
+import { SvgClose } from "../SvgIcons";
 
 // The button used for closing the modal
 function Close({ changeContent }) {
@@ -12,7 +12,7 @@ function Close({ changeContent }) {
 
   return (
     <button className="modal-close" {...attributes}>
-      <img src={ic_close} alt="" />
+      <SvgClose color="#bdbdbd" />
     </button>
   );
 }
