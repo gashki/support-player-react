@@ -1,9 +1,7 @@
 .nade-list {
-  flex-grow: 1;
+  display: inline-block;
   font-size: 0;
   list-style: none;
-  margin: 0 auto;
   max-width: 1600px;
   padding: 20px 20px 80px;
-  text-align: center;
 }

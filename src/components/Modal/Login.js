@@ -67,7 +67,7 @@ class LoginForm extends Component {
     }
 
     // Authenticates the user and closes the modal
-    authenticateUser(email, password).then(() => {
+    authenticateUser(email, password).then((_) => {
       changeContent("contentModal", null);
     }).catch((error) => {
       console.log(error);

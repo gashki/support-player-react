@@ -34,7 +34,7 @@ class NadeCard extends Component {
     const nade = nadeData.nade;
     const team = nadeData.team;
 
-    // Determines the appropriate firegrenade to display
+    // Determines the appropriate fire grenade to display
     const type = nade === "weapon_firegrenade" ? (team === 1 ? "weapon_incgrenade" : "weapon_molotov") : nade;
 
     const thumbnail = nadeData["images"]["thumb_medium"];

@@ -38,7 +38,14 @@ class NadeList extends Component {
 
   render() {
     const nadeList = this.state.nadeList;
-    const blankList = new Array(4).fill(<li className="nade-card-blank"></li>);
+
+    // Does not work in Internet Explorer
+    //const blankList = new Array(4).fill(<li className="nade-card-blank"></li>);
+
+    const blankList = [];
+    for (let i = 0; i < 4; i++) {
+      blankList.push(<li key={`blank-nade-${i}`} className="nade-card-blank"></li>);
+    }
 
     return (
       <Scroll>

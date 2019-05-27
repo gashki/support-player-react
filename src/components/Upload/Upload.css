@@ -1,7 +1,9 @@
 .upload {
   background-color: #202020;
-  margin: 32px auto 40px;
+  display: inline-block;
+  margin: 32px 20px 40px;
   padding: 48px 60px 60px;
+  text-align: left;
   width: 600px;
 }
 
@@ -116,7 +118,7 @@
 }
 
 .upload-switch-input:checked + label:after {
-  left: calc(100% - 2px);
+  left: 38px;
   transform: translateX(-100%);
 }
 
