@@ -133,7 +133,7 @@ class Upload extends Component {
   // Verifies the input of the media form
   handleMedia = (e) => {
     const { content, location, alignment, result, video, ...details } = this.state;
-    const changeContent = this.props.changeContent;
+    const changeState = this.props.changeState;
 
     // Prevents the form from being submitted
     e.preventDefault();
@@ -173,13 +173,13 @@ class Upload extends Component {
       details.video = video ? true : false;
 
       // Displays the loading icon
-      changeContent("contentModal", <UploadLoader details={details} media={media} changeContent={changeContent} />);
+      changeState("contentModal", <UploadLoader details={details} media={media} changeState={changeState} />);
     }
   };
 
   // Displays an error message with the missing fields
   displayMissingFields = (invalidList) => {
-    const changeContent = this.props.changeContent;
+    const changeState = this.props.changeState;
 
     // Builds a list of components with the fields
     const invalidInput = invalidList.map((invalid, index) => {
@@ -196,10 +196,10 @@ class Upload extends Component {
         title="Missing Information"
         message="The following information is missing and must be completed before continuing."
         content={<ul>{invalidInput}</ul>}
-        changeContent={changeContent}
+        changeState={changeState}
       />;
 
-    changeContent("contentModal", content);
+    changeState("contentModal", content);
   };
 
   render() {
@@ -209,7 +209,7 @@ class Upload extends Component {
     const handleChange = this.handleChange;
     const handleDetails = this.handleDetails;
     const handleMedia = this.handleMedia;
-    const changeContent = this.props.changeContent;
+    const changeState = this.props.changeState;
 
     return (
       <Scroll>
@@ -221,13 +221,13 @@ class Upload extends Component {
               {...details}
               handleChange={handleChange}
               handleSubmit={handleDetails}
-              changeContent={changeContent}
+              changeState={changeState}
             />
             : <Media
               {...media}
               handleChange={handleChange}
               handleSubmit={handleMedia}
-              changeContent={changeContent}
+              changeState={changeState}
             />
           }
         </div>
@@ -257,7 +257,7 @@ class UploadLoader extends Component {
 
     ldbar.set(detailsPercent / 2);
 
-    const { details, media, changeContent } = this.props;
+    const { details, media, changeState } = this.props;
     const validate = functions.httpsCallable("submitDetails");
 
     // Validates the form data
@@ -319,7 +319,7 @@ class UploadLoader extends Component {
         })
       );
     }).then((_) => {
-      //changeContent("contentModal", null);
+      //changeState("contentModal", null);
       //success
       console.log("upload success");
     }).catch(error => {

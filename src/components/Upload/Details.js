@@ -35,7 +35,7 @@ function Details(props) {
 
   const handleChange = props.handleChange;
   const handleSubmit = props.handleSubmit;
-  const changeContent = props.changeContent;
+  const changeState = props.changeState;
 
 
   // The options for the type of grenade
@@ -94,7 +94,7 @@ function Details(props) {
           help="The start location where the player throws the grenade. The input should be a call-out on the map that the player can easily recognize."
           require={true}
           onChange={handleChange}
-          changeContent={changeContent}
+          changeState={changeState}
         />
         <UploadInput
           label="End Location"
@@ -105,7 +105,7 @@ function Details(props) {
           help="The end location of the grenade after it has been thrown. The input should be a call-out on the map that the player can easily recognize."
           require={true}
           onChange={handleChange}
-          changeContent={changeContent}
+          changeState={changeState}
         />
       </div>
       <div className="upload-row">
@@ -117,7 +117,7 @@ function Details(props) {
           length={140}
           help="The source of this grenade throw. This can be a link to a Reddit/Imgur post or to a YouTube video/channel."
           onChange={handleChange}
-          changeContent={changeContent}
+          changeState={changeState}
         />
       </div>
       <h3>Characteristics</h3>
@@ -187,7 +187,7 @@ function Details(props) {
           value={thrw}
           help="The action that triggers the grenade throw. A left click is an overhand (long) throw and a right click is an underhand (short) throw."
           onChange={handleChange}
-          changeContent={changeContent}
+          changeState={changeState}
         />
       </div>
       {viewmodel &&
@@ -209,7 +209,7 @@ function Details(props) {
           value={team}
           help="The team that benefits the most from this grenade throw and are most likely to use it in a competitive match."
           onChange={handleChange}
-          changeContent={changeContent}
+          changeState={changeState}
         />
       </div>
       {vsettings &&

@@ -1,7 +1,7 @@
 .upload {
   background-color: #202020;
   display: inline-block;
-  margin: 32px 20px 40px;
+  margin: 32px 32px 40px;
   padding: 48px 60px 60px;
   text-align: left;
   width: 600px;
@@ -377,7 +377,7 @@
   width: 192px;
 }
 
-.upload-back {
+.upload-previous {
   background: none;
   border: none;
   color: #d4006a;

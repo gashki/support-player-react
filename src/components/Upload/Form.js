@@ -45,7 +45,7 @@ export function UploadInput(props) {
     help,
     require = false,
     onChange,
-    changeContent
+    changeState
   } = props;
 
   // Sets the value of the input
@@ -64,7 +64,7 @@ export function UploadInput(props) {
       <label className="upload-details-label" onClick={handleClick}>
         {label}
         {require && <Required />}
-        {help && <Help message={help} changeContent={changeContent} />}
+        {help && <Help message={help} changeState={changeState} />}
       </label>
       <input
         className="upload-input border-box"
@@ -79,7 +79,7 @@ export function UploadInput(props) {
 }
 
 // The radio input used on the details form
-export function UploadRadio({ label, input, options, value, help, onChange, changeContent }) {
+export function UploadRadio({ label, input, options, value, help, onChange, changeState }) {
   const name = `upload-radio-${input}`;
 
   // Builds a list of radio options
@@ -117,7 +117,7 @@ export function UploadRadio({ label, input, options, value, help, onChange, chan
       <label className="upload-details-label" onClick={handleClick}>
         {label}
         <Required />
-        {help && <Help message={help} changeContent={changeContent} />}
+        {help && <Help message={help} changeState={changeState} />}
       </label>
       <div className="upload-radio border-box">
         {optionList}
@@ -162,14 +162,14 @@ export function UploadSubmit({ value }) {
 }
 
 // The error/help message used for the upload page
-export function UploadMessage({ title, message, content, changeContent }) {
+export function UploadMessage({ title, message, content, changeState }) {
   // Prevents the modal from closing when the content is clicked
   const handleClick = (e) => {
     e.stopPropagation();
   };
 
   const closeModal = () => {
-    changeContent("contentModal", null);
+    changeState("contentModal", null);
   };
 
   return (

@@ -7,7 +7,7 @@ import { ModalLabel, ModalInput, ModalSubmit, ModalError } from "./Form";
 
 
 // The settings content for the modal
-function Settings({ currentUser, changeContent }) {
+function Settings({ currentUser, changeState }) {
   // Prevents the modal from closing when the content is clicked
   const handleClick = (e) => {
     e.stopPropagation();
@@ -20,14 +20,14 @@ function Settings({ currentUser, changeContent }) {
       <SettingsForm
         isEmail={true}
         currentUser={currentUser}
-        changeContent={changeContent}
+        changeState={changeState}
       />
       <SettingsForm
         isEmail={false}
         currentUser={currentUser}
-        changeContent={changeContent}
+        changeState={changeState}
       />
-      <Close changeContent={changeContent} />
+      <Close changeState={changeState} />
     </div>
   );
 }
@@ -57,7 +57,7 @@ class SettingsForm extends Component {
 
   // Handles the form submission
   handleSubmit = (e) => {
-    const { isEmail, currentUser, changeContent } = this.props;
+    const { isEmail, currentUser, changeState } = this.props;
     const { newEmail, newPassword, confirmPassword, currentPassword } = this.state;
 
     // Prevents the form from being submitted
@@ -84,7 +84,7 @@ class SettingsForm extends Component {
 
       return currentUser.updatePassword(newPassword);
     }).then(() => {
-      changeContent("contentModal", null);
+      changeState("contentModal", null);
     }).catch((error) => {
       console.log(error);
 

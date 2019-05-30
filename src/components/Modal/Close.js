@@ -2,9 +2,9 @@ import React from "react";
 import { SvgClose } from "../SvgIcons";
 
 // The button used for closing the modal
-function Close({ changeContent }) {
+function Close({ changeState }) {
   const handleClick = () => {
-    changeContent("contentModal", null);
+    changeState("contentModal", null);
   };
 
   // The attributes for the close button

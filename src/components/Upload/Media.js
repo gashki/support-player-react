@@ -13,10 +13,10 @@ function Media(props) {
   const { location, alignment, result, video, comments } = props;
   const handleChange = props.handleChange;
   const handleSubmit = props.handleSubmit;
-  const changeContent = props.changeContent;
+  const changeState = props.changeState;
 
   // Returns to the previous page
-  const handleBack = () => {
+  const PreviousPage = () => {
     // Changes the content to the details form
     handleChange("content", 0);
 
@@ -38,7 +38,7 @@ function Media(props) {
           comments={comments}
           help="The first image in this set will be used in the thumbnail and should be a third-person view of the player in the starting location. Include additional images if the player must align themselves to a wall or the ground."
           onChange={handleChange}
-          changeContent={changeContent}
+          changeState={changeState}
         />
         <UploadImage
           label="Alignment"
@@ -47,7 +47,7 @@ function Media(props) {
           comments={comments}
           help="An image or set of images that should help the player align their crosshair or viewmodel to be able to consistently and successfully throw this grenade."
           onChange={handleChange}
-          changeContent={changeContent}
+          changeState={changeState}
         />
         <UploadImage
           label="Result"
@@ -56,7 +56,7 @@ function Media(props) {
           comments={comments}
           help="The first image in this set will be used in the thumbnail and should be an elevated view of the result of the grenade throw."
           onChange={handleChange}
-          changeContent={changeContent}
+          changeState={changeState}
         />
         <UploadVideo
           label="Demonstration"
@@ -64,10 +64,10 @@ function Media(props) {
           video={video}
           help="A video demonstration of the grenade throw. This video is intended to be short and to the point."
           onChange={handleChange}
-          changeContent={changeContent}
+          changeState={changeState}
         />
         <div style={{ height: 16 }} />
-        <button className="upload-back" type="button" onClick={handleBack}>Go to previous page</button>
+        <button className="upload-previous" type="button" onClick={PreviousPage}>Go to previous page</button>
         <UploadSubmit value="Submit" />
       </form>
     </div>
@@ -76,11 +76,11 @@ function Media(props) {
 
 
 // The images to be submitted
-function UploadImage({ label, input, images, comments, help, onChange, changeContent }) {
+function UploadImage({ label, input, images, comments, help, onChange, changeState }) {
   // The maximum accepted file size
   const maxSize = 2;
 
-  const fileRqmts =
+  const fileRequirements =
     <ul>
       <li>Accepted file extensions: jpg, jpeg, png</li>
       <li>Maximum file size: {maxSize} MB</li>
@@ -105,11 +105,11 @@ function UploadImage({ label, input, images, comments, help, onChange, changeCon
           <UploadMessage
             title="File Requirements"
             message="The submitted file does not meet one or more of the following requirements."
-            content={fileRqmts}
-            changeContent={changeContent}
+            content={fileRequirements}
+            changeState={changeState}
           />;
 
-        changeContent("contentModal", content);
+        changeState("contentModal", content);
       }
     }
   };
@@ -135,7 +135,7 @@ function UploadImage({ label, input, images, comments, help, onChange, changeCon
     <section className="upload-media">
       <label onClick={handleClick}>
         {label}
-        <Help message={help} content={fileRqmts} changeContent={changeContent} />
+        <Help message={help} content={fileRequirements} changeState={changeState} />
       </label>
       <div className="upload-image">
         <MediaFile
@@ -173,11 +173,11 @@ function UploadImage({ label, input, images, comments, help, onChange, changeCon
 
 
 // The video to be submitted
-function UploadVideo({ label, input, video, help, onChange, changeContent }) {
+function UploadVideo({ label, input, video, help, onChange, changeState }) {
   // The maximum accepted file size
   const maxSize = 50;
 
-  const fileRqmts =
+  const fileRequirements =
     <ul>
       <li>Accepted file extensions: mp4</li>
       <li>Maximum file size: {maxSize} MB</li>
@@ -201,11 +201,11 @@ function UploadVideo({ label, input, video, help, onChange, changeContent }) {
           <UploadMessage
             title="File Requirements"
             message="The submitted file does not meet one or more of the following requirements."
-            content={fileRqmts}
-            changeContent={changeContent}
+            content={fileRequirements}
+            changeState={changeState}
           />;
 
-        changeContent("contentModal", content);
+        changeState("contentModal", content);
       }
     }
   };
@@ -219,7 +219,7 @@ function UploadVideo({ label, input, video, help, onChange, changeContent }) {
     <section className="upload-media">
       <label onClick={handleClick}>
         {label}
-        <Help message={help} content={fileRqmts} changeContent={changeContent} />
+        <Help message={help} content={fileRequirements} changeState={changeState} />
       </label>
       <div className="upload-video">
         <MediaFile

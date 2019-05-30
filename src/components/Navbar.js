@@ -10,16 +10,22 @@ import Vertical from "./Vertical";
 
 
 // The navigation bar at the top of each page
-function Navbar({ currentUser, changeContent }) {
+function Navbar({ currentUser, changeState }) {
+  // Resets the content for the home button
+  const handleClick = (e) => {
+    e.preventDefault();
+    changeState("contentMain", { type: "NadeList", state: null }, "/");
+  };
+
   return (
     <nav className="navbar">
-      <a className="navbar-logo unselectable" href="/">
+      <a className="navbar-logo unselectable" href="/" title="Support Player" onClick={handleClick}>
         <h1>SupportPlayer</h1>
         <Vertical />
       </a>
       {currentUser
-        ? <NavbarAccount currentUser={currentUser} changeContent={changeContent} />
-        : <NavbarLogin changeContent={changeContent} />
+        ? <NavbarAccount currentUser={currentUser} changeState={changeState} />
+        : <NavbarLogin changeState={changeState} />
       }
     </nav>
   );
@@ -27,7 +33,7 @@ function Navbar({ currentUser, changeContent }) {
 
 
 // The user account section of the navigation bar
-function NavbarAccount({ currentUser, changeContent }) {
+function NavbarAccount({ currentUser, changeState }) {
   // Returns an SVG button used in the user account section
   function AccountButton({ svg, href, title, onClick }) {
     const handleClick = (e) => {
@@ -45,13 +51,13 @@ function NavbarAccount({ currentUser, changeContent }) {
 
   // Opens the upload page
   const handleUpload = () => {
-    changeContent("contentMain", { "type": "upload" });
+    changeState("contentMain", { type: "Upload", state: null }, "/upload");
   };
 
   // Opens the user settings modal
   const handleSettings = () => {
-    changeContent("contentModal",
-      <Settings currentUser={currentUser} changeContent={changeContent} />
+    changeState("contentModal",
+      <Settings currentUser={currentUser} changeState={changeState} />
     );
   };
 
@@ -91,15 +97,15 @@ function NavbarAccount({ currentUser, changeContent }) {
 
 
 // The login section of the navigation bar
-function NavbarLogin({ changeContent }) {
+function NavbarLogin({ changeState }) {
   // Returns a text button used for opening the login modal
   function LoginButton({ index, href, title }) {
     const handleClick = (e) => {
       e.preventDefault();
 
       // Opens the login modal
-      changeContent("contentModal",
-        <Login index={index} changeContent={changeContent} />
+      changeState("contentModal",
+        <Login index={index} changeState={changeState} />
       );
     };
 

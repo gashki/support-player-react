@@ -8,13 +8,20 @@ import Upload from "./Upload/Upload";
 
 
 function Content(props) {
+  const contentType = props.contentMain.type;
   //types of content: browse(default/null),search,upload,nade,collection,error
   function renderContent() {
-    switch (props.contentMain.type) {
-      case "upload":
-        return <Upload changeContent={props.changeContent} />;
-      default:
+    switch (contentType) {
+      case "Collection":
+        return <div></div>;
+      case "Grenade":
+        return <div></div>;
+      case "NadeList":
         return [<Sidebar key={1} />, <NadeList key={2} />];
+      case "Upload":
+        return <Upload changeState={props.changeState} />;
+      default:
+        return null;
     }
   }
 

@@ -6,7 +6,7 @@ import { UploadMessage } from "./Form";
 
 
 // The button used for opening a help message
-function Help({ message, content, changeContent }) {
+function Help({ message, content, changeState }) {
   const handleClick = () => {
     // The content of the help message
     const help =
@@ -14,10 +14,10 @@ function Help({ message, content, changeContent }) {
         title="Additional Information"
         message={message}
         content={content}
-        changeContent={changeContent}
+        changeState={changeState}
       />;
 
-    changeContent("contentModal", help);
+    changeState("contentModal", help);
   };
 
   // The attributes for the help button

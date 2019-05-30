@@ -7,7 +7,7 @@ import { ModalLabel, ModalInput, ModalSubmit, ModalError } from "./Form";
 
 
 // The login content for the modal
-function Login({ index, changeContent }) {
+function Login({ index, changeState }) {
   // Prevents the modal from closing when the content is clicked
   const handleClick = (e) => {
     e.stopPropagation();
@@ -17,9 +17,9 @@ function Login({ index, changeContent }) {
     <div className="modal-content-tabs" onClick={handleClick}>
       <ModalLabel checked={0 === index} label="Login" />
       <ModalLabel checked={1 === index} label="Register" />
-      <LoginForm isLogin={true} changeContent={changeContent} />
-      <LoginForm isLogin={false} changeContent={changeContent} />
-      <Close changeContent={changeContent} />
+      <LoginForm isLogin={true} changeState={changeState} />
+      <LoginForm isLogin={false} changeState={changeState} />
+      <Close changeState={changeState} />
     </div>
   );
 }
@@ -47,7 +47,7 @@ class LoginForm extends Component {
 
   // Handles the form submission
   handleSubmit = (e) => {
-    const { isLogin, changeContent } = this.props;
+    const { isLogin, changeState } = this.props;
     const { email, password } = this.state;
 
     // Prevents the form from being submitted
@@ -68,7 +68,7 @@ class LoginForm extends Component {
 
     // Authenticates the user and closes the modal
     authenticateUser(email, password).then((_) => {
-      changeContent("contentModal", null);
+      changeState("contentModal", null);
     }).catch((error) => {
       console.log(error);
 
