@@ -50,9 +50,7 @@ class SettingsForm extends Component {
 
   // Changes the value of the text inputs
   handleChange = (e, input) => {
-    this.setState({
-      [input]: e.target.value
-    });
+    this.setState({ [input]: e.target.value });
   };
 
   // Handles the form submission
@@ -63,9 +61,7 @@ class SettingsForm extends Component {
     // Prevents the form from being submitted
     e.preventDefault();
 
-    this.setState({
-      error: null
-    });
+    this.setState({ error: null });
 
     const credential = firebase.auth.EmailAuthProvider.credential(
       currentUser.email,
@@ -88,9 +84,7 @@ class SettingsForm extends Component {
     }).catch((error) => {
       console.log(error);
 
-      this.setState({
-        error: error
-      });
+      this.setState({ error });
     });
   };
 

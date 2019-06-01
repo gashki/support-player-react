@@ -92,7 +92,7 @@ class App extends Component {
         contentModal = <Login index={0} changeState={changeState} />;
       }
     }
-    // Replaces the URL if it is invalid
+    // The current URL is invalid
     else {
       replacePath = "";
     }
@@ -108,9 +108,7 @@ class App extends Component {
 
   // Sets the state of the content
   changeState = (type, content, path) => {
-    this.setState({
-      [type]: content
-    });
+    this.setState({ [type]: content });
 
     // Changes the current URL of the page
     if (path) window.history.pushState(null, null, path);

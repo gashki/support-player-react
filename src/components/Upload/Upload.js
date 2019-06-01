@@ -53,9 +53,7 @@ class Upload extends Component {
 
   // Sets the state of an input
   handleChange = (input, value) => {
-    this.setState({
-      [input]: value
-    });
+    this.setState({ [input]: value });
   };
 
   // Verifies the input of the details form
@@ -121,9 +119,7 @@ class Upload extends Component {
     }
     else {
       // Continue to the media form
-      this.setState({
-        content: 1
-      });
+      this.setState({ content: 1 });
 
       // Scroll to the top of the page
       document.querySelector(".content > .scroll").scrollTop = 0;
@@ -241,6 +237,9 @@ class Upload extends Component {
 class UploadLoader extends Component {
   constructor(props) {
     super(props);
+
+    // The default state of the upload dialog
+    this.state = { complete: 0 };
   }
 
   componentDidMount() {
@@ -257,7 +256,7 @@ class UploadLoader extends Component {
 
     ldbar.set(detailsPercent / 2);
 
-    const { details, media, changeState } = this.props;
+    const { details, media } = this.props;
     const validate = functions.httpsCallable("submitDetails");
 
     // Validates the form data
@@ -319,28 +318,51 @@ class UploadLoader extends Component {
         })
       );
     }).then((_) => {
-      //changeState("contentModal", null);
-      //success
-      console.log("upload success");
+      this.setState({ complete: 1 });
     }).catch(error => {
       console.log(error);
     });
   }
 
   // Prevents the loading modal from closing
-  handleClick = (e) => {
+  preventClose = (e) => {
     e.stopPropagation();
   };
 
+  // Returns the user to the home page when the upload is complete
+  handleReturn = () => {
+    const changeState = this.props.changeState;
+    changeState("contentMain", { type: "NadeList", state: null }, "/");
+    changeState("contentModal", null);
+  };
+
   render() {
-    const handleClick = this.handleClick;
+    const complete = this.state.complete;
+    const preventClose = this.preventClose;
+    const handleReturn = this.handleReturn;
+    let title, message, content;
+
+    // Checks the state of the upload dialog
+    if (complete) {
+      title = "Submission Successful";
+      message = <p>Thank you for submitting your grenade. Your submission<br />will be processed within 24 hours.</p>;
+      content =
+        <span style={{ display: "flex", flexDirection: "row-reverse" }}>
+          <button type="button" onClick={handleReturn}>Return Home</button>
+        </span>;
+    }
+    else {
+      title = "Submitting Grenade";
+      message = <p>Please wait while the data is processing and the files<br />are uploading.</p>;
+      content = <div id="upload-ldbar" style={{ height: "40px", width: "380px" }} />;
+    }
 
     return (
-      <div className="upload-loader" onClick={handleClick}>
+      <div className="upload-loader" onClick={preventClose}>
         <div className="upload-progress">
-          <h3>Submitting Grenade</h3>
-          <p>Please wait while the data is processing and the files<br />are uploading.</p>
-          <div id="upload-ldbar" style={{ height: "40px", width: "380px" }} />
+          <h3>{title}</h3>
+          {message}
+          {content}
         </div>
       </div>
     );

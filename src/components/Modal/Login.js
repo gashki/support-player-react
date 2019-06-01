@@ -40,9 +40,7 @@ class LoginForm extends Component {
 
   // Changes the value of the text inputs
   handleChange = (e, input) => {
-    this.setState({
-      [input]: e.target.value
-    });
+    this.setState({ [input]: e.target.value });
   };
 
   // Handles the form submission
@@ -53,9 +51,7 @@ class LoginForm extends Component {
     // Prevents the form from being submitted
     e.preventDefault();
 
-    this.setState({
-      error: null
-    });
+    this.setState({ error: null });
 
     // Determines the user authentication method
     const authenticateUser = (a, b) => {
@@ -72,9 +68,7 @@ class LoginForm extends Component {
     }).catch((error) => {
       console.log(error);
 
-      this.setState({
-        error: error
-      });
+      this.setState({ error });
     });
   };
 
