@@ -4,7 +4,7 @@ import "./Upload.css";
 
 // Custom progress bar library
 import "../../lib/loading-bar.css";
-import "../../lib/loading-bar.js";
+import "../../lib/loading-bar.min.js";
 
 // React components
 import Details from "./Details";
@@ -239,7 +239,7 @@ class UploadLoader extends Component {
     super(props);
 
     // The default state of the upload dialog
-    this.state = { complete: 0 };
+    this.state = { complete: false };
   }
 
   componentDidMount() {
@@ -318,7 +318,7 @@ class UploadLoader extends Component {
         })
       );
     }).then((_) => {
-      this.setState({ complete: 1 });
+      this.setState({ complete: true });
     }).catch(error => {
       console.log(error);
     });
@@ -345,7 +345,7 @@ class UploadLoader extends Component {
     // Checks the state of the upload dialog
     if (complete) {
       title = "Submission Successful";
-      message = <p>Thank you for submitting your grenade. Your submission<br />will be processed within 24 hours.</p>;
+      message = <p>Thank you for submitting a grenade. Your submission will be<br />processed within 24 hours.</p>;
       content =
         <span style={{ display: "flex", flexDirection: "row-reverse" }}>
           <button type="button" onClick={handleReturn}>Return Home</button>

@@ -15,9 +15,7 @@ class NadeCard extends Component {
     super(props);
 
     // The default state of the card
-    this.state = {
-      mouseover: false
-    };
+    this.state = { mouseover: false };
   }
 
   render() {
@@ -30,12 +28,17 @@ class NadeCard extends Component {
     const views = nadeData.views;
     const viewCount = `${views} view${views === 1 ? "" : "s"}`;
 
-    const map = nadeData.map;
+    const map = MAPS[nadeData.map]["title"];
     const nade = nadeData.nade;
     const team = nadeData.team;
 
-    // Determines the appropriate fire grenade to display
-    const type = nade === "weapon_firegrenade" ? (team === 1 ? "weapon_incgrenade" : "weapon_molotov") : nade;
+    let icon = NADES[nade]["icon"];
+
+    // Determines the appropriate fire grenade icon
+    if ("weapon_firegrenade" === nade) {
+      const type = team === 1 ? "weapon_incgrenade" : "weapon_molotov";
+      icon = icon[type];
+    }
 
     const thumbnail = nadeData["images"]["thumb_medium"];
     const preview = nadeData["videos"]["preview"];
@@ -55,13 +58,13 @@ class NadeCard extends Component {
           {showPreview && <div className="nade-card-loader"><Loader size="small" /></div>}
           {showPreview && <video src={preview} autoPlay loop muted />}
           {mouseover && <ScheduleButton />}
-          {mouseover || <div className="nade-card-type">{NADES[type]}</div>}
-          {mouseover || <span className="nade-card-map">{MAPS[map]}</span>}
+          {mouseover || <div className="nade-card-type">{icon}</div>}
+          {mouseover || <span className="nade-card-map">{map}</span>}
           <Vertical />
         </a>
         <div className="nade-card-details">
           <span>{viewCount}&nbsp;&nbsp;&bull;&nbsp;&nbsp;{relativeTime}</span>
-          <Rating width="20%" />
+          <Rating width="20" />
         </div>
       </li>
     );
@@ -109,7 +112,7 @@ function getRelativeTime(timestamp) {
     { msec: msPerSec, unit: "second" }
   ];
 
-  // The number of milliseconds since the nade submission date
+  // The number of milliseconds since the nade submission
   const elapsed = Date.now() - timestamp;
 
   let tempNum, tempStr;

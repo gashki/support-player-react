@@ -16,7 +16,7 @@ function Rating({ width }) {
         <SvgStar color="#bdbdbd" />
         <SvgStar color="#bdbdbd" />
       </span>
-      <span style={{ width }}>
+      <span style={{ width: `${width}%` }}>
         <SvgStar color="#d00010" />
         <SvgStar color="#d00010" />
         <SvgStar color="#d00010" />

@@ -1,21 +1,100 @@
 import React from "react";
 import * as SvgWeapons from "./components/Weapons";
 
+export const sortObject = (object) => {
+  const objectKeys = Object.keys(object);
+
+  // An array of objects with all of their properties
+  const objectSort = objectKeys.map(key => ({ id: key, ...object[key] }));
+
+  // Sorts the objects by the sort value
+  objectSort.sort((a, b) => a.sort - b.sort);
+
+  return objectSort;
+};
+
 export const MAPS = {
-  "de_cache": "Cache",
-  "de_cbble": "Cobblestone",
-  "de_dust2": "Dust II",
-  "de_inferno": "Inferno",
-  "de_mirage": "Mirage",
-  "de_nuke": "Nuke",
-  "de_overpass": "Overpass",
-  "de_train": "Train"
+  "de_cache": {
+    title: "Cache",
+    sort: 0
+  },
+  "de_cbble": {
+    title: "Cobblestone",
+    sort: 1
+  },
+  "de_dust2": {
+    title: "Dust II",
+    sort: 2
+  },
+  "de_inferno": {
+    title: "Inferno",
+    sort: 3
+  },
+  "de_mirage": {
+    title: "Mirage",
+    sort: 4
+  },
+  "de_nuke": {
+    title: "Nuke",
+    sort: 5
+  },
+  "de_overpass": {
+    title: "Overpass",
+    sort: 6
+  },
+  "de_train": {
+    title: "Train",
+    sort: 7
+  }
 };
 
 export const NADES = {
-  "weapon_flashbang": <SvgWeapons.Flashbang />,
-  "weapon_hegrenade": <SvgWeapons.HEGrenade />,
-  "weapon_incgrenade": <SvgWeapons.IncGrenade />,
-  "weapon_molotov": <SvgWeapons.Molotov />,
-  "weapon_smokegrenade": <SvgWeapons.SmokeGrenade />
+  "weapon_firegrenade": {
+    title: "Incendiary/Molotov",
+    icon: {
+      "weapon_incgrenade": <SvgWeapons.IncGrenade />,
+      "weapon_molotov": <SvgWeapons.Molotov />,
+    },
+    sort: 1
+  },
+  "weapon_flashbang": {
+    title: "Flashbang",
+    icon: <SvgWeapons.Flashbang />,
+    sort: 2
+  },
+  "weapon_hegrenade": {
+    title: "HE Grenade",
+    icon: <SvgWeapons.HEGrenade />,
+    sort: 3
+  },
+  "weapon_smokegrenade": {
+    title: "Smoke Grenade",
+    icon: <SvgWeapons.SmokeGrenade />,
+    sort: 0
+  }
+};
+
+export const FILTERS = {
+  movement: [
+    { id: "fixed", title: "Stationary" },
+    { id: "jump", title: "Run/Walk" },
+    { id: "walk", title: "Jump" }
+  ],
+  rating: [
+    { id: "4-star", title: "80" },
+    { id: "3-star", title: "60" },
+    { id: "2-star", title: "40" },
+    { id: "1-star", title: "20" }
+  ],
+  feature: [
+    { id: "oneway", title: "One-way" }
+  ],
+  tickrate: [
+    { id: "64", title: "64 Tick" },
+    { id: "128", title: "128 Tick" }
+  ],
+  team: [
+    { id: "counter-terrorist", title: "Counter-Terrorist" },
+    { id: "terrorist", title: "Terrorist" }
+  ]
 };

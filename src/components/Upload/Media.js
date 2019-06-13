@@ -139,20 +139,20 @@ function UploadImage({ label, input, images, comments, help, onChange, changeSta
       </label>
       <div className="upload-image">
         <MediaFile
-          id={`media-${input}-0`}
+          id={`media-file-${input}-0`}
           media={images[0]}
           require={true}
           handleMedia={handleMedia}
           removeMedia={() => removeMedia(0)}
         />
         <MediaFile
-          id={`media-${input}-1`}
+          id={`media-file-${input}-1`}
           media={images[1]}
           handleMedia={handleMedia}
           removeMedia={() => removeMedia(1)}
         />
         <MediaFile
-          id={`media-${input}-2`}
+          id={`media-file-${input}-2`}
           media={images[2]}
           handleMedia={handleMedia}
           removeMedia={() => removeMedia(2)}
@@ -223,7 +223,7 @@ function UploadVideo({ label, input, video, help, onChange, changeState }) {
       </label>
       <div className="upload-video">
         <MediaFile
-          id={`media-${input}`}
+          id={`media-file-${input}`}
           image={false}
           media={video}
           handleMedia={handleMedia}

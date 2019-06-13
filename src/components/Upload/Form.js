@@ -11,10 +11,11 @@ export function UploadSelect(props) {
 
   // Builds a list of select options
   const optionList = options.map((option, index) => {
+    const { title, value } = option;
     const id = `upload-select-${input}-${index}`;
 
     return (
-      <option key={id} value={option.value}>{option.title}</option>
+      <option key={id} value={value}>{title}</option>
     );
   });
 

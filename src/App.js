@@ -92,7 +92,7 @@ class App extends Component {
         contentModal = <Login index={0} changeState={changeState} />;
       }
     }
-    // The current URL is invalid
+    // The default URL if it is invalid
     else {
       replacePath = "";
     }

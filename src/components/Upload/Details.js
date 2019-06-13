@@ -1,4 +1,5 @@
 import React from "react";
+import { MAPS, NADES, sortObject } from "../../constants";
 
 // React components
 import {
@@ -37,31 +38,15 @@ function Details(props) {
   const handleSubmit = props.handleSubmit;
   const changeState = props.changeState;
 
-
   // The options for the type of grenade
-  const nades = [
-    { value: "", title: "Select a Grenade" },
-    { value: "weapon_smokegrenade", title: "Smoke Grenade" },
-    { value: "weapon_firegrenade", title: "Incendiary/Molotov" },
-    //{ value: "weapon_molotov", title: "Molotov Cocktail" },
-    //{ value: "weapon_incgrenade", title: "Incendiary Grenade" },
-    { value: "weapon_flashbang", title: "Flashbang" },
-    { value: "weapon_hegrenade", title: "HE Grenade" },
-    //{ value: "weapon_decoy", title: "Decoy Grenade" }
-  ];
+  const nades = [{ value: "", title: "Select a Grenade" }];
+  const nadeSort = sortObject(NADES);
+  nadeSort.forEach(nade => nades.push({ value: nade.id, title: nade.title }));
 
   // The options for the map
-  const maps = [
-    { value: "", title: "Select a Map" },
-    { value: "de_cache", title: "Cache" },
-    { value: "de_cbble", title: "Cobblestone" },
-    { value: "de_dust2", title: "Dust II" },
-    { value: "de_inferno", title: "Inferno" },
-    { value: "de_mirage", title: "Mirage" },
-    { value: "de_nuke", title: "Nuke" },
-    { value: "de_overpass", title: "Overpass" },
-    { value: "de_train", title: "Train" }
-  ];
+  const maps = [{ value: "", title: "Select a Map" }];
+  const mapSort = sortObject(MAPS);
+  mapSort.forEach(map => maps.push({ value: map.id, title: map.title }));
 
   return (
     <form onSubmit={handleSubmit}>
