@@ -21,7 +21,11 @@ export function UploadSelect(props) {
 
   // Sets the value of the input
   const handleChange = (e) => {
-    const value = e.target.value;
+    let value = e.target.value;
+
+    // Converts the value to a number
+    if (/^\d+$/.test(value)) value = +value;
+
     onChange(input, value);
   };
 
@@ -86,13 +90,10 @@ export function UploadRadio({ label, input, options, value, help, onChange, chan
   // Builds a list of radio options
   const optionList = options.map((option, index) => {
     const id = `${name}-${index}`;
-    const checked = parseInt(value) === index;
+    const checked = value === index;
 
     // Sets the value of the input
-    const handleChange = (_) => {
-      const value = index;
-      onChange(input, value);
-    };
+    const handleChange = (_) => onChange(input, index);
 
     return (
       <div key={id}>
