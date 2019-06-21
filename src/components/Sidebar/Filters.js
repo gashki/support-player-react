@@ -65,7 +65,7 @@ class Filters extends Component {
       const filterKey = "nade";
       const value = filterState[id];
 
-      // Appends the fitler to the filter list
+      // Appends the nade fitler to the nade list
       const tempFilter = filters[filterKey] || [];
       tempFilter.push({ id, title, value });
       filters[filterKey] = tempFilter;
@@ -79,7 +79,7 @@ class Filters extends Component {
       const filterKey = "map";
       const value = filterState[id];
 
-      // Appends the fitler to the filter list
+      // Appends the map fitler to the map list
       const tempFilter = filters[filterKey] || [];
       tempFilter.push({ id, title, value });
       filters[filterKey] = tempFilter;
@@ -96,7 +96,7 @@ class Filters extends Component {
         const title = filter.title;
         const value = filterState[id];
 
-        // Appends the fitler to the filter list
+        // Appends the fitler to the filter type list
         const tempFilter = filters[filterKey] || [];
         tempFilter.push({ id, title, value });
         filters[filterKey] = tempFilter;

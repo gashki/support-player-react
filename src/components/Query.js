@@ -7,14 +7,14 @@ const filterSort = ["movement", "rating", "feature", "tickrate", "team"];
 export const encodeSearchParam = (filterState) => {
   let tempSearch = "1";
 
-  // Converts the value to an integer and appends it to the search parameter
+  // Converts the state to an integer and appends it to the search parameter
   nadesAndMaps.forEach(nadeMap => tempSearch += +filterState[nadeMap.id]);
 
   // Iterates through the list of filter types
   filterSort.forEach(filterKey => {
     const filterType = FILTERS[filterKey];
 
-    // Converts the value to an integer and appends it to the search parameter
+    // Converts the state to an integer and appends it to the search parameter
     filterType.forEach(filter => {
       const id = `${filterKey}-${filter.id}`;
       tempSearch += +filterState[id];
@@ -59,7 +59,7 @@ export const decodeSearchParam = (searchParam) => {
 
     // Extracts the nade and map values
     nadesAndMaps.forEach((nadeMap, index) => {
-      // Converts the string to a boolean
+      // Converts the binary value to a boolean
       state[nadeMap.id] = !!+tempSearch.charAt(index);
     });
 
@@ -73,7 +73,7 @@ export const decodeSearchParam = (searchParam) => {
       filterType.forEach((filter, index) => {
         const id = `${filterKey}-${filter.id}`;
 
-        // Converts the string to a boolean
+        // Converts the binary value to a boolean
         state[id] = !!+tempSearch.charAt(index);
       });
 
