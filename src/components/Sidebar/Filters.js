@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { FILTERS, MAPS, NADES, sortObject } from "../../constants";
-import { decodeSearchParam } from "../Query";
+import { encodeSearchParam, decodeSearchParam } from "../Query";
 
 // React components
 import { FilterSelect, FilterCheckbox, FilterRating } from "./Form";
@@ -10,7 +10,7 @@ class Filters extends Component {
   constructor(props) {
     super(props);
 
-    const searchParam = props.contentState || "";
+    const searchParam = props.contentState;
 
     // The state of the filters based on the search parameter
     const filterState = decodeSearchParam(searchParam);
@@ -18,8 +18,35 @@ class Filters extends Component {
     this.state = { ...filterState };
   }
 
+  componentDidUpdate(prevProps) {
+    const prevSearchParam = prevProps.contentState;
+    const nextSearchParam = this.props.contentState;
+
+    // Checks if the filter state needs to be updated
+    if (prevSearchParam !== nextSearchParam) {
+      const filterState = decodeSearchParam(nextSearchParam);
+      this.setState({ ...filterState });
+    }
+  }
+
+  // Sets the state of an input
+  handleChange = (input, value) => {
+    const changeState = this.props.changeState;
+    const filterState = { ...this.state };
+
+    // Updates the filter value
+    filterState[input] = value;
+
+    // Encodes a search parameter based on the updated state
+    const searchParam = encodeSearchParam(filterState);
+    const filterParam = "/?filters=" + searchParam;
+
+    changeState("contentMain", { type: "NadeList", state: searchParam }, filterParam);
+  };
+
   render() {
-    const filterState = this.state;
+    const filterState = { ...this.state };
+    const handleChange = this.handleChange;
 
     // The properties for the sort filter
     const sortFilter = {
@@ -30,34 +57,36 @@ class Filters extends Component {
 
     const filters = {};
 
+    // Builds a list of nade filters
     const nadeSort = sortObject(NADES);
     nadeSort.forEach(nade => {
-      // The properties for each nade filter
+      // The properties for the nade filter
       const { id, title } = nade;
       const filterKey = "nade";
       const value = filterState[id];
 
-      // Appends the nade filters
+      // Appends the fitler to the filter list
       const tempFilter = filters[filterKey] || [];
       tempFilter.push({ id, title, value });
       filters[filterKey] = tempFilter;
     });
 
+    // Builds a list of map filters
     const mapSort = sortObject(MAPS);
     mapSort.forEach(map => {
-      // The properties for each map filter
+      // The properties for the map filter
       const { id, title } = map;
       const filterKey = "map";
       const value = filterState[id];
 
-      // Appends the map filters
+      // Appends the fitler to the filter list
       const tempFilter = filters[filterKey] || [];
       tempFilter.push({ id, title, value });
       filters[filterKey] = tempFilter;
     });
 
-    const filterKeys = Object.keys(FILTERS);
     // Iterates through the list of filter types
+    const filterKeys = Object.keys(FILTERS);
     filterKeys.forEach(filterKey => {
       const filterType = FILTERS[filterKey];
 
@@ -67,7 +96,7 @@ class Filters extends Component {
         const title = filter.title;
         const value = filterState[id];
 
-        // Appends the filter types
+        // Appends the fitler to the filter list
         const tempFilter = filters[filterKey] || [];
         tempFilter.push({ id, title, value });
         filters[filterKey] = tempFilter;
@@ -81,14 +110,42 @@ class Filters extends Component {
           input={sortFilter.id}
           options={sortFilter.options}
           value={sortFilter.value}
+          onChange={handleChange}
         />
-        <FilterCheckbox legend="Type" options={filters.nade} />
-        <FilterCheckbox legend="Map" options={filters.map} />
-        <FilterCheckbox legend="Movement" options={filters.movement} />
-        <FilterRating options={filters.rating} />
-        <FilterCheckbox legend="Feature" options={filters.feature} />
-        <FilterCheckbox legend="Tick Rate" options={filters.tickrate} />
-        <FilterCheckbox legend="Team" options={filters.team} />
+        <FilterCheckbox
+          legend="Type"
+          options={filters.nade}
+          onChange={handleChange}
+        />
+        <FilterCheckbox
+          legend="Map"
+          options={filters.map}
+          onChange={handleChange}
+        />
+        <FilterCheckbox
+          legend="Movement"
+          options={filters.movement}
+          onChange={handleChange}
+        />
+        <FilterRating
+          options={filters.rating}
+          onChange={handleChange}
+        />
+        <FilterCheckbox
+          legend="Feature"
+          options={filters.feature}
+          onChange={handleChange}
+        />
+        <FilterCheckbox
+          legend="Tick Rate"
+          options={filters.tickrate}
+          onChange={handleChange}
+        />
+        <FilterCheckbox
+          legend="Team"
+          options={filters.team}
+          onChange={handleChange}
+        />
       </form>
     );
   }

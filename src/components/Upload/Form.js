@@ -84,7 +84,8 @@ export function UploadInput(props) {
 }
 
 // The radio input used on the details form
-export function UploadRadio({ label, input, options, value, help, onChange, changeState }) {
+export function UploadRadio(props) {
+  const { label, input, options, value, help, onChange, changeState } = props;
   const name = `upload-radio-${input}`;
 
   // Builds a list of radio options

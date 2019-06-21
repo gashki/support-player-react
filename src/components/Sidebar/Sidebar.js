@@ -6,12 +6,15 @@ import Collections from "./Collections";
 import Filters from "./Filters";
 
 
-function Sidebar() {
+function Sidebar({ contentState, changeState }) {
+  const collections = <Collections />;
+  const filters = <Filters contentState={contentState} changeState={changeState} />;
+
   return (
     <div className="sidebar">
       <div className="sidebar-inner">
-        <SidebarSection title="Collections" content={<Collections />} />
-        <SidebarSection title="Filters" content={<Filters />} />
+        <SidebarSection title="Collections" content={collections} />
+        <SidebarSection title="Filters" content={filters} />
       </div>
     </div>
   );

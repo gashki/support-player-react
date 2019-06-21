@@ -19,7 +19,7 @@ function Content(props) {
       case "Grenade":
         return <div></div>;
       case "NadeList":
-        return [<Sidebar key={1} contentState={contentState} />, <NadeList key={2} />];
+        return [<Sidebar key={1} contentState={contentState} changeState={changeState} />, <NadeList key={2} />];
       case "Upload":
         return <Upload changeState={changeState} />;
       default:

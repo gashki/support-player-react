@@ -4,7 +4,9 @@ import React from "react";
 import Rating from "../Rating";
 
 // The select label used for sorting the nades
-export function FilterSelect({ legend, input, options, value }) {
+export function FilterSelect(props) {
+  const { legend, input, options, value, onChange } = props;
+
   // Builds a list of select options
   const optionList = options.map((option, index) => {
     const key = `filter-select-${input}-${index}`;
@@ -14,7 +16,17 @@ export function FilterSelect({ legend, input, options, value }) {
     );
   });
 
-  const filterSelect = <select value={value}>{optionList}</select>;
+  // Sets the value of the input
+  const handleChange = (e) => {
+    let value = e.target.value;
+
+    // Converts the value to a number
+    if (/^\d+$/.test(value)) value = +value;
+
+    onChange(input, value);
+  };
+
+  const filterSelect = <select value={value} onChange={handleChange}>{optionList}</select>;
 
   return (
     <Fieldset legend={legend} filters={filterSelect} />
@@ -22,15 +34,21 @@ export function FilterSelect({ legend, input, options, value }) {
 }
 
 // The checkbox label used for filtering the nades
-export function FilterCheckbox({ legend, options }) {
+export function FilterCheckbox({ legend, options, onChange }) {
   // Builds a list of checkboxes for related filters
   const optionList = options.map(option => {
     const { id, title, value } = option;
     const key = `filter-checkbox-${id}`;
 
+    // Sets the value of the input
+    const handleChange = (e) => {
+      const value = e.target.checked;
+      onChange(id, value);
+    };
+
     return (
       <label key={key} className="border-box">
-        <input type="checkbox" defaultChecked={value} />
+        <input type="checkbox" defaultChecked={value} onChange={handleChange} />
         <span>{title}</span>
       </label>
     );
@@ -42,15 +60,21 @@ export function FilterCheckbox({ legend, options }) {
 }
 
 // The checkbox label used for filtering by ratings
-export function FilterRating({ options }) {
+export function FilterRating({ options, onChange }) {
   // Builds a list of rating checkboxes
   const optionList = options.map(option => {
     const { id, title, value } = option;
     const key = `filter-checkbox-${id}`;
 
+    // Sets the value of the input
+    const handleChange = (e) => {
+      const value = e.target.checked;
+      onChange(id, value);
+    };
+
     return (
       <label key={key} className="border-box">
-        <input type="checkbox" defaultChecked={value} />
+        <input type="checkbox" defaultChecked={value} onChange={handleChange} />
         <Rating width={title} />
         <span>&nbsp;&amp; Up</span>
       </label>
