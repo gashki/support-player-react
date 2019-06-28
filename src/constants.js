@@ -1,14 +1,22 @@
 import React from "react";
 import * as SvgWeapons from "./components/Weapons";
 
-export const sortObject = (object) => {
+export const sortObject = (object, sortType = 0) => {
   const objectKeys = Object.keys(object);
 
   // An array of objects with all of their properties
   const objectSort = objectKeys.map(key => ({ id: key, ...object[key] }));
 
-  // Sorts the objects by the sort value
-  objectSort.sort((a, b) => a.sort - b.sort);
+  switch (sortType) {
+    case 0:
+      // Sorts the objects by the title
+      objectSort.sort((a, b) => (a.title > b.title) - (a.title < b.title));
+      break;
+    case 1:
+      // Sorts the objects by the sort value
+      objectSort.sort((a, b) => a.sort - b.sort);
+      break;
+  }
 
   return objectSort;
 };
@@ -45,6 +53,10 @@ export const MAPS = {
   "de_train": {
     title: "Train",
     sort: 7
+  },
+  "de_vertigo": {
+    title: "Vertigo",
+    sort: 8
   }
 };
 

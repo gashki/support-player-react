@@ -58,7 +58,7 @@ class Filters extends Component {
     const filters = {};
 
     // Builds a list of nade filters
-    const nadeSort = sortObject(NADES);
+    const nadeSort = sortObject(NADES, 1);
     nadeSort.forEach(nade => {
       // The properties for the nade filter
       const { id, title } = nade;
@@ -72,7 +72,7 @@ class Filters extends Component {
     });
 
     // Builds a list of map filters
-    const mapSort = sortObject(MAPS);
+    const mapSort = sortObject(MAPS, 0);
     mapSort.forEach(map => {
       // The properties for the map filter
       const { id, title } = map;

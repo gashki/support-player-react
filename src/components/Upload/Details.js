@@ -40,12 +40,12 @@ function Details(props) {
 
   // The options for the type of grenade
   const nades = [{ value: "", title: "Select a Grenade" }];
-  const nadeSort = sortObject(NADES);
+  const nadeSort = sortObject(NADES, 1);
   nadeSort.forEach(nade => nades.push({ value: nade.id, title: nade.title }));
 
   // The options for the map
   const maps = [{ value: "", title: "Select a Map" }];
-  const mapSort = sortObject(MAPS);
+  const mapSort = sortObject(MAPS, 0);
   mapSort.forEach(map => maps.push({ value: map.id, title: map.title }));
 
   return (
