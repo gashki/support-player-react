@@ -21,6 +21,7 @@ export const sortObject = (object, sortType = 0) => {
   return objectSort;
 };
 
+// Do not change the sort values
 export const MAPS = {
   "de_cache": {
     title: "Cache",
@@ -60,6 +61,7 @@ export const MAPS = {
   }
 };
 
+// Do not change the sort values
 export const NADES = {
   "weapon_firegrenade": {
     title: "Incendiary/Molotov",
