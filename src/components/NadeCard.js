@@ -36,7 +36,7 @@ class NadeCard extends Component {
 
     // Determines the appropriate fire grenade icon
     if ("weapon_firegrenade" === nade) {
-      const type = team === 1 ? "weapon_incgrenade" : "weapon_molotov";
+      const type = team["10"] ? "weapon_incgrenade" : "weapon_molotov";
       icon = icon[type];
     }
 
