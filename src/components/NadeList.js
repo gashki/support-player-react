@@ -72,11 +72,6 @@ class NadeList extends Component {
       <Scroll>
         <ul className="nade-list">
           {nadeList}
-          {nadeList}
-          {nadeList}
-          {nadeList}
-          {nadeList}
-          {nadeList}
           {blankList}
         </ul>
       </Scroll>

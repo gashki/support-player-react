@@ -94,7 +94,14 @@ export const decodeSearchParam = (searchParam) => {
 export const buildSearchQuery = (searchParam) => {
   let nadeListRef = firestore.collection("nades").where("status", "==", "public");
 
-  if (!searchParam) return nadeListRef;
+  // Sorts the nade list by the Firestore document ID
+  const nadeSort = firebase.firestore.FieldPath.documentId();
+
+  // Determines the order of the nade list
+  const nadeOrder = searchParam ? (!!+searchParam.charAt(0) ? "desc" : "asc") : "asc";
+  const nadeLimit = 30;
+
+  if (!searchParam) return nadeListRef.orderBy(nadeSort, nadeOrder).limit(nadeLimit);
 
   // Converts the hexadecimal string to binary
   let tempSearch = parseInt("1" + searchParam.slice(1), 16).toString(2).slice(1);
@@ -153,9 +160,5 @@ export const buildSearchQuery = (searchParam) => {
     tempSearch = tempSearch.slice(filterLength);
   });
 
-  // Sorts the nade list by the Firestore document ID
-  const nadeSort = firebase.firestore.FieldPath.documentId();
-  nadeListRef = nadeListRef.orderBy(nadeSort);
-
-  return nadeListRef;
+  return nadeListRef.orderBy(nadeSort, nadeOrder).limit(nadeLimit);
 };

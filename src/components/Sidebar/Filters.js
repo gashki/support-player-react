@@ -51,7 +51,7 @@ class Filters extends Component {
     // The properties for the sort filter
     const sortFilter = {
       id: "sort",
-      options: ["Most Recent", "Most Viewed", "Top Rated"],
+      options: ["Most Recent", "Least Recent"],
       value: filterState.sort
     };
 
