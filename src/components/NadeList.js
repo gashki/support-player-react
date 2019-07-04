@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { firestore } from "../firebase";
+import { buildSearchQuery } from "./Query";
 import "./NadeList.css";
 
 // React components
@@ -19,12 +20,32 @@ class NadeList extends Component {
   }
 
   componentDidMount() {
+    // Initializes the nade list
+    this.queryNadeList();
+  }
+
+  componentDidUpdate(prevProps) {
+    const prevSearchParam = prevProps.contentState;
+    const nextSearchParam = this.props.contentState;
+
+    // Checks if the nade list needs to be updated
+    if (prevSearchParam !== nextSearchParam) this.queryNadeList();
+  }
+
+  // Performs the nade list query to Firestore
+  queryNadeList = () => {
     const nadeList = [];
-    const nadeListRef = firestore.collection("nades").where("status", "==", "public");
+    const searchParam = this.props.contentState;
 
+    // Builds the Firestore query from the search parameter
+    const nadeListRef = buildSearchQuery(searchParam);
+
+    // TODO: ADD LIMIT AND ORDER
+    // TODO: ADD SECURITY RULES
+
+    // Performs the Firestore query
     nadeListRef.get().then(snapshot => {
-      if (snapshot.empty) return null;
-
+      // Builds the nade list
       snapshot.forEach(nade => {
         const id = `nade-${nade.id}`;
         nadeList.push(<NadeCard key={id} nade={nade} />);
@@ -34,7 +55,7 @@ class NadeList extends Component {
     }).catch(error => {
       console.log(error);
     });
-  }
+  };
 
   render() {
     const nadeList = this.state.nadeList;

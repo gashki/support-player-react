@@ -1,6 +1,7 @@
+import firebase, { firestore } from "../firebase";
 import { FILTERS, MAPS, NADES, sortObject } from "../constants";
 
-const nadesAndMaps = [...sortObject(NADES), ...sortObject(MAPS)];
+const nadesAndMaps = [...sortObject(NADES, 1), ...sortObject(MAPS, 1)];
 const filterSort = ["movement", "rating", "feature", "tickrate", "team"];
 
 // Converts the filter state into a search parameter
@@ -20,6 +21,10 @@ export const encodeSearchParam = (filterState) => {
       tempSearch += +filterState[id];
     });
   });
+
+  // Pads the binary value to evenly convert to hexadecimal
+  // The number of the filters must be a multiple of 4
+  tempSearch += "000";
 
   // Converts the binary string to hexadecimal
   const hexadecimal = parseInt(tempSearch, 2).toString(16).toLowerCase();
@@ -85,6 +90,72 @@ export const decodeSearchParam = (searchParam) => {
   return state;
 };
 
-export const buildSearchQuery = () => {
+// Builds a Firestore query from the search parameter
+export const buildSearchQuery = (searchParam) => {
+  let nadeListRef = firestore.collection("nades").where("status", "==", "public");
 
+  if (!searchParam) return nadeListRef;
+
+  // Converts the hexadecimal string to binary
+  let tempSearch = parseInt("1" + searchParam.slice(1), 16).toString(2).slice(1);
+
+  // Extracts the nade query
+  const nadeLength = sortObject(NADES, 1).length;
+  const nadeQuery = tempSearch.slice(0, nadeLength);
+
+  if (+nadeQuery) {
+    nadeListRef = nadeListRef.where(`nades.${nadeQuery}`, "==", true);
+  }
+
+  // Removes the processed characters
+  tempSearch = tempSearch.slice(nadeLength);
+
+  // Extracts the map query
+  const mapLength = sortObject(MAPS, 1).length;
+  const mapQuery = tempSearch.slice(0, mapLength);
+
+  if (+mapQuery) {
+    nadeListRef = nadeListRef.where(`maps.${mapQuery}`, "==", true);
+  }
+
+  // Removes the processed characters
+  tempSearch = tempSearch.slice(mapLength);
+
+  // Iterates through the list of filter types
+  filterSort.forEach(filterKey => {
+    const filterLength = FILTERS[filterKey].length;
+    const filterQuery = tempSearch.slice(0, filterLength);
+
+    // Checks for selected filters
+    // Chains where() methods for the filter type
+    if (+filterQuery) {
+      if ("rating" === filterKey) {
+        // Reverses the query string to prioritize the minimum rating
+        const ratingQuery = filterQuery.split("").reverse().join("");
+
+        // Removes the leading zeros and returns the length
+        const tempRating = (+ratingQuery).toString().length;
+
+        // The minimum star rating for the grenade
+        const starRating = (filterLength - tempRating) + 1;
+
+        nadeListRef = nadeListRef.where(`rating.${starRating}-star`, "==", true);
+      }
+      else if ("feature" === filterKey) {
+        nadeListRef = nadeListRef.where("feature.oneway", "==", true);
+      }
+      else {
+        nadeListRef = nadeListRef.where(`${filterKey}.${filterQuery}`, "==", true);
+      }
+    }
+
+    // Removes the processed characters
+    tempSearch = tempSearch.slice(filterLength);
+  });
+
+  // Sorts the nade list by the Firestore document ID
+  const nadeSort = firebase.firestore.FieldPath.documentId();
+  nadeListRef = nadeListRef.orderBy(nadeSort);
+
+  return nadeListRef;
 };
