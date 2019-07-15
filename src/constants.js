@@ -1,6 +1,8 @@
 import React from "react";
 import * as SvgWeapons from "./components/Weapons";
 
+export const NADE_LIMIT = 30;
+
 export const sortObject = (object, sortType = 0) => {
   const objectKeys = Object.keys(object);
 
@@ -16,6 +18,7 @@ export const sortObject = (object, sortType = 0) => {
       // Sorts the objects by the sort value
       objectSort.sort((a, b) => a.sort - b.sort);
       break;
+    default:
   }
 
   return objectSort;

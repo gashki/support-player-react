@@ -1,5 +1,5 @@
 import firebase, { firestore } from "../firebase";
-import { FILTERS, MAPS, NADES, sortObject } from "../constants";
+import { NADE_LIMIT, FILTERS, MAPS, NADES, sortObject } from "../constants";
 
 const nadesAndMaps = [...sortObject(NADES, 1), ...sortObject(MAPS, 1)];
 const filterSort = ["movement", "rating", "feature", "tickrate", "team"];
@@ -98,10 +98,9 @@ export const buildSearchQuery = (searchParam) => {
   const nadeSort = firebase.firestore.FieldPath.documentId();
 
   // Determines the order of the nade list
-  const nadeOrder = searchParam ? (!!+searchParam.charAt(0) ? "desc" : "asc") : "asc";
-  const nadeLimit = 30;
+  const nadeOrder = searchParam ? (!!+searchParam.charAt(0) ? "asc" : "desc") : "desc";
 
-  if (!searchParam) return nadeListRef.orderBy(nadeSort, nadeOrder).limit(nadeLimit);
+  if (!searchParam) return nadeListRef.orderBy(nadeSort, nadeOrder).limit(NADE_LIMIT);
 
   // Converts the hexadecimal string to binary
   let tempSearch = parseInt("1" + searchParam.slice(1), 16).toString(2).slice(1);
@@ -160,5 +159,5 @@ export const buildSearchQuery = (searchParam) => {
     tempSearch = tempSearch.slice(filterLength);
   });
 
-  return nadeListRef.orderBy(nadeSort, nadeOrder).limit(nadeLimit);
+  return nadeListRef.orderBy(nadeSort, nadeOrder).limit(NADE_LIMIT);
 };
