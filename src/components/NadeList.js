@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { firestore } from "../firebase";
+import { NADE_LIMIT } from "../constants";
 import { buildSearchQuery } from "./Query";
 import "./NadeList.css";
 
@@ -15,7 +15,8 @@ class NadeList extends Component {
 
     // The default state of the nade list
     this.state = {
-      nadeList: []
+      nadeList: [],
+      loadMore: false
     };
   }
 
@@ -33,25 +34,28 @@ class NadeList extends Component {
   }
 
   // Performs the nade list query to Firestore
-  queryNadeList = () => {
-    const nadeList = [];
+  queryNadeList = (startAfter) => {
+    const tempList = [];
     const searchParam = this.props.contentState;
 
     // Builds the Firestore query from the search parameter
-    const nadeListRef = buildSearchQuery(searchParam);
+    let nadeListRef = buildSearchQuery(searchParam);
 
-    // TODO: ADD LIMIT AND ORDER
-    // TODO: ADD SECURITY RULES
+    // Checks if there is a start point for the query
+    if (startAfter) nadeListRef = nadeListRef.startAfter(startAfter);
 
     // Performs the Firestore query
     nadeListRef.get().then(snapshot => {
       // Builds the nade list
-      snapshot.forEach(nade => {
-        const id = `nade-${nade.id}`;
-        nadeList.push(<NadeCard key={id} nade={nade} />);
-      });
+      snapshot.forEach(nade => tempList.push(nade));
 
-      this.setState({ nadeList });
+      // Concatenates the nade list if there is a starting point
+      const nadeList = startAfter ? [...this.state.nadeList, ...tempList] : tempList;
+
+      // Determines if the "Load More" button should be shown
+      const loadMore = (searchParam && tempList.length === NADE_LIMIT) ? true : false;
+
+      this.setState({ nadeList, loadMore });
     }).catch(error => {
       console.log(error);
     });
@@ -59,20 +63,37 @@ class NadeList extends Component {
 
   render() {
     const nadeList = this.state.nadeList;
+    const loadMore = this.state.loadMore;
+
+    // The list of nade cards
+    const nadeCards = nadeList.map(nade => <NadeCard key={nade.id} nade={nade} />);
 
     // Does not work in Internet Explorer
     //const blankList = new Array(4).fill(<li className="nade-card-blank"></li>);
 
+    // Blank cards to fill the nade list
     const blankList = [];
     for (let i = 0; i < 4; i++) {
       blankList.push(<li key={`blank-nade-${i}`} className="nade-card-blank"></li>);
     }
 
+    // Queries more nades to add to the nade list
+    const handleClick = () => {
+      const listLength = nadeList.length;
+      const lastNadeId = nadeList[listLength - 1].id;
+
+      this.queryNadeList(lastNadeId);
+    };
+
     return (
       <Scroll>
         <ul className="nade-list">
-          {nadeList}
+          {nadeCards}
           {blankList}
+          {loadMore &&
+            <button className="load-more-button" type="button" onClick={handleClick}>
+              {"Load More"}
+            </button>}
         </ul>
       </Scroll>
     );
