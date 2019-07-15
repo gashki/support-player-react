@@ -16,7 +16,7 @@ function Media(props) {
   const changeState = props.changeState;
 
   // Returns to the previous page
-  const PreviousPage = () => {
+  const previousPage = () => {
     // Changes the content to the details form
     handleChange("content", 0);
 
@@ -67,7 +67,7 @@ function Media(props) {
           changeState={changeState}
         />
         <div style={{ height: 16 }} />
-        <button className="upload-previous" type="button" onClick={PreviousPage}>Go to previous page</button>
+        <button className="upload-previous" type="button" onClick={previousPage}>Go to previous page</button>
         <UploadSubmit value="Submit" />
       </form>
     </div>

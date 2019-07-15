@@ -19,7 +19,6 @@ class NadeCard extends Component {
   }
 
   render() {
-    const nadeId = this.props.nade.id;
     const nadeData = this.props.nade.data();
 
     const timestamp = nadeData.timestamp.toMillis();
@@ -50,7 +49,7 @@ class NadeCard extends Component {
       <li className="nade-card">
         <a
           className="nade-card-media unselectable"
-          href={`/nades/${nadeId}`}
+          href={`/nades/${nadeData.id}`}
           onMouseEnter={() => this.setState({ mouseover: true })}
           onMouseLeave={() => this.setState({ mouseover: false })}
         >
