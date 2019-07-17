@@ -10,19 +10,24 @@ import Collections from "./Collections";
 import Filters from "./Filters";
 
 
+// The sidebar for the main page
 class Sidebar extends Component {
   constructor(props) {
     super(props);
   }
 
   componentDidMount() {
+    // Initializes the custom scroll bar
     new SimpleBar(document.getElementById("sidebar-simplebar"));
   }
 
   render() {
     const { contentState, changeState } = this.props;
 
+    // The collections content for the sidebar
     const collections = <Collections />;
+
+    // The filters content for the sidebar
     const filters = <Filters contentState={contentState} changeState={changeState} />;
 
     return (
@@ -37,6 +42,7 @@ class Sidebar extends Component {
 }
 
 
+// Displays the content for the sidebar sections
 function SidebarSection({ title, content }) {
   return (
     <section className="sidebar-section">
