@@ -18,8 +18,20 @@ class NadeCard extends Component {
     this.state = { mouseover: false };
   }
 
+  // Sets the content of the main page to the grenade
+  handleClick = (e, nadeId) => {
+    e.preventDefault();
+
+    const changeState = this.props.changeState;
+    const grenadePath = `/nades/${nadeId}`;
+
+    changeState("contentMain", { type: "Grenade", state: nadeId }, grenadePath);
+  };
+
   render() {
+    // The data for the nade card
     const nadeData = this.props.nade.data();
+    const nadeId = nadeData.id;
 
     const timestamp = nadeData.timestamp.toMillis();
     const relativeTime = getRelativeTime(timestamp);
@@ -49,7 +61,8 @@ class NadeCard extends Component {
       <li className="nade-card">
         <a
           className="nade-card-media unselectable"
-          href={`/nades/${nadeData.id}`}
+          href={`/nades/${nadeId}`}
+          onClick={(e) => this.handleClick(e, nadeId)}
           onMouseEnter={() => this.setState({ mouseover: true })}
           onMouseLeave={() => this.setState({ mouseover: false })}
         >

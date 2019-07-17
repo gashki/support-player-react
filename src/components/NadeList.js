@@ -62,11 +62,13 @@ class NadeList extends Component {
   };
 
   render() {
+    const changeState = this.props.changeState;
     const nadeList = this.state.nadeList;
     const loadMore = this.state.loadMore;
 
     // The list of nade cards
-    const nadeCards = nadeList.map(nade => <NadeCard key={nade.id} nade={nade} />);
+    const nadeCards =
+      nadeList.map(nade => <NadeCard key={nade.id} nade={nade} changeState={changeState} />);
 
     // Does not work in Internet Explorer
     //const blankList = new Array(4).fill(<li className="nade-card-blank"></li>);
