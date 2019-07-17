@@ -102,7 +102,7 @@ export function UploadRadio(props) {
           id={id}
           name={name}
           type="radio"
-          defaultChecked={checked}
+          checked={checked}
           onChange={handleChange}
         />
         <label htmlFor={id}>{option}</label>
@@ -146,7 +146,7 @@ export function UploadSwitch({ label, input, value, onChange }) {
         id={id}
         className="upload-switch-input"
         type="checkbox"
-        defaultChecked={value}
+        checked={value}
         onChange={handleChange}
       />
       <label htmlFor={id}></label>
