@@ -60,12 +60,12 @@ export const decodeSearchParam = (searchParam) => {
     let tempSearch = parseInt("1" + searchParam.slice(1), 16).toString(2).slice(1);
 
     // Extracts the value of the sort filter
-    state.sort = +searchParam.charAt(0);
+    state.sort = +searchParam[0];
 
     // Extracts the nade and map values
     nadesAndMaps.forEach((nadeMap, index) => {
       // Converts the binary value to a boolean
-      state[nadeMap.id] = !!+tempSearch.charAt(index);
+      state[nadeMap.id] = !!+tempSearch[index];
     });
 
     // Removes the processed characters from the search parameter
@@ -79,7 +79,7 @@ export const decodeSearchParam = (searchParam) => {
         const id = `${filterKey}-${filter.id}`;
 
         // Converts the binary value to a boolean
-        state[id] = !!+tempSearch.charAt(index);
+        state[id] = !!+tempSearch[index];
       });
 
       // Removes the processed characters from the search parameter
@@ -98,7 +98,7 @@ export const buildSearchQuery = (searchParam) => {
   const nadeSort = firebase.firestore.FieldPath.documentId();
 
   // Determines the order of the nade list
-  const nadeOrder = searchParam ? (!!+searchParam.charAt(0) ? "asc" : "desc") : "desc";
+  const nadeOrder = searchParam ? (!!+searchParam[0] ? "asc" : "desc") : "desc";
 
   if (!searchParam) return nadeListRef.orderBy(nadeSort, nadeOrder).limit(NADE_LIMIT);
 
