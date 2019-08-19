@@ -53,7 +53,7 @@ class NadeList extends Component {
       const nadeList = startAfter ? [...this.state.nadeList, ...tempList] : tempList;
 
       // Determines if the "Load More" button should be shown
-      const loadMore = (searchParam && tempList.length === NADE_LIMIT) ? true : false;
+      const loadMore = !!(searchParam && tempList.length === NADE_LIMIT);
 
       this.setState({ nadeList, loadMore });
     }).catch(error => {
@@ -68,7 +68,7 @@ class NadeList extends Component {
 
     // The list of nade cards
     const nadeCards =
-      nadeList.map(nade => <NadeCard key={nade.id} nade={nade} changeState={changeState} />);
+      nadeList.map(nade => <NadeCard key={nade.id} nadeData={nade.data()} changeState={changeState} />);
 
     // Does not work in Internet Explorer
     //const blankList = new Array(4).fill(<li className="nade-card-blank"></li>);

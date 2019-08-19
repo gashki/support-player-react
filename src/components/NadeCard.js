@@ -22,7 +22,7 @@ class NadeCard extends Component {
     const changeState = this.props.changeState;
 
     // The data for the nade card
-    const nadeData = this.props.nade.data();
+    const nadeData = this.props.nadeData;
     const nadeId = nadeData.id;
 
     const timestamp = nadeData.timestamp.toMillis();
