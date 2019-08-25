@@ -1,6 +1,6 @@
 .sidebar {
   background-color: #202020;
-  min-width: 240px;
+  flex-shrink: 0;
   width: 240px;
 }
 
