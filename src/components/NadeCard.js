@@ -85,7 +85,10 @@ class NadeCard extends Component {
 // The button displayed on the nade card
 function ScheduleButton() {
   const handleClick = (e) => {
+    //TODO: FIX COMMENT; prevents a link from opening
     e.preventDefault();
+    //TODO: FIX COMMENT; prevents card from changing content
+    e.stopPropagation();
     console.log("schedule button clicked");
   };
 
