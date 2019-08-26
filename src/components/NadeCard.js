@@ -55,6 +55,12 @@ class NadeCard extends Component {
       changeState("contentMain", { type: "Grenade", state: nadeId }, `/nades/${nadeId}`);
     };
 
+    // Adds a background color for previews that are not 16:9
+    const handleVideo = (e) => {
+      const videoElement = e.target;
+      videoElement.style.backgroundColor = "#bdbdbd";
+    };
+
     return (
       <li className="nade-card">
         <a
@@ -66,7 +72,7 @@ class NadeCard extends Component {
         >
           <img src={thumbnail} alt="Grenade thumbnail" />
           {showPreview && <div className="nade-card-loader"><Loader size="small" /></div>}
-          {showPreview && <video src={preview} autoPlay loop muted />}
+          {showPreview && <video src={preview} onPlaying={handleVideo} autoPlay loop muted />}
           {mouseover && <ScheduleButton />}
           {mouseover || <div className="nade-card-type">{icon}</div>}
           {mouseover || <span className="nade-card-map">{map}</span>}
