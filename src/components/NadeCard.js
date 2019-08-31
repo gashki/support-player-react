@@ -72,7 +72,7 @@ class NadeCard extends Component {
         >
           <img src={thumbnail} alt="Grenade thumbnail" />
           {showPreview && <div className="nade-card-loader"><Loader size="small" /></div>}
-          {showPreview && <video src={preview} onPlaying={handleVideo} autoPlay loop muted />}
+          {showPreview && <video src={preview} onCanPlay={handleVideo} autoPlay loop muted playsInline />}
           {mouseover && <ScheduleButton />}
           {mouseover || <div className="nade-card-type">{icon}</div>}
           {mouseover || <span className="nade-card-map">{map}</span>}
