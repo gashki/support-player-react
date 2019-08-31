@@ -95,7 +95,8 @@ class NadeList extends Component {
           {loadMore &&
             <button className="load-more-button" type="button" onClick={handleClick}>
               {"Load More"}
-            </button>}
+            </button>
+          }
         </ul>
       </Scroll>
     );

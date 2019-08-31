@@ -6,6 +6,7 @@ import { encodeSearchParam, decodeSearchParam } from "../Query";
 import { FilterSelect, FilterCheckbox, FilterRating } from "./Form";
 
 
+// The filters for querying the nade list
 class Filters extends Component {
   constructor(props) {
     super(props);
