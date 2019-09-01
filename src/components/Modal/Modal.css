@@ -139,7 +139,7 @@
   top: 0;
 }
 
-.modal-close:hover {
+.modal-close:focus, .modal-close:hover {
   border: 1px solid #bdbdbd;
 }
 

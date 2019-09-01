@@ -34,15 +34,16 @@
   display: flex;
   flex-direction: row;
   font-size: 14px;
+  outline: none;
   padding: 4px 0 4px 16px;
   text-decoration: none;
 }
 
-.sidebar-collections a:hover {
+.sidebar-collections a:focus, .sidebar-collections a:hover {
   color: #ff4755;
 }
 
-.sidebar-collections a:hover > svg {
+.sidebar-collections a:focus > svg, .sidebar-collections a:hover > svg {
   fill: #ff4755;
 }
 
@@ -79,6 +80,10 @@
   padding: 6px 24px;
 }
 
+.sidebar-filters select:focus, .sidebar-filters select:hover {
+  background-color: #424242;
+}
+
 .sidebar-filters label {
   align-items: center;
   color: #bdbdbd;
@@ -90,12 +95,13 @@
   padding: 0 0 0 16px;
 }
 
-.sidebar-filters label:hover {
+.sidebar-filters label:hover, .sidebar-filters label > input:focus ~ span {
   color: #ff4755;
 }
 
 .sidebar-filters label > input {
   cursor: pointer;
+  outline: none;
   margin: 0 8px 0 1px;
 }
 
