@@ -25,6 +25,8 @@
 
 .grenade-display video, .grenade-display img {
   display: block;
+  flex-basis: 0;
+  flex-grow: 1;
   margin: 0 auto;
   max-height: 600px;
   max-width: 100%;
