@@ -88,7 +88,7 @@ class NadeCard extends Component {
 }
 
 
-// The button displayed on the nade card
+// The button used for adding the nade to the "View later" collection
 function ScheduleButton() {
   const handleClick = (e) => {
     //TODO: FIX COMMENT; prevents a link from opening

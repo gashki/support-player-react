@@ -75,7 +75,7 @@ class Upload extends Component {
     // Prevents the form from being submitted
     e.preventDefault();
 
-    let invalidList = [];
+    const invalidList = [];
 
     if (nade === "") {
       invalidList.push("Grenade");
@@ -134,11 +134,9 @@ class Upload extends Component {
     // Prevents the form from being submitted
     e.preventDefault();
 
-    if (content !== 1) {
-      return null;
-    }
+    if (content !== 1) return null;
 
-    let invalidList = [];
+    const invalidList = [];
 
     if (location.length === 0) {
       invalidList.push("Location");
