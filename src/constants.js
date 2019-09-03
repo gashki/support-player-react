@@ -72,21 +72,25 @@ export const NADES = {
       "weapon_incgrenade": <SvgWeapons.IncGrenade />,
       "weapon_molotov": <SvgWeapons.Molotov />,
     },
+    verb: "fire",
     sort: 1
   },
   "weapon_flashbang": {
     title: "Flashbang",
     icon: <SvgWeapons.Flashbang />,
+    verb: "flash",
     sort: 2
   },
   "weapon_hegrenade": {
     title: "HE Grenade",
     icon: <SvgWeapons.HEGrenade />,
+    verb: "explode at",
     sort: 3
   },
   "weapon_smokegrenade": {
     title: "Smoke Grenade",
     icon: <SvgWeapons.SmokeGrenade />,
+    verb: "smoke",
     sort: 0
   }
 };

@@ -1,0 +1,211 @@
+.grenade {
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+  max-width: 1440px;
+  min-width: 420px;
+  padding: 32px 32px 92px;
+  text-align: left;
+}
+
+.grenade-display {
+  background-color: #202020;
+  flex-grow: 1;
+  min-height: 800px;
+}
+
+.grenade-display-media {
+  align-items: center;
+  background-color: #bdbdbd;
+  display: flex;
+  flex-direction: row;
+  min-height: 200px;
+  position: relative;
+}
+
+.grenade-display video, .grenade-display img {
+  display: block;
+  margin: 0 auto;
+  max-height: 600px;
+  max-width: 100%;
+}
+
+.grenade-display video {
+  outline: none;
+  width: 100%;
+}
+
+.grenade-display h2 {
+  color: #f5f5f5;
+  font-size: 16px;
+  font-weight: normal;
+  margin: 48px 20px 10px;
+}
+
+.grenade-display > div:first-child h2 {
+  margin-top: 28px;
+}
+
+.grenade-display p {
+  color: #bdbdbd;
+  font-size: 14px;
+  margin: 10px 20px;
+}
+
+.grenade-display p:first-of-type + p {
+  color: #ffadd6;
+}
+
+.grenade-display p:last-of-type {
+  margin-bottom: 20px;
+}
+
+.grenade-display-media > div {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  position: absolute;
+  top: 0;
+}
+
+.grenade-display-media > div:first-of-type {
+  left: 0;
+}
+
+.grenade-display-media > div:last-of-type {
+  right: 0;
+}
+
+.grenade-display-media button {
+  background-color: rgba(0, 0, 0, 0.6);
+  border: none;
+  cursor: pointer;
+  height: 40px;
+  outline: none;
+  padding: 0;
+  width: 40px;
+}
+
+.grenade-display-media button:focus, .grenade-display-media button:hover {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.grenade-display-media button > svg {
+  height: 100%;
+  width: 100%;
+}
+
+.grenade-details {
+  align-self: flex-start;
+  background-color: #202020;
+  flex-shrink: 0;
+  margin-left: 28px;
+  min-height: 400px;
+  padding: 28px;
+  width: 420px;
+}
+
+.grenade-details h2 {
+  color: #f5f5f5;
+  font-size: 15px;
+  font-weight: normal;
+  margin: 0;
+}
+
+.grenade-details h3 {
+  color: #d4006a;
+  font-size: 12px;
+  font-weight: normal;
+  margin: 18px 0 8px;
+  text-transform: uppercase;
+}
+
+.grenade-details h3:first-of-type {
+  margin-top: 24px;
+}
+
+.grenade-details p {
+  color: #bdbdbd;
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+.grenade-details hr {
+  border: 1px solid #424242;
+  margin: 18px 0;
+}
+
+.grenade-details-ratings {
+  align-items: center;
+  color: #bdbdbd;
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+}
+
+.grenade-details-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.grenade-details-buttons button {
+  background-color: #2f2f2f;
+  border: none;
+  border-radius: 4px;
+  color: #e0e0e0;
+  cursor: pointer;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  height: 32px;
+  outline: none;
+  padding: 0;
+  text-align: center;
+  text-transform: uppercase;
+  width: 112px;
+}
+
+.grenade-details-buttons button:focus, .grenade-details-buttons button:hover {
+  background-color: #424242;
+}
+
+.grenade-details table {
+  border-collapse: collapse;
+  font-size: 14px;
+  width: 100%;
+}
+
+.grenade-details table tr {
+  height: 28px;
+}
+
+.grenade-details table tr > * {
+  max-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 50%;
+}
+
+.grenade-details table th {
+  color: #bdbdbd;
+  font-weight: normal;
+  text-align: left;
+}
+
+.grenade-details table td {
+  color: #f5f5f5;
+  text-align: right;
+}
+
+@media (max-width: 960px) {
+  .grenade {
+    flex-direction: column;
+  }
+
+  .grenade-details {
+    margin: 28px 0 0;
+  }
+}
