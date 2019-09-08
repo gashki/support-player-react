@@ -6,7 +6,7 @@ import { SvgStar } from "./SvgIcons";
 
 
 // A component that displays a star rating
-function Rating({ width }) {
+function Rating({ width = 0 }) {
   return (
     <div className="rating">
       <span>
