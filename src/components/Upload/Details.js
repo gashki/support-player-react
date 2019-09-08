@@ -31,12 +31,11 @@ function Details(props) {
     shadow,
     texture,
     effect,
-    shader
+    shader,
+    handleChange,
+    handleSubmit,
+    changeState
   } = props;
-
-  const handleChange = props.handleChange;
-  const handleSubmit = props.handleSubmit;
-  const changeState = props.changeState;
 
   // The options for the type of grenade
   const nades = [{ value: "", title: "Select a Grenade" }];

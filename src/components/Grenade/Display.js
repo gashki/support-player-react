@@ -96,9 +96,7 @@ class DisplayImage extends Component {
     super(props);
 
     // The default state of the image set
-    this.state = {
-      index: 0
-    };
+    this.state = { index: 0 };
   }
 
   // Updates the index for the image set
@@ -116,12 +114,8 @@ class DisplayImage extends Component {
   };
 
   render() {
+    const { header, description, comment, images } = this.props;
     const index = this.state.index;
-
-    const header = this.props.header;
-    const description = this.props.description;
-    const comment = this.props.comment;
-    const images = this.props.images;
 
     // Used for cycling through the image set when there are multiple images
     const nextImage = images.length > 1;

@@ -10,10 +10,16 @@ import Vertical from "../Vertical";
 
 // The media form of the upload page
 function Media(props) {
-  const { location, alignment, result, video, comments } = props;
-  const handleChange = props.handleChange;
-  const handleSubmit = props.handleSubmit;
-  const changeState = props.changeState;
+  const {
+    location,
+    alignment,
+    result,
+    video,
+    comments,
+    handleChange,
+    handleSubmit,
+    changeState
+  } = props;
 
   // Returns to the previous page
   const previousPage = () => {
@@ -76,7 +82,9 @@ function Media(props) {
 
 
 // The images to be submitted
-function UploadImage({ label, input, images, comments, help, onChange, changeState }) {
+function UploadImage(props) {
+  const { label, input, images, comments, help, onChange, changeState } = props;
+
   // The maximum accepted file size
   const maxSize = 2;
 
@@ -173,7 +181,9 @@ function UploadImage({ label, input, images, comments, help, onChange, changeSta
 
 
 // The video to be submitted
-function UploadVideo({ label, input, video, help, onChange, changeState }) {
+function UploadVideo(props) {
+  const { label, input, video, help, onChange, changeState } = props;
+
   // The maximum accepted file size
   const maxSize = 50;
 
@@ -236,7 +246,9 @@ function UploadVideo({ label, input, video, help, onChange, changeState }) {
 
 
 // Displays the selected media file
-function MediaFile({ id, image = true, media, require = false, handleMedia, removeMedia }) {
+function MediaFile(props) {
+  const { id, image = true, media, require = false, handleMedia, removeMedia } = props;
+
   const label = image ? "Add an image" : "Add a video";
   const accept = image ? "image/jpeg,image/png" : "video/mp4";
 
