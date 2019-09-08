@@ -96,7 +96,7 @@ function UploadImage(props) {
 
   // Validates the file type and displays the image
   const handleMedia = (e) => {
-    const target = e.target;
+    const target = e.currentTarget;
 
     // Checks if there is a file selected
     if (target.files && target.files[0]) {
@@ -130,7 +130,7 @@ function UploadImage(props) {
 
   // Stores the comment input
   const handleComment = (e) => {
-    const value = { ...comments, [input]: e.target.value };
+    const value = { ...comments, [input]: e.currentTarget.value };
     onChange("comments", value);
   };
 
@@ -195,7 +195,7 @@ function UploadVideo(props) {
 
   // Validates the file type and displays the video
   const handleMedia = (e) => {
-    const target = e.target;
+    const target = e.currentTarget;
 
     // Checks if there is a file selected
     if (target.files && target.files[0]) {

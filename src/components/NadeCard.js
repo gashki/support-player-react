@@ -57,7 +57,7 @@ class NadeCard extends Component {
 
     // Adds a background color for previews that are not 16:9
     const handleVideo = (e) => {
-      const videoElement = e.target;
+      const videoElement = e.currentTarget;
       videoElement.style.backgroundColor = "#bdbdbd";
     };
 

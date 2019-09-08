@@ -21,7 +21,7 @@ export function UploadSelect(props) {
 
   // Sets the value of the input
   const handleChange = (e) => {
-    let value = e.target.value;
+    let value = e.currentTarget.value;
 
     // Converts the value to a number
     if (/^\d+$/.test(value)) value = +value;
@@ -55,7 +55,7 @@ export function UploadInput(props) {
 
   // Sets the value of the input
   const handleChange = (e) => {
-    const value = e.target.value;
+    const value = e.currentTarget.value;
     onChange(input, value);
   };
 
@@ -135,7 +135,7 @@ export function UploadSwitch({ label, input, value, onChange }) {
 
   // Sets the value of the input
   const handleChange = (e) => {
-    const value = e.target.checked;
+    const value = e.currentTarget.checked;
     onChange(input, value);
   };
 

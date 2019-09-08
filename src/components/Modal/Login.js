@@ -40,7 +40,7 @@ class LoginForm extends Component {
 
   // Changes the value of the text inputs
   handleChange = (e, input) => {
-    this.setState({ [input]: e.target.value });
+    this.setState({ [input]: e.currentTarget.value });
   };
 
   // Handles the form submission
