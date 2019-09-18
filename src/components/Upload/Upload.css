@@ -294,6 +294,7 @@
   font-family: "Roboto", sans-serif;
   font-size: 13px;
   line-height: 18px;
+  margin: 0;
   outline: none;
   padding: 8px 12px;
   resize: none;
@@ -347,6 +348,7 @@
   border: 1px solid #ff4755;
   border-radius: 4px;
   cursor: pointer;
+  margin: 0;
   outline: none;
   padding: 0;
   position: absolute;
@@ -396,6 +398,7 @@
   cursor: pointer;
   float: right;
   height: 16px;
+  margin: 0;
   outline: none;
   padding: 0;
   width: 16px;

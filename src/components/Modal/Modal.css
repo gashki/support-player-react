@@ -133,6 +133,7 @@
   border-radius: 4px;
   cursor: pointer;
   left: calc(100% + 6px);
+  margin: 0;
   outline: none;
   padding: 0;
   position: absolute;
