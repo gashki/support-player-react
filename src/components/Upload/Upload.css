@@ -189,7 +189,7 @@
   width: 160px;
 }
 
-.upload-submit:hover {
+.upload-submit:focus, .upload-submit:hover {
   box-shadow: 0 0 2px #d4006a;
 }
 
@@ -244,7 +244,7 @@
   width: 120px;
 }
 
-.upload-message button:hover {
+.upload-message button:focus, .upload-message button:hover {
   box-shadow: 0 0 2px #d4006a;
 }
 
@@ -456,7 +456,7 @@
   width: 120px;
 }
 
-.upload-progress button:hover {
+.upload-progress button:focus, .upload-progress button:hover {
   box-shadow: 0 0 2px #d4006a;
 }
 

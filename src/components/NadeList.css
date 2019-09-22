@@ -23,6 +23,6 @@
   width: 140px;
 }
 
-.load-more-button:hover {
+.load-more-button:focus, .load-more-button:hover {
   color: #f5f5f5;
 }
