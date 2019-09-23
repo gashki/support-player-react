@@ -22,13 +22,15 @@ class Sidebar extends Component {
   }
 
   render() {
-    const { contentState, changeState } = this.props;
+    const { contentState, currentUser, changeState } = this.props;
 
     // The collections content for the sidebar
-    const collections = <Collections />;
+    const collections =
+      <Collections currentUser={currentUser} changeState={changeState} />;
 
     // The filters content for the sidebar
-    const filters = <Filters contentState={contentState} changeState={changeState} />;
+    const filters =
+      <Filters contentState={contentState} changeState={changeState} />;
 
     return (
       <div id="sidebar-simplebar" className="sidebar">

@@ -25,10 +25,10 @@
 .sidebar-collections {
   font-size: 0;
   list-style: none;
-  padding: 0 0 12px;
+  padding: 0 0 4px;
 }
 
-.sidebar-collections a {
+.sidebar-collections-item {
   align-items: center;
   color: #f5f5f5;
   display: flex;
@@ -39,18 +39,49 @@
   text-decoration: none;
 }
 
-.sidebar-collections a:focus, .sidebar-collections a:hover {
+.sidebar-collections a:focus, .sidebar-collections a:hover,
+.sidebar-collections button:focus div, .sidebar-collections button:hover div {
   color: #ff4755;
 }
 
-.sidebar-collections a:focus > svg, .sidebar-collections a:hover > svg {
+.sidebar-collections a:focus svg, .sidebar-collections a:hover svg,
+.sidebar-collections button:focus svg, .sidebar-collections button:hover svg {
   fill: #ff4755;
+}
+
+.sidebar-collections button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+  outline: none;
+  padding: 0;
+  width: 100%;
 }
 
 .sidebar-collections svg {
   height: 20px;
   margin: 0 8px 0 0;
   width: 20px;
+}
+
+.sidebar-collections-toggle {
+  background: none;
+  border: none;
+  color: #bdbdbd;
+  cursor: pointer;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  margin: 2px 0 0;
+  outline: none;
+  padding: 4px 0;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+.sidebar-collections-toggle:focus, .sidebar-collections-toggle:hover {
+  color: #f5f5f5;
 }
 
 .sidebar-filters fieldset {
@@ -101,8 +132,8 @@
 
 .sidebar-filters label > input {
   cursor: pointer;
-  outline: none;
   margin: 0 8px 0 1px;
+  outline: none;
 }
 
 @media (max-width: 600px) {
