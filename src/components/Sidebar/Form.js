@@ -3,6 +3,42 @@ import React from "react";
 // React components
 import Rating from "../Rating";
 
+// The component for the collection list links
+export function CollectionLink({ svg, href, title, onClick }) {
+  const handleClick = (e) => {
+    e.preventDefault();
+    onClick();
+  };
+
+  // The attributes for the collection link
+  const attributes = { href, title, onClick: handleClick };
+
+  return (
+    <li>
+      <a className="sidebar-collections-item" {...attributes}>{svg}{title}</a>
+    </li>
+  );
+}
+
+// The component for the collection list buttons
+export function CollectionButton({ svg, title, onClick }) {
+  const handleClick = (e) => {
+    e.preventDefault();
+    onClick();
+  };
+
+  // The attributes for the collection button
+  const attributes = { title, type: "button", onClick: handleClick };
+
+  return (
+    <li>
+      <button {...attributes}>
+        <div className="sidebar-collections-item">{svg}{title}</div>
+      </button>
+    </li>
+  );
+}
+
 // The select label used for sorting the nades
 export function FilterSelect(props) {
   const { legend, input, options, value, onChange } = props;

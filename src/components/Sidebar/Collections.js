@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { firestore } from "../../firebase";
 
 // React components
+import { CollectionLink, CollectionButton } from "./Form";
 import Login from "../Modal/Login";
 import {
   SvgAddBox,
@@ -170,44 +171,5 @@ class Collections extends Component {
     );
   }
 }
-
-
-// The component for the collection list links
-function CollectionLink({ svg, href, title, onClick }) {
-  const handleClick = (e) => {
-    e.preventDefault();
-    onClick();
-  };
-
-  // The attributes for the collection link
-  const attributes = { href, title, onClick: handleClick };
-
-  return (
-    <li>
-      <a className="sidebar-collections-item" {...attributes}>{svg}{title}</a>
-    </li>
-  );
-}
-
-
-// The component for the collection list buttons
-function CollectionButton({ svg, title, onClick }) {
-  const handleClick = (e) => {
-    e.preventDefault();
-    onClick();
-  };
-
-  // The attributes for the collection button
-  const attributes = { title, type: "button", onClick: handleClick };
-
-  return (
-    <li>
-      <button {...attributes}>
-        <div className="sidebar-collections-item">{svg}{title}</div>
-      </button>
-    </li>
-  );
-}
-
 
 export default Collections;
