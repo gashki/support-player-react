@@ -42,7 +42,7 @@ function NavbarAccount({ currentUser, changeState }) {
     };
 
     // The attributes for the SVG button
-    const attributes = { href: href, title: title, onClick: handleClick };
+    const attributes = { href, title, onClick: handleClick };
 
     return (
       <a className="navbar-account-button" {...attributes}>{svg}</a>

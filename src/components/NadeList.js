@@ -63,8 +63,9 @@ class NadeList extends Component {
 
   render() {
     const changeState = this.props.changeState;
-    const nadeList = this.state.nadeList;
-    const loadMore = this.state.loadMore;
+    const { nadeList, loadMore } = this.state;
+
+    // TODO: Add note if the nadeList is empty
 
     // The list of nade cards
     const nadeCards =
