@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { firestore } from "../../firebase";
 
 // React components
+import Login from "../Modal/Login";
 import {
   SvgAddBox,
   SvgFavorite,
@@ -96,8 +97,18 @@ class Collections extends Component {
       // Sets the href if there is a user logged in
       const href = currentUser ? `/collections/${field}` : "/login";
 
+      // Sets the content when the default link is clicked
+      const handleClick = () => {
+        if (currentUser) {
+          changeState("contentMain", { type: "Collection", state: field }, href);
+        }
+        else {
+          changeState("contentModal", <Login index={0} changeState={changeState} />);
+        }
+      };
+
       // The attributes for the collection link
-      const attributes = { key, svg, href, title };
+      const attributes = { key, svg, href, title, onClick: handleClick };
 
       return (
         <CollectionLink {...attributes} />
@@ -111,13 +122,28 @@ class Collections extends Component {
       const svg = <SvgList color="#f5f5f5" />;
       const href = `/collections/${id}`;
 
+      // Opens the collection page
+      const handleClick = () => {
+        changeState("contentMain", { type: "Collection", state: id }, href);
+      };
+
       // The attributes for the collection link
-      const attributes = { key, svg, href, title };
+      const attributes = { key, svg, href, title, onClick: handleClick };
 
       return (
         <CollectionLink {...attributes} />
       );
     });
+
+    // Sets the content when the collection button is clicked
+    const handleButton = () => {
+      if (currentUser) {
+        changeState("contentModal", <Login index={1} changeState={changeState} />);
+      }
+      else {
+        changeState("contentModal", <Login index={0} changeState={changeState} />);
+      }
+    };
 
     // Determines if the "Show More" button should be shown
     const showColls = collList.length > 0;
@@ -128,11 +154,15 @@ class Collections extends Component {
       <div style={{ paddingBottom: "8px" }}>
         <ul className="sidebar-collections">
           {defaultLinks}
-          <CollectionButton svg={<SvgAddBox color="#f5f5f5" />} title="Create new collection" />
+          <CollectionButton
+            svg={<SvgAddBox color="#f5f5f5" />}
+            title="Create new collection"
+            onClick={handleButton}
+          />
           {showMore && userLinks}
         </ul>
         {showColls &&
-          <button className="sidebar-collections-toggle" onClick={showMoreToggle}>
+          <button className="sidebar-collections-toggle" type="button" onClick={showMoreToggle}>
             {showMoreText}
           </button>
         }
@@ -143,8 +173,14 @@ class Collections extends Component {
 
 
 // The component for the collection list links
-function CollectionLink({ svg, href, title }) {
-  const attributes = { href, title };
+function CollectionLink({ svg, href, title, onClick }) {
+  const handleClick = (e) => {
+    e.preventDefault();
+    onClick();
+  };
+
+  // The attributes for the collection link
+  const attributes = { href, title, onClick: handleClick };
 
   return (
     <li>
@@ -155,10 +191,18 @@ function CollectionLink({ svg, href, title }) {
 
 
 // The component for the collection list buttons
-function CollectionButton({ svg, title }) {
+function CollectionButton({ svg, title, onClick }) {
+  const handleClick = (e) => {
+    e.preventDefault();
+    onClick();
+  };
+
+  // The attributes for the collection button
+  const attributes = { title, type: "button", onClick: handleClick };
+
   return (
     <li>
-      <button title={title}>
+      <button {...attributes}>
         <div className="sidebar-collections-item">{svg}{title}</div>
       </button>
     </li>
