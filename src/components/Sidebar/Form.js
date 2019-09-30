@@ -15,7 +15,9 @@ export function CollectionLink({ svg, href, title, onClick }) {
 
   return (
     <li>
-      <a className="sidebar-collections-item" {...attributes}>{svg}{title}</a>
+      <a className="sidebar-collections-item" {...attributes}>
+        {svg}<span>{title}</span>
+      </a>
     </li>
   );
 }
@@ -33,7 +35,9 @@ export function CollectionButton({ svg, title, onClick }) {
   return (
     <li>
       <button {...attributes}>
-        <div className="sidebar-collections-item">{svg}{title}</div>
+        <div className="sidebar-collections-item">
+          {svg}<span>{title}</span>
+        </div>
       </button>
     </li>
   );
