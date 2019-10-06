@@ -60,13 +60,13 @@ export function UploadInput(props) {
   };
 
   // Prevents the label from opening the help message
-  const handleClick = (e) => {
+  const preventOpen = (e) => {
     e.preventDefault();
   };
 
   return (
     <div>
-      <label className="upload-details-label" onClick={handleClick}>
+      <label className="upload-details-label" onClick={preventOpen}>
         {label}
         {require && <Required />}
         {help && <Help message={help} changeState={changeState} />}
@@ -111,13 +111,13 @@ export function UploadRadio(props) {
   });
 
   // Prevents the label from opening the help message
-  const handleClick = (e) => {
+  const preventOpen = (e) => {
     e.preventDefault();
   };
 
   return (
     <div>
-      <label className="upload-details-label" onClick={handleClick}>
+      <label className="upload-details-label" onClick={preventOpen}>
         {label}
         <Required />
         {help && <Help message={help} changeState={changeState} />}
@@ -167,7 +167,7 @@ export function UploadSubmit({ value }) {
 // The error/help message used for the upload page
 export function UploadMessage({ title, message, content, changeState }) {
   // Prevents the modal from closing when the content is clicked
-  const handleClick = (e) => {
+  const preventClose = (e) => {
     e.stopPropagation();
   };
 
@@ -176,7 +176,7 @@ export function UploadMessage({ title, message, content, changeState }) {
   };
 
   return (
-    <div className="upload-message" onClick={handleClick}>
+    <div className="upload-message" onClick={preventClose}>
       <h3>{title}</h3>
       <p>{message}</p>
       {content}

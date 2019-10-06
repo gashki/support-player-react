@@ -135,13 +135,13 @@ function UploadImage(props) {
   };
 
   // Prevents the label from opening the help message
-  const handleClick = (e) => {
+  const preventOpen = (e) => {
     e.preventDefault();
   };
 
   return (
     <section className="upload-media">
-      <label onClick={handleClick}>
+      <label onClick={preventOpen}>
         {label}
         <Help message={help} content={fileRequirements} changeState={changeState} />
       </label>
@@ -221,13 +221,13 @@ function UploadVideo(props) {
   };
 
   // Prevents the label from opening the help message
-  const handleClick = (e) => {
+  const preventOpen = (e) => {
     e.preventDefault();
   };
 
   return (
     <section className="upload-media">
-      <label onClick={handleClick}>
+      <label onClick={preventOpen}>
         {label}
         <Help message={help} content={fileRequirements} changeState={changeState} />
       </label>

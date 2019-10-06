@@ -9,12 +9,12 @@ import { ModalLabel, ModalInput, ModalSubmit, ModalError } from "./Form";
 // The settings content for the modal
 function Settings({ currentUser, changeState }) {
   // Prevents the modal from closing when the content is clicked
-  const handleClick = (e) => {
+  const preventClose = (e) => {
     e.stopPropagation();
   };
 
   return (
-    <div className="modal-content-tabs" onClick={handleClick}>
+    <div className="modal-content-tabs" onClick={preventClose}>
       <ModalLabel checked={true} label="Email" />
       <ModalLabel checked={false} label="Password" />
       <SettingsForm
