@@ -24,13 +24,8 @@ export function CollectionLink({ svg, href, title, onClick }) {
 
 // The component for the collection list buttons
 export function CollectionButton({ svg, title, onClick }) {
-  const handleClick = (e) => {
-    e.preventDefault();
-    onClick();
-  };
-
   // The attributes for the collection button
-  const attributes = { title, type: "button", onClick: handleClick };
+  const attributes = { title, type: "button", onClick };
 
   return (
     <li>

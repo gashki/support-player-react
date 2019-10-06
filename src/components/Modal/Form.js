@@ -19,9 +19,12 @@ export function ModalInput(props) {
     onChange(e, input);
   };
 
+  // The attributes for the text input
+  const attributes = { type, value, maxLength: 140, onChange: handleChange };
+
   return ([
     <label key={`ModalInput-label-${input}`}>{label}</label>,
-    <input key={`ModalInput-input-${input}`} className="modal-form-input border-box" type={type} value={value} onChange={handleChange} required />
+    <input key={`ModalInput-input-${input}`} className="modal-form-input border-box" {...attributes} required />
   ]);
 }
 
