@@ -125,6 +125,7 @@
   color: #ff4755;
   font-size: 13px;
   line-height: 16px;
+  margin: 0;
 }
 
 .modal-close {
@@ -167,11 +168,15 @@
   margin: 0 0 20px;
 }
 
-.modal-dialog > p {
+.modal-dialog-message {
   color: #bdbdbd;
   font-size: 14px;
   line-height: 18px;
-  margin: 0 0 14px;
+  margin: 14px 0;
+}
+
+.modal-dialog > p:first-of-type {
+  margin-top: 0;
 }
 
 .modal-dialog button {
@@ -195,11 +200,11 @@
   background-color: #424242;
 }
 
-.modal-dialog button:first-of-type {
+.modal-dialog button:last-of-type {
   background-color: #d4006a;
   color: #f5f5f5;
 }
 
-.modal-dialog button:first-of-type:focus, .modal-dialog button:first-of-type:hover {
+.modal-dialog button:last-of-type:focus, .modal-dialog button:last-of-type:hover {
   box-shadow: 0 0 2px #d4006a;
 }
