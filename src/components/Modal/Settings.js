@@ -14,7 +14,7 @@ function Settings({ currentUser, changeState }) {
   };
 
   return (
-    <div className="modal-content-tabs" onClick={preventClose}>
+    <div className="modal-content-tabs" onMouseDown={preventClose}>
       <ModalLabel checked={true} label="Email" />
       <ModalLabel checked={false} label="Password" />
       <SettingsForm
@@ -81,9 +81,8 @@ class SettingsForm extends Component {
       return currentUser.updatePassword(newPassword);
     }).then(() => {
       changeState("contentModal", null);
-    }).catch((error) => {
+    }).catch(error => {
       console.log(error);
-
       this.setState({ error });
     });
   };
@@ -94,10 +93,12 @@ class SettingsForm extends Component {
     const handleChange = this.handleChange;
     const handleSubmit = this.handleSubmit;
 
-    if (isEmail) {
-      return (
-        <form id="modal-form-email" className="modal-form" onSubmit={handleSubmit}>
-          {error && <ModalError error={error} />}
+    const formId = isEmail ? "modal-form-email" : "modal-form-password";
+
+    return (
+      <form id={formId} className="modal-form" onSubmit={handleSubmit}>
+        {error && <ModalError error={error} />}
+        {isEmail &&
           <ModalInput
             label="New Email"
             input="newEmail"
@@ -105,22 +106,7 @@ class SettingsForm extends Component {
             value={newEmail}
             onChange={handleChange}
           />
-          <ModalInput
-            label="Current Password"
-            input="currentPassword"
-            type="password"
-            value={currentPassword}
-            onChange={handleChange}
-          />
-          <div style={{ height: 12 }}></div>
-          <ModalSubmit value="Save" />
-        </form>
-      );
-    }
-
-    return (
-      <form id="modal-form-password" className="modal-form" onSubmit={handleSubmit}>
-        {error && <ModalError error={error} />}
+        }
         <ModalInput
           label="Current Password"
           input="currentPassword"
@@ -128,20 +114,24 @@ class SettingsForm extends Component {
           value={currentPassword}
           onChange={handleChange}
         />
-        <ModalInput
-          label="New Password"
-          input="newPassword"
-          type="password"
-          value={newPassword}
-          onChange={handleChange}
-        />
-        <ModalInput
-          label="Confirm Password"
-          input="confirmPassword"
-          type="password"
-          value={confirmPassword}
-          onChange={handleChange}
-        />
+        {isEmail ||
+          <ModalInput
+            label="New Password"
+            input="newPassword"
+            type="password"
+            value={newPassword}
+            onChange={handleChange}
+          />
+        }
+        {isEmail ||
+          <ModalInput
+            label="Confirm Password"
+            input="confirmPassword"
+            type="password"
+            value={confirmPassword}
+            onChange={handleChange}
+          />
+        }
         <div style={{ height: 12 }}></div>
         <ModalSubmit value="Save" />
       </form>
