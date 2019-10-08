@@ -3,18 +3,19 @@ import { auth } from "../../firebase";
 
 // React components
 import Close from "./Close";
+import Dialog from "./Dialog";
 import { ModalLabel, ModalInput, ModalSubmit, ModalError } from "./Form";
 
 
 // The login content for the modal
 function Login({ index, changeState }) {
   // Prevents the modal from closing when the content is clicked
-  const handleClick = (e) => {
+  const preventClose = (e) => {
     e.stopPropagation();
   };
 
   return (
-    <div className="modal-content-tabs" onClick={handleClick}>
+    <div className="modal-content-tabs" onMouseDown={preventClose}>
       <ModalLabel checked={0 === index} label="Login" />
       <ModalLabel checked={1 === index} label="Register" />
       <LoginForm isLogin={true} changeState={changeState} />
@@ -65,45 +66,43 @@ class LoginForm extends Component {
     // Authenticates the user and closes the modal
     authenticateUser(email, password).then((_) => {
       changeState("contentModal", null);
-    }).catch((error) => {
+    }).catch(error => {
       console.log(error);
-
       this.setState({ error });
     });
   };
 
   render() {
-    const isLogin = this.props.isLogin;
+    const { isLogin, changeState } = this.props;
     const { email, password, error } = this.state;
     const handleChange = this.handleChange;
     const handleSubmit = this.handleSubmit;
 
-    if (isLogin) {
-      return (
-        <form id="modal-form-login" className="modal-form" onSubmit={handleSubmit}>
-          {error && <ModalError error={error} />}
-          <ModalInput
-            label="Email"
-            input="email"
-            type="email"
-            value={email}
-            onChange={handleChange}
-          />
-          <ModalInput
-            label="Password"
-            input="password"
-            type="password"
-            value={password}
-            onChange={handleChange}
-          />
-          <button className="modal-login-forgot" type="button">Forgot Password?</button>
-          <ModalSubmit value="Log in" />
-        </form>
-      );
-    }
+    const formId = isLogin ? "modal-form-login" : "modal-form-register";
+    const action = isLogin ? "Log in" : "Sign up";
+    const agreement = "By clicking Sign Up, you are indicating that you have read and agree to our Terms of Service and Privacy Policy.";
+
+    // Opens the "Reset Password" dialog
+    const openDialog = () => {
+      const title = "Reset Password";
+      const message = "Enter your email address and we'll send you a link to reset your password.";
+
+      // Sends an email to reset the user's password
+      const onSubmit = (input) => {
+        return auth.sendPasswordResetEmail(input).catch(error => {
+          console.log(error);
+          return error;
+        });
+      };
+
+      // The attributes for the dialog
+      const attributes = { title, message, action: "Send", type: "email", onSubmit, changeState };
+
+      changeState("contentModal", <Dialog {...attributes} />);
+    };
 
     return (
-      <form id="modal-form-register" className="modal-form" onSubmit={handleSubmit}>
+      <form id={formId} className="modal-form" onSubmit={handleSubmit}>
         {error && <ModalError error={error} />}
         <ModalInput
           label="Email"
@@ -119,8 +118,11 @@ class LoginForm extends Component {
           value={password}
           onChange={handleChange}
         />
-        <p className="modal-user-agreement">By clicking Sign Up, you are indicating that you have read and agree to our Terms of Service and Privacy Policy.</p>
-        <ModalSubmit value="Sign up" />
+        {isLogin
+          ? <button className="modal-login-forgot" type="button" onClick={openDialog}>Forgot Password?</button>
+          : <p className="modal-user-agreement">{agreement}</p>
+        }
+        <ModalSubmit value={action} />
       </form>
     );
   }
