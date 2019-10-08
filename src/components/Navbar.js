@@ -63,7 +63,7 @@ function NavbarAccount({ currentUser, changeState }) {
 
   // Signs out the user
   const authSignOut = () => {
-    auth.signOut().catch((error) => {
+    auth.signOut().catch(error => {
       console.log(error);
     });
   };

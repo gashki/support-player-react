@@ -9,7 +9,7 @@ function Modal({ contentModal, changeState }) {
   };
 
   return (
-    <div className="modal" onClick={handleClick}>
+    <div className="modal" onMouseDown={handleClick}>
       {contentModal}
     </div>
   );

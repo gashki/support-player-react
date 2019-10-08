@@ -345,7 +345,7 @@ class UploadLoader extends Component {
       title = "Submission Successful";
       message = <p>Thank you for submitting a grenade. Your submission will be<br />processed within 24 hours.</p>;
       content =
-        <span style={{ display: "flex", flexDirection: "row-reverse" }}>
+        <span style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
           <button type="button" onClick={handleReturn}>Return Home</button>
         </span>;
     }
@@ -356,7 +356,7 @@ class UploadLoader extends Component {
     }
 
     return (
-      <div className="upload-loader" onClick={preventClose}>
+      <div className="upload-loader" onMouseDown={preventClose}>
         <div className="upload-progress">
           <h3>{title}</h3>
           {message}

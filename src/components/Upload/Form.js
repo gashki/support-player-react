@@ -158,7 +158,7 @@ export function UploadSwitch({ label, input, value, onChange }) {
 // The submit button for the upload page
 export function UploadSubmit({ value }) {
   return (
-    <div style={{ display: "flex", flexDirection: "row-reverse" }}>
+    <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
       <input className="upload-submit" type="submit" value={value} />
     </div>
   );
@@ -176,11 +176,11 @@ export function UploadMessage({ title, message, content, changeState }) {
   };
 
   return (
-    <div className="upload-message" onClick={preventClose}>
+    <div className="upload-message" onMouseDown={preventClose}>
       <h3>{title}</h3>
       <p>{message}</p>
       {content}
-      <div style={{ display: "flex", flexDirection: "row-reverse" }}>
+      <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
         <button type="button" onClick={closeModal}>Dismiss</button>
       </div>
     </div>
