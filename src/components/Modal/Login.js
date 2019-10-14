@@ -72,34 +72,36 @@ class LoginForm extends Component {
     });
   };
 
+  // Opens the "Reset Password" dialog
+  openDialog = () => {
+    const changeState = this.props.changeState;
+    const title = "Reset Password";
+    const message = "Enter your email address and we'll send you a link to reset your password.";
+
+    // Sends an email to reset the user's password
+    const onSubmit = (input) => {
+      return auth.sendPasswordResetEmail(input).catch(error => {
+        console.log(error);
+        return error;
+      });
+    };
+
+    // The attributes for the dialog
+    const attributes = { title, message, action: "Send", type: "email", onSubmit, changeState };
+
+    changeState("contentModal", <Dialog {...attributes} />);
+  };
+
   render() {
-    const { isLogin, changeState } = this.props;
+    const isLogin = this.props.isLogin;
     const { email, password, error } = this.state;
     const handleChange = this.handleChange;
     const handleSubmit = this.handleSubmit;
+    const openDialog = this.openDialog;
 
     const formId = isLogin ? "modal-form-login" : "modal-form-register";
     const action = isLogin ? "Log in" : "Sign up";
     const agreement = "By clicking Sign Up, you are indicating that you have read and agree to our Terms of Service and Privacy Policy.";
-
-    // Opens the "Reset Password" dialog
-    const openDialog = () => {
-      const title = "Reset Password";
-      const message = "Enter your email address and we'll send you a link to reset your password.";
-
-      // Sends an email to reset the user's password
-      const onSubmit = (input) => {
-        return auth.sendPasswordResetEmail(input).catch(error => {
-          console.log(error);
-          return error;
-        });
-      };
-
-      // The attributes for the dialog
-      const attributes = { title, message, action: "Send", type: "email", onSubmit, changeState };
-
-      changeState("contentModal", <Dialog {...attributes} />);
-    };
 
     return (
       <form id={formId} className="modal-form" onSubmit={handleSubmit}>
