@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { firestore } from "../../firebase";
+import firebase, { firestore } from "../../firebase";
 
 // React components
 import { CollectionLink, CollectionButton } from "./Form";
+import Dialog from "../Modal/Dialog";
 import Login from "../Modal/Login";
 import {
   SvgAddBox,
@@ -59,7 +60,11 @@ class Collections extends Component {
       const collList = collKeys.map(key => ({ id: key, title: collections[key] }));
 
       // Sorts the collections by the title
-      collList.sort((a, b) => (a.title > b.title) - (a.title < b.title));
+      collList.sort((a, b) => {
+        const aTitle = a.title.toLowerCase();
+        const bTitle = b.title.toLowerCase();
+        return (aTitle > bTitle) - (aTitle < bTitle);
+      });
 
       this.setState({ collList });
     }).catch(error => {
@@ -67,9 +72,57 @@ class Collections extends Component {
     });
   };
 
+  // Opens the "New Collection" dialog
+  openDialog = () => {
+    const { currentUser, changeState } = this.props;
+    const collList = this.state.collList;
+    const title = "New Collection";
+    const message = "Collections allow you to group grenades together and share them. Enter the name of your new collection.";
+
+    // Creates a new collection in Firestore
+    const onSubmit = (input) => {
+      // Checks if there is a user is signed in
+      if (!currentUser) return null;
+
+      // References to the user's Firestore document and collections
+      const userUid = currentUser.uid;
+      const userRef = firestore.doc(`users/${userUid}`);
+      const collRef = firestore.collection(`users/${userUid}/collections`);
+
+      // The data for the Firestore document
+      const collName = input.trim();
+      const collTime = firebase.firestore.FieldValue.serverTimestamp();
+      const collection = { name: collName, created: collTime, modified: collTime };
+
+      // Adds the new grenade collection document in Firestore
+      collRef.add(collection).then(document => {
+        const collId = document.id;
+        const userDoc = { collections: { [collId]: collName }, modified: collTime, recent: collId };
+
+        // Updates the user's document with the new collection ID
+        return userRef.set(userDoc, { merge: true }).then((_) => {
+          // Adds the new collection to the sidebar
+          const collItem = { id: collId, title: collName };
+          this.setState({ collList: [collItem, ...collList], showMore: true });
+        });
+      }).catch(error => {
+        console.log(error);
+        return error;
+      });
+    };
+
+    // The attributes for the dialog
+    const attributes = { title, message, action: "Create", onSubmit, changeState };
+
+    // Displays the dialog if there is a user signed in
+    if (currentUser) changeState("contentModal", <Dialog {...attributes} />);
+    else changeState("contentModal", <Login index={0} changeState={changeState} />);
+  };
+
   render() {
     const { collList, showMore } = this.state;
     const { currentUser, changeState } = this.props;
+    const openDialog = this.openDialog;
 
     // The default collections to show on the sidebar
     const defaultItems = [
@@ -136,16 +189,6 @@ class Collections extends Component {
       );
     });
 
-    // Sets the content when the collection button is clicked
-    const handleButton = () => {
-      if (currentUser) {
-        changeState("contentModal", <Login index={1} changeState={changeState} />);
-      }
-      else {
-        changeState("contentModal", <Login index={0} changeState={changeState} />);
-      }
-    };
-
     // Determines if the "Show More" button should be shown
     const showColls = collList.length > 0;
     const showMoreText = showMore ? "Show Less" : "Show More";
@@ -158,7 +201,7 @@ class Collections extends Component {
           <CollectionButton
             svg={<SvgAddBox color="#f5f5f5" />}
             title="Create new collection"
-            onClick={handleButton}
+            onClick={openDialog}
           />
           {showMore && userLinks}
         </ul>
