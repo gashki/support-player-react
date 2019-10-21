@@ -35,6 +35,9 @@ class Dialog extends Component {
     // Resets the error message
     if (error) this.setState({ error: null });
 
+    // TODO: Add loading icon
+    // TODO: Add success message
+
     const result = await onSubmit(value);
 
     // Sets the error message or closes the modal
@@ -64,7 +67,7 @@ class Dialog extends Component {
         <h3>{title}</h3>
         {error && <ModalError error={error} />}
         <p className="modal-dialog-message">{message}</p>
-        <input className="modal-form-input border-box" {...attributes} required />
+        <input className="modal-form-input border-box" {...attributes} autoFocus required />
         <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
           <button type="button" onClick={closeDialog}>Cancel</button>
           <button type="submit">{action}</button>
