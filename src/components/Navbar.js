@@ -6,7 +6,6 @@ import "./Navbar.css";
 import Login from "./Modal/Login";
 import Settings from "./Modal/Settings";
 import { SvgExit, SvgSettings, SvgUpload } from "./SvgIcons";
-import Vertical from "./Vertical";
 
 
 // The navigation bar at the top of each page
@@ -21,7 +20,6 @@ function Navbar({ currentUser, changeState }) {
     <nav className="navbar">
       <a className="navbar-logo unselectable" href="/" title="Support Player" onClick={handleClick}>
         <h1>SupportPlayer</h1>
-        <Vertical />
       </a>
       {currentUser
         ? <NavbarAccount currentUser={currentUser} changeState={changeState} />
@@ -90,7 +88,6 @@ function NavbarAccount({ currentUser, changeState }) {
         title="Log out"
         onClick={authSignOut}
       />
-      <Vertical />
     </div>
   );
 }
