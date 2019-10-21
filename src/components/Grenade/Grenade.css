@@ -51,6 +51,7 @@
 .grenade-display p {
   color: #bdbdbd;
   font-size: 14px;
+  line-height: 18px;
   margin: 10px 20px;
 }
 
@@ -84,6 +85,7 @@
   border: none;
   cursor: pointer;
   height: 40px;
+  margin: 0;
   outline: none;
   padding: 0;
   width: 40px;
@@ -133,17 +135,40 @@
   margin: 10px 0;
 }
 
+.grenade-details a {
+  color: #d4006a;
+  display: flex;
+  outline: none;
+  text-decoration: none;
+}
+
+.grenade-details a:focus, .grenade-details a:hover {
+  text-decoration: underline;
+}
+
+.grenade-details a span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .grenade-details hr {
   border: 1px solid #424242;
   margin: 18px 0;
 }
 
-.grenade-details-ratings {
+.grenade-details-stats {
   align-items: center;
   color: #bdbdbd;
   display: flex;
   flex-direction: row;
   font-size: 14px;
+}
+
+.grenade-details-rating {
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
 }
 
 .grenade-details-buttons {
@@ -162,6 +187,7 @@
   font-family: "Roboto", sans-serif;
   font-size: 12px;
   height: 32px;
+  margin: 0;
   outline: none;
   padding: 0;
   text-align: center;

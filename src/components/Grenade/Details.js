@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import { MAPS, NADES } from "../../constants";
 
 // React components
@@ -28,6 +28,7 @@ function Details({ nadeData }) {
       vsettings
     } = nadeData;
 
+    // The title for the header of the details section
     const nadeInfo = `${NADES[nade].title}\u00A0\u00A0|\u00A0\u00A0${MAPS[map].title}`;
 
     const tempDate = timestamp.toDate();
@@ -36,12 +37,12 @@ function Details({ nadeData }) {
     // The information for the buttons on the details section
     const nadeBtnInfo = [
       {
-        field: "favorite",
-        label: "Favorite"
-      },
-      {
         field: "add-to",
         label: "Add To"
+      },
+      {
+        field: "share",
+        label: "Share"
       },
       {
         field: "report",
@@ -51,8 +52,7 @@ function Details({ nadeData }) {
 
     // The button components displayed on the details section
     const nadeBtnList = nadeBtnInfo.map(btnInfo => {
-      const field = btnInfo.field;
-      const label = btnInfo.label;
+      const { field, label } = btnInfo;
       const key = `grenade-details-buttons-${field}`;
 
       return (
@@ -63,6 +63,11 @@ function Details({ nadeData }) {
     });
 
     const nadeMvmt = movement["100"] ? "Stationary" : (movement["001"] ? (movement["010"] ? "Run & Jump" : "Jump") : "Run/Walk");
+
+    // Determines if a link should be displayed for the grenade source
+    const hrefSrc = /^http(s?):\/\//i.test(source);
+    const tempSrc = hrefSrc && source.replace(/^http(s?):\/\//i, "");
+    const nadeSrc = hrefSrc ? <a href={source} title={tempSrc} target="_blank" rel="noopener noreferrer"><span>{tempSrc}</span></a> : source;
 
     // Dictionaries for converting the Firestore data
     const tickDict = { 1: "64 Tick", 2: "64 & 128 Tick", 3: "128 Tick" };
@@ -116,9 +121,14 @@ function Details({ nadeData }) {
         value: teamDict[convertQueryValues(team)]
       },
       {
+        field: "features",
+        title: "Features",
+        value: feature.oneway && "One-way"
+      },
+      {
         field: "source",
         title: "Source",
-        value: source
+        value: nadeSrc
       }
     ];
 
@@ -146,19 +156,12 @@ function Details({ nadeData }) {
       }
     ];
 
-    // TODO: Add views to the right of ratings
-    // TODO: Add hyperlinks for sources
-    // TODO: Add "One-way" to characteristics table
-
     // Builds the details section when there is grenade data
     components =
       <div>
         <h2>{nadeInfo}</h2>
         <p>{nadeDate}</p>
-        <div className="grenade-details-ratings">
-          <Rating width="80" />
-          <span>&nbsp;&nbsp;0 ratings</span>
-        </div>
+        <DetailsStats nadeData={{ rating, views }} userData={{ rating: 0 }} />
         <hr />
         <div className="grenade-details-buttons">
           {nadeBtnList}
@@ -176,6 +179,81 @@ function Details({ nadeData }) {
       {components}
     </div>
   );
+}
+
+
+// Displays the grenade statistics for the details section
+class DetailsStats extends Component {
+  constructor(props) {
+    super(props);
+
+    // The default state of the rating system
+    this.state = {
+      mouseover: false,
+      overRating: 0,
+      userRating: 0
+    };
+  }
+
+  // TODO: Might need to check componentDidUpdate if nadeRating or userRating updates
+
+  // Calculates the star rating on mouseover
+  handleRating = (e) => {
+    const currentRect = e.currentTarget.getBoundingClientRect();
+    const parentRect = e.currentTarget.parentNode.getBoundingClientRect();
+
+    // The percentage of the container width at the cursor location
+    const percRating = (parentRect.right - currentRect.right) / parentRect.width;
+
+    // The star rating on mouseover
+    const overRating = 100 - (percRating * 100);
+
+    this.setState({ overRating });
+  };
+
+  render() {
+    const { nadeData, userData } = this.props;
+    const { mouseover, overRating, userRating } = this.state;
+    const { average: avgRating, count: numRating } = nadeData.rating;
+    const handleRating = this.handleRating;
+
+    // Adds an -s to the end of plural nouns
+    const grammarNumber = (num) => num === 1 ? "" : "s";
+
+    let prevRating, tempRating = "You have not rated this grenade";
+
+    // Checks if the user has rated the grenade
+    if (userRating) tempRating = `You rated this ${userRating} star${grammarNumber(userRating)}`;
+    else if (prevRating = userData.rating) tempRating = `You previously rated this ${prevRating} star${grammarNumber(prevRating)}`;
+
+    const nadeRating = mouseover ? overRating : avgRating * 20;
+    const textRating = mouseover ? tempRating : `${numRating} rating${grammarNumber(numRating)}`;
+
+    const tempViews = nadeData.views + 1;
+    const textViews = mouseover ? null : <span>{tempViews} view{grammarNumber(tempViews)}</span>
+
+    // Star outlines to update the rating on mouseover
+    const ratingOutline = [];
+    for (let i = 0; i < 5; i++) {
+      const key = `grenade-details-star-outline-${i}`;
+      ratingOutline.push(<div key={key} onMouseEnter={handleRating}></div>);
+    }
+
+    return (
+      <div className="grenade-details-stats">
+        <div
+          className="grenade-details-rating"
+          onMouseEnter={() => this.setState({ mouseover: true })}
+          onMouseLeave={() => this.setState({ mouseover: false })}
+        >
+          <Rating width={nadeRating} />
+          {mouseover && <div className="rating-outline">{ratingOutline}</div>}
+        </div>
+        <span style={{ flexGrow: 1 }}>&nbsp;&nbsp;{textRating}</span>
+        {textViews}
+      </div>
+    );
+  }
 }
 
 

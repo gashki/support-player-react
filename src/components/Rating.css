@@ -15,3 +15,18 @@
   top: 0;
   white-space: nowrap;
 }
+
+.rating-outline {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.rating-outline > div {
+  flex-basis: 0;
+  flex-grow: 1;
+}
