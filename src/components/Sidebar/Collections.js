@@ -6,9 +6,9 @@ import { CollectionLink, CollectionButton } from "./Form";
 import Dialog from "../Modal/Dialog";
 import Login from "../Modal/Login";
 import {
-  SvgAddBox,
   SvgFavorite,
-  SvgList,
+  SvgFolder,
+  SvgNewFolder,
   SvgSchedule,
   SvgUpload
 } from "../SvgIcons";
@@ -173,7 +173,7 @@ class Collections extends Component {
     const userLinks = collList.map(item => {
       const { id, title } = item;
       const key = `collection-user-${id}`;
-      const svg = <SvgList color="#f5f5f5" />;
+      const svg = <SvgFolder color="#f5f5f5" />;
       const href = `/collections/${id}`;
 
       // Opens the collection page
@@ -199,7 +199,7 @@ class Collections extends Component {
         <ul className="sidebar-collections">
           {defaultLinks}
           <CollectionButton
-            svg={<SvgAddBox color="#f5f5f5" />}
+            svg={<SvgNewFolder color="#f5f5f5" />}
             title="Create new collection"
             onClick={openDialog}
           />

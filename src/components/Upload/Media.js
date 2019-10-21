@@ -3,7 +3,7 @@ import React from "react";
 // React components
 import Help from "./Help";
 import Required from "./Required";
-import { SvgAddBox, SvgDelete } from "../SvgIcons";
+import { SvgAddCircle, SvgDelete } from "../SvgIcons";
 import { UploadMessage, UploadSubmit } from "./Form";
 import Vertical from "../Vertical";
 
@@ -273,7 +273,7 @@ function MediaFile(props) {
           <Vertical />
         </div>
         : <label className="upload-media-label unselectable" htmlFor={id}>
-          <SvgAddBox color="#ffadd6" />
+          <SvgAddCircle color="#ffadd6" />
           <span>{label}{require && <Required />}</span>
           <Vertical />
         </label>
