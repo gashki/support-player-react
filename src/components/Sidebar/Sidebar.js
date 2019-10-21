@@ -12,6 +12,7 @@ import Filters from "./Filters";
 
 // The sidebar for the main page
 class Sidebar extends Component {
+  // eslint-disable-next-line
   constructor(props) {
     super(props);
   }
