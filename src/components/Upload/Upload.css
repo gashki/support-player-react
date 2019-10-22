@@ -213,7 +213,7 @@
   color: #bdbdbd;
   font-size: 14px;
   line-height: 18px;
-  margin: 0 0 8px;
+  margin: 0 0 12px;
 }
 
 .upload-message ul {
@@ -224,7 +224,7 @@
 .upload-message li {
   color: #bdbdbd;
   font-size: 14px;
-  margin: 4px 0;
+  margin: 6px 0;
 }
 
 .upload-message button {

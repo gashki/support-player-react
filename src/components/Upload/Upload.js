@@ -180,7 +180,7 @@ class Upload extends Component {
       const id = `missing-field-${index}`;
 
       return (
-        <li key={id}><i style={{ color: "#f5f5f5" }}>{invalid}</i> is a required field</li>
+        <li key={id}><i style={{ color: "#f5f5f5" }}>{invalid}</i>&nbsp;&nbsp;is a required field</li>
       );
     });
 
