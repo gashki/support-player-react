@@ -67,6 +67,7 @@
   background-color: #f5f5f5;
   border: 1px solid #424242;
   border-radius: 4px;
+  box-sizing: border-box;
   display: block;
   font-family: "Roboto", sans-serif;
   font-size: 13px;

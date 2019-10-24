@@ -67,7 +67,7 @@ class Dialog extends Component {
         <h3>{title}</h3>
         {error && <ModalError error={error} />}
         <p className="modal-dialog-message">{message}</p>
-        <input className="modal-form-input border-box" {...attributes} autoFocus required />
+        <input className="modal-form-input" {...attributes} autoFocus required />
         <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
           <button type="button" onClick={closeDialog}>Cancel</button>
           <button type="submit">{action}</button>

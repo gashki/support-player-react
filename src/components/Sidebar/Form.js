@@ -82,7 +82,7 @@ export function FilterCheckbox({ legend, options, onChange }) {
     };
 
     return (
-      <label key={key} className="border-box">
+      <label key={key}>
         <input type="checkbox" checked={value} onChange={handleChange} />
         <span>{title}</span>
       </label>
@@ -108,7 +108,7 @@ export function FilterRating({ options, onChange }) {
     };
 
     return (
-      <label key={key} className="border-box">
+      <label key={key}>
         <input type="checkbox" checked={value} onChange={handleChange} />
         <Rating width={title} />
         <span>&nbsp;&amp; Up</span>

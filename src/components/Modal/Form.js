@@ -24,14 +24,14 @@ export function ModalInput(props) {
 
   return ([
     <label key={`ModalInput-label-${input}`}>{label}</label>,
-    <input key={`ModalInput-input-${input}`} className="modal-form-input border-box" {...attributes} required />
+    <input key={`ModalInput-input-${input}`} className="modal-form-input" {...attributes} required />
   ]);
 }
 
 // The submit button for modal forms
 export function ModalSubmit({ value }) {
   return (
-    <input className="modal-form-submit border-box" type="submit" value={value} />
+    <input className="modal-form-submit" type="submit" value={value} />
   );
 }
 

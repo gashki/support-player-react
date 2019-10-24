@@ -32,7 +32,7 @@ export function UploadSelect(props) {
   return (
     <div>
       <label className="upload-details-label">{label}{require && <Required />}</label>
-      <select className="upload-select border-box" value={value} onChange={handleChange}>
+      <select className="upload-select" value={value} onChange={handleChange}>
         {optionList}
       </select>
     </div>
@@ -72,7 +72,7 @@ export function UploadInput(props) {
         {help && <Help message={help} changeState={changeState} />}
       </label>
       <input
-        className="upload-input border-box"
+        className="upload-input"
         type="text"
         value={value}
         placeholder={hint}
@@ -122,7 +122,7 @@ export function UploadRadio(props) {
         <Required />
         {help && <Help message={help} changeState={changeState} />}
       </label>
-      <div className="upload-radio border-box">
+      <div className="upload-radio">
         {optionList}
       </div>
     </div>

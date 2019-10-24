@@ -167,7 +167,6 @@ function UploadImage(props) {
         />
       </div>
       <textarea
-        className="border-box"
         value={comments[input]}
         placeholder="Comment (Optional)"
         rows="2"
