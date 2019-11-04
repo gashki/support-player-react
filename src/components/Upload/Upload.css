@@ -400,6 +400,7 @@
   border: none;
   cursor: pointer;
   float: right;
+  font-size: 0;
   height: 16px;
   margin: 0;
   outline: none;

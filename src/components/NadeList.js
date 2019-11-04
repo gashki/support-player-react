@@ -66,6 +66,7 @@ class NadeList extends Component {
     const { nadeList, loadMore } = this.state;
 
     // TODO: Add note if the nadeList is empty
+    // TODO: Add a loading icon on initial load
 
     // The list of nade cards
     const nadeCards =

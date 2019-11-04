@@ -76,7 +76,7 @@ class Collections extends Component {
       const collection = { name: collName, created: collTime, modified: collTime };
 
       // Adds the new grenade collection document in Firestore
-      collRef.add(collection).then(document => {
+      return collRef.add(collection).then(document => {
         const collId = document.id;
         const userDoc = { collections: { [collId]: collName }, modified: collTime, recent: collId };
 

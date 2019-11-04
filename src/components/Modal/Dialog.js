@@ -26,7 +26,7 @@ class Dialog extends Component {
 
   // Submits the user input to be processed
   handleSubmit = async (e) => {
-    const { onSubmit, changeState } = this.props;
+    const { close = true, onSubmit, changeState } = this.props;
     const { value, error } = this.state;
 
     // Prevents the form from being submitted
@@ -42,7 +42,7 @@ class Dialog extends Component {
 
     // Sets the error message or closes the modal
     if (result) this.setState({ error: result });
-    else changeState("contentModal", null);
+    else if (close) changeState("contentModal", null);
   };
 
   closeDialog = () => {
