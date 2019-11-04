@@ -161,3 +161,34 @@ export const buildSearchQuery = (searchParam) => {
 
   return nadeListRef.orderBy(nadeSort, nadeOrder).limit(NADE_LIMIT);
 };
+
+// Returns a list of the user's grenade collections in Firestore
+export const getUserCollections = (userUid) => {
+  // Returns an empty list if there is no user
+  if (!userUid) return [];
+
+  const userRef = firestore.doc(`users/${userUid}`);
+
+  // Performs the Firestore query
+  return userRef.get().then(user => {
+    if (!user.exists) return [];
+
+    const collections = user.data().collections;
+    if (!collections) return [];
+
+    const collKeys = Object.keys(collections);
+    const collList = collKeys.map(key => ({ id: key, title: collections[key] }));
+
+    // Sorts the collections by the title
+    collList.sort((a, b) => {
+      const aTitle = a.title.toLowerCase();
+      const bTitle = b.title.toLowerCase();
+      return (aTitle > bTitle) - (aTitle < bTitle);
+    });
+
+    return collList;
+  }).catch(error => {
+    console.log(error);
+    return [];
+  });
+};

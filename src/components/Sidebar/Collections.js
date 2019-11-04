@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import firebase, { firestore } from "../../firebase";
+import { getUserCollections } from "../Query";
 
 // React components
 import { CollectionLink, CollectionButton } from "./Form";
@@ -40,36 +41,16 @@ class Collections extends Component {
   }
 
   // Performs the collections query to Firestore
-  queryCollections = () => {
+  queryCollections = async () => {
     const currentUser = this.props.currentUser;
 
     // Resets the collections if there is no user
     if (!currentUser) return this.setState({ collList: [], showMore: false });
 
     const userUid = currentUser.uid;
-    const userRef = firestore.doc(`users/${userUid}`);
+    const collList = await getUserCollections(userUid);
 
-    // Performs the Firestore query
-    userRef.get().then(user => {
-      if (!user.exists) return null;
-
-      const collections = user.data().collections;
-      if (!collections) return null;
-
-      const collKeys = Object.keys(collections);
-      const collList = collKeys.map(key => ({ id: key, title: collections[key] }));
-
-      // Sorts the collections by the title
-      collList.sort((a, b) => {
-        const aTitle = a.title.toLowerCase();
-        const bTitle = b.title.toLowerCase();
-        return (aTitle > bTitle) - (aTitle < bTitle);
-      });
-
-      this.setState({ collList });
-    }).catch(error => {
-      console.log(error);
-    });
+    this.setState({ collList });
   };
 
   // Opens the "New Collection" dialog
@@ -120,8 +101,8 @@ class Collections extends Component {
   };
 
   render() {
-    const { collList, showMore } = this.state;
     const { currentUser, changeState } = this.props;
+    const { collList, showMore } = this.state;
     const openDialog = this.openDialog;
 
     // The default collections to show on the sidebar
@@ -153,12 +134,8 @@ class Collections extends Component {
 
       // Sets the content when the default link is clicked
       const handleClick = () => {
-        if (currentUser) {
-          changeState("contentMain", { type: "Collection", state: field }, href);
-        }
-        else {
-          changeState("contentModal", <Login index={0} changeState={changeState} />);
-        }
+        if (currentUser) changeState("contentMain", { type: "Collection", state: field }, href);
+        else changeState("contentModal", <Login index={0} changeState={changeState} />);
       };
 
       // The attributes for the collection link
