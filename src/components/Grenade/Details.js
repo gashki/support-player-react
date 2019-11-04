@@ -1,12 +1,23 @@
 import React, { Component } from "react";
+import firebase, { firestore } from "../../firebase";
 import { MAPS, NADES } from "../../constants";
+import { getUserCollections } from "../Query";
+
+// Custom scroll bar library
+import "../../lib/simplebar.min.css";
+import SimpleBar from "../../lib/simplebar.min.js";
 
 // React components
+import Close from "../Modal/Close";
+import Dialog from "../Modal/Dialog";
+import Loader from "../Loader";
+import Login from "../Modal/Login";
 import Rating from "../Rating";
+import { SvgNewFolder } from "../SvgIcons";
 
 
 // The information section of the grenade content
-function Details({ nadeData }) {
+function Details({ nadeData, currentUser, changeState }) {
   let components = null;
 
   // Checks if there is grenade data
@@ -34,29 +45,38 @@ function Details({ nadeData }) {
     const tempDate = timestamp.toDate();
     const nadeDate = tempDate.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 
+    // Opens the "Add to Collection" dialog for saving grenades
+    const openCollList = () => {
+      if (currentUser) changeState("contentModal", <CollListDialog currentUser={currentUser} changeState={changeState} />);
+      else changeState("contentModal", <Login index={0} changeState={changeState} />);
+    };
+
     // The information for the buttons on the details section
     const nadeBtnInfo = [
       {
         field: "add-to",
-        label: "Add To"
+        label: "Add To",
+        action: openCollList
       },
       {
         field: "share",
-        label: "Share"
+        label: "Share",
+        action: () => { }
       },
       {
         field: "report",
-        label: "Report"
+        label: "Report",
+        action: () => { }
       }
     ];
 
     // The button components displayed on the details section
     const nadeBtnList = nadeBtnInfo.map(btnInfo => {
-      const { field, label } = btnInfo;
+      const { field, label, action } = btnInfo;
       const key = `grenade-details-buttons-${field}`;
 
       return (
-        <button key={key} type="button">
+        <button key={key} type="button" onClick={action}>
           {label}
         </button>
       );
@@ -175,7 +195,7 @@ function Details({ nadeData }) {
   }
 
   return (
-    <div className="grenade-details border-box">
+    <div className="grenade-details">
       {components}
     </div>
   );
@@ -251,6 +271,168 @@ class DetailsStats extends Component {
         </div>
         <span style={{ flexGrow: 1 }}>&nbsp;&nbsp;{textRating}</span>
         {textViews}
+      </div>
+    );
+  }
+}
+
+
+// The dialog for saving grenades to collections
+class CollListDialog extends Component {
+  constructor(props) {
+    super(props);
+
+    // The default state of the dialog
+    this.state = {
+      collList: [],
+      loadList: true
+    };
+  }
+
+  componentDidMount() {
+    // Initializes the user data
+    this.queryUserData();
+  }
+
+  componentDidUpdate(prevProps) {
+    const prevUser = prevProps.currentUser;
+    const nextUser = this.props.currentUser;
+
+    // Checks if the user data needs to be updated
+    if (prevUser !== nextUser) this.queryUserData();
+  }
+
+  // Prevents the modal from closing when the content is clicked
+  preventClose = (e) => {
+    e.stopPropagation();
+  };
+
+  // Performs the user data queries to Firestore
+  queryUserData = async () => {
+    const currentUser = this.props.currentUser;
+    const loadList = false;
+
+    // Resets the user data if there is no user
+    if (!currentUser) return this.setState({ collList: [], loadList });
+
+    const userUid = currentUser.uid;
+    const collList = await getUserCollections(userUid);
+    //const nadeList = await getNadeCollections(nadeId);
+
+    this.setState({ collList, loadList });
+
+    // Initializes the custom scroll bar
+    new SimpleBar(document.getElementById("coll-list-simplebar"));
+  };
+
+  // Opens the "New Collection" dialog
+  openDialog = () => {
+    const { currentUser, changeState } = this.props;
+    const title = "New Collection";
+    const message = "Collections allow you to group grenades together and share them. Enter the name of your new collection.";
+
+    // Creates a new collection in Firestore
+    const onSubmit = (input) => {
+      // Checks if there is a user is signed in
+      if (!currentUser) return null;
+
+      // References to the user's Firestore document and collections
+      const userUid = currentUser.uid;
+      const userRef = firestore.doc(`users/${userUid}`);
+      const collRef = firestore.collection(`users/${userUid}/collections`);
+
+      // The data for the Firestore document
+      const collName = input.trim();
+      const collTime = firebase.firestore.FieldValue.serverTimestamp();
+      const collection = { name: collName, created: collTime, modified: collTime };
+
+      // Adds the new grenade collection document in Firestore
+      return collRef.add(collection).then(document => {
+        const collId = document.id;
+        const userDoc = { collections: { [collId]: collName }, modified: collTime, recent: collId };
+
+        // Updates the user's document with the new collection ID
+        return userRef.set(userDoc, { merge: true }).then((_) => {
+          // Reopens the "Add to Collection" dialog
+          changeState("contentModal", <CollListDialog currentUser={currentUser} changeState={changeState} />);
+        });
+      }).catch(error => {
+        console.log(error);
+        return error;
+      });
+    };
+
+    // The attributes for the dialog
+    const attributes = { title, message, action: "Create", close: false, onSubmit, changeState };
+
+    // Displays the dialog if there is a user signed in
+    if (currentUser) changeState("contentModal", <Dialog {...attributes} />);
+    else changeState("contentModal", <Login index={0} changeState={changeState} />);
+  };
+
+  render() {
+    const { collList, loadList } = this.state;
+    const changeState = this.props.changeState;
+
+    const preventClose = this.preventClose;
+    const openDialog = this.openDialog;
+
+    // The list of components to display in the dialog
+    const listItems = [];
+
+    // The custom checkbox component for selecting collections
+    function ListItem({ id, title }) {
+      return (
+        <li>
+          <label>
+            <input type="checkbox" />
+            <div />
+            <span>{title}</span>
+          </label>
+        </li>
+      );
+    }
+
+    // The default collections to display
+    const defaultList = [
+      { id: "favorites", title: "Favorites" },
+      { id: "view-later", title: "View later" }
+    ];
+
+    // Builds the components for the default collections
+    defaultList.forEach(item => {
+      const key = `grenade-coll-list-${item.id}`;
+      listItems.push(<ListItem key={key} {...item} />);
+    });
+
+    // Builds the components for the user collections
+    collList.forEach(item => {
+      const key = `grenade-coll-list-${item.id}`;
+      listItems.push(<ListItem key={key} {...item} />);
+    });
+
+    // The loading icon when the collections are being queried
+    const listLoader =
+      <div className="grenade-coll-list-loader">
+        <Loader size="medium" />
+      </div>;
+
+    // TODO: Add debounce/throttle function to prevent onClick from firing multiple times
+    // Add this function to the filters too
+    // https://davidwalsh.name/javascript-debounce-function
+
+    return (
+      <div className="grenade-coll-list" onMouseDown={preventClose}>
+        <h3>Add to Collection</h3>
+        <ul id="coll-list-simplebar">
+          {loadList ? listLoader : listItems}
+        </ul>
+        <button className="grenade-coll-list-button" type="button" onClick={openDialog}>
+          <div>
+            <SvgNewFolder color="#bdbdbd" /><span>Create new collection</span>
+          </div>
+        </button>
+        <Close changeState={changeState} />
       </div>
     );
   }
