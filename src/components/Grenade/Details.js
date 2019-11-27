@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import firebase, { firestore } from "../../firebase";
 import { MAPS, NADES } from "../../constants";
-import { getUserCollections } from "../Query";
+import { debounce } from "../../utility";
+import { getUserCollections, getNadeConnections } from "../Query";
 
 // Custom scroll bar library
 import "../../lib/simplebar.min.css";
@@ -47,7 +48,10 @@ function Details({ nadeData, currentUser, changeState }) {
 
     // Opens the "Add to Collection" dialog for saving grenades
     const openCollList = () => {
-      if (currentUser) changeState("contentModal", <CollListDialog currentUser={currentUser} changeState={changeState} />);
+      // The attributes for the dialog
+      const attributes = { nadeData, currentUser, changeState };
+
+      if (currentUser) changeState("contentModal", <CollListDialog {...attributes} />);
       else changeState("contentModal", <Login index={0} changeState={changeState} />);
     };
 
@@ -85,8 +89,9 @@ function Details({ nadeData, currentUser, changeState }) {
     const nadeMvmt = movement["100"] ? "Stationary" : (movement["001"] ? (movement["010"] ? "Run & Jump" : "Jump") : "Run/Walk");
 
     // Determines if a link should be displayed for the grenade source
-    const hrefSrc = /^http(s?):\/\//i.test(source);
-    const tempSrc = hrefSrc && source.replace(/^http(s?):\/\//i, "");
+    const hrefReg = /^http(s?):\/\//i;
+    const hrefSrc = hrefReg.test(source);
+    const tempSrc = hrefSrc && source.replace(hrefReg, "");
     const nadeSrc = hrefSrc ? <a href={source} title={tempSrc} target="_blank" rel="noopener noreferrer"><span>{tempSrc}</span></a> : source;
 
     // Dictionaries for converting the Firestore data
@@ -285,6 +290,7 @@ class CollListDialog extends Component {
     // The default state of the dialog
     this.state = {
       collList: [],
+      connList: {},
       loadList: true
     };
   }
@@ -309,17 +315,25 @@ class CollListDialog extends Component {
 
   // Performs the user data queries to Firestore
   queryUserData = async () => {
-    const currentUser = this.props.currentUser;
+    const { nadeData, currentUser } = this.props;
     const loadList = false;
 
-    // Resets the user data if there is no user
-    if (!currentUser) return this.setState({ collList: [], loadList });
+    // Resets the user data if there is no user or grenade
+    if (!nadeData || !currentUser) return this.setState({ collList: [], connList: {}, loadList });
 
+    const nadeId = nadeData.docId;
     const userUid = currentUser.uid;
-    const collList = await getUserCollections(userUid);
-    //const nadeList = await getNadeCollections(nadeId);
 
-    this.setState({ collList, loadList });
+    // Performs the queries asynchronously
+    const results = await Promise.all([
+      getUserCollections(userUid),
+      getNadeConnections(userUid, nadeId)
+    ]);
+
+    const collList = results[0];
+    const connList = results[1];
+
+    this.setState({ collList, connList, loadList });
 
     // Initializes the custom scroll bar
     new SimpleBar(document.getElementById("coll-list-simplebar"));
@@ -327,7 +341,7 @@ class CollListDialog extends Component {
 
   // Opens the "New Collection" dialog
   openDialog = () => {
-    const { currentUser, changeState } = this.props;
+    const { nadeData, currentUser, changeState } = this.props;
     const title = "New Collection";
     const message = "Collections allow you to group grenades together and share them. Enter the name of your new collection.";
 
@@ -344,17 +358,20 @@ class CollListDialog extends Component {
       // The data for the Firestore document
       const collName = input.trim();
       const collTime = firebase.firestore.FieldValue.serverTimestamp();
-      const collection = { name: collName, created: collTime, modified: collTime };
+      const collection = { name: collName, created: collTime, grenades: {}, modified: collTime, recent: "" };
 
-      // Adds the new grenade collection document in Firestore
+      // Adds the new collection document in Firestore
       return collRef.add(collection).then(document => {
         const collId = document.id;
         const userDoc = { collections: { [collId]: collName }, modified: collTime, recent: collId };
 
         // Updates the user's document with the new collection ID
         return userRef.set(userDoc, { merge: true }).then((_) => {
+          // The attributes for the dialog
+          const attributes = { nadeData, currentUser, changeState };
+
           // Reopens the "Add to Collection" dialog
-          changeState("contentModal", <CollListDialog currentUser={currentUser} changeState={changeState} />);
+          changeState("contentModal", <CollListDialog {...attributes} />);
         });
       }).catch(error => {
         console.log(error);
@@ -371,8 +388,8 @@ class CollListDialog extends Component {
   };
 
   render() {
-    const { collList, loadList } = this.state;
-    const changeState = this.props.changeState;
+    const { collList, connList, loadList } = this.state;
+    const { nadeData, currentUser, changeState } = this.props;
 
     const preventClose = this.preventClose;
     const openDialog = this.openDialog;
@@ -381,11 +398,53 @@ class CollListDialog extends Component {
     const listItems = [];
 
     // The custom checkbox component for selecting collections
-    function ListItem({ id, title }) {
+    function ListItem({ id: collId, title }) {
+      const checked = !!connList[collId];
+
+      // Executes after the last event has stopped being invoked for 0.5 seconds
+      const updateUserCollection = debounce((insert) => {
+        // Checks for user and grenade data
+        if (!nadeData || !currentUser) return null;
+
+        const userUid = currentUser.uid;
+        const { docId: nadeId, id, nade, map, location, images } = nadeData;
+
+        // Sentinel values used for writing to document fields
+        const svrTime = firebase.firestore.FieldValue.serverTimestamp();
+        const deleKey = firebase.firestore.FieldValue.delete();
+
+        // References to the user's Firestore documents
+        const collRef = firestore.doc(`users/${userUid}/collections/${collId}`);
+        const connRef = firestore.doc(`users/${userUid}/connections/${nadeId}`);
+
+        // The data for the Firestore documents
+        const nadeDoc = { id, nade, map, location, thumbnail: images["thumb_small"], added: svrTime };
+        const collMap = { [nadeId]: (insert ? nadeDoc : deleKey) };
+        const connMap = { [collId]: (insert ? svrTime : deleKey) };
+
+        const collDoc = { modified: svrTime, recent: nadeId, grenades: collMap };
+        const connDoc = { modified: svrTime, recent: collId, collections: connMap };
+
+        // Adds/removes the grenade to/from the collection document
+        return collRef.set(collDoc, { merge: true }).then((_) => {
+          // Updates the connection between the grenade and the collection
+          return connRef.set(connDoc, { merge: true });
+        }).catch(error => {
+          console.log(error);
+          return error;
+        });
+      }, 500);
+
+      // Calls a debounce function to update the Firestore documents
+      const handleChange = (e) => {
+        const value = e.currentTarget.checked;
+        updateUserCollection(value);
+      };
+
       return (
         <li>
           <label>
-            <input type="checkbox" />
+            <input type="checkbox" defaultChecked={checked} onChange={handleChange} />
             <div />
             <span>{title}</span>
           </label>
@@ -416,10 +475,6 @@ class CollListDialog extends Component {
       <div className="grenade-coll-list-loader">
         <Loader size="medium" />
       </div>;
-
-    // TODO: Add debounce/throttle function to prevent onClick from firing multiple times
-    // Add this function to the filters too
-    // https://davidwalsh.name/javascript-debounce-function
 
     return (
       <div className="grenade-coll-list" onMouseDown={preventClose}>

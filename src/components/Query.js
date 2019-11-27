@@ -192,3 +192,24 @@ export const getUserCollections = (userUid) => {
     return [];
   });
 };
+
+// Returns an object of collections that are connected to the grenade
+export const getNadeConnections = (userUid, nadeId) => {
+  // Returns an empty object if there is no user or grenade
+  if (!userUid || !nadeId) return {};
+
+  const nadeRef = firestore.doc(`users/${userUid}/connections/${nadeId}`);
+
+  // Performs the Firestore query
+  return nadeRef.get().then(nade => {
+    if (!nade.exists) return {};
+
+    const collections = nade.data().collections;
+    if (!collections) return {};
+
+    return collections;
+  }).catch(error => {
+    console.log(error);
+    return {};
+  });
+};

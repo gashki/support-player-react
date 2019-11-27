@@ -73,9 +73,9 @@ class Collections extends Component {
       // The data for the Firestore document
       const collName = input.trim();
       const collTime = firebase.firestore.FieldValue.serverTimestamp();
-      const collection = { name: collName, created: collTime, modified: collTime };
+      const collection = { name: collName, created: collTime, grenades: {}, modified: collTime, recent: "" };
 
-      // Adds the new grenade collection document in Firestore
+      // Adds the new collection document in Firestore
       return collRef.add(collection).then(document => {
         const collId = document.id;
         const userDoc = { collections: { [collId]: collName }, modified: collTime, recent: collId };
