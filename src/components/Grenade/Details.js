@@ -322,12 +322,12 @@ class CollListDialog extends Component {
     if (!nadeData || !currentUser) return this.setState({ collList: [], connList: {}, loadList });
 
     const nadeId = nadeData.docId;
-    const userUid = currentUser.uid;
+    const userId = currentUser.uid;
 
     // Performs the queries asynchronously
     const results = await Promise.all([
-      getUserCollections(userUid),
-      getNadeConnections(userUid, nadeId)
+      getUserCollections(userId),
+      getNadeConnections(userId, nadeId)
     ]);
 
     const collList = results[0];
@@ -407,7 +407,7 @@ class CollListDialog extends Component {
         // Checks for user and grenade data
         if (!nadeData || !currentUser) return null;
 
-        const userUid = currentUser.uid;
+        const userId = currentUser.uid;
         const { docId: nadeId, id, nade, map, location, images } = nadeData;
 
         // Sentinel values used for writing to document fields
@@ -415,8 +415,8 @@ class CollListDialog extends Component {
         const deleKey = firebase.firestore.FieldValue.delete();
 
         // References to the user's Firestore documents
-        const collRef = firestore.doc(`users/${userUid}/collections/${collId}`);
-        const connRef = firestore.doc(`users/${userUid}/connections/${nadeId}`);
+        const collRef = firestore.doc(`users/${userId}/collections/${collId}`);
+        const connRef = firestore.doc(`users/${userId}/connections/${nadeId}`);
 
         // The data for the Firestore documents
         const nadeDoc = { id, nade, map, location, thumbnail: images["thumb_small"], added: svrTime };

@@ -48,8 +48,8 @@ class Collections extends Component {
     // Resets the collections if there is no user
     if (!currentUser) return this.setState({ collList: [], showMore: false });
 
-    const userUid = currentUser.uid;
-    const collList = await getUserCollections(userUid);
+    const userId = currentUser.uid;
+    const collList = await getUserCollections(userId);
 
     this.setState({ collList });
   };
