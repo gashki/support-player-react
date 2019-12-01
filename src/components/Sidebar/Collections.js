@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import firebase, { firestore } from "../../firebase";
+import { generateDocId } from "../../utility";
 import { getUserCollections } from "../Query";
 
 // React components
@@ -65,10 +66,12 @@ class Collections extends Component {
       // Checks if there is a user is signed in
       if (!currentUser) return null;
 
+      const userId = currentUser.uid;
+      const collId = generateDocId();
+
       // References to the user's Firestore document and collections
-      const userUid = currentUser.uid;
-      const userRef = firestore.doc(`users/${userUid}`);
-      const collRef = firestore.collection(`users/${userUid}/collections`);
+      const userRef = firestore.doc(`users/${userId}`);
+      const collRef = firestore.doc(`users/${userId}/collections/${collId}`);
 
       // The data for the Firestore document
       const collName = input.trim();
@@ -76,8 +79,7 @@ class Collections extends Component {
       const collection = { name: collName, created: collTime, grenades: {}, modified: collTime, recent: "" };
 
       // Adds the new collection document in Firestore
-      return collRef.add(collection).then(document => {
-        const collId = document.id;
+      return collRef.set(collection).then((_) => {
         const userDoc = { collections: { [collId]: collName }, modified: collTime, recent: collId };
 
         // Updates the user's document with the new collection ID
