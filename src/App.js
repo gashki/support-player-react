@@ -45,6 +45,13 @@ class App extends Component {
   setContent = (replaceState) => {
     // The current URL of the page
     const currentPath = window.location.pathname.slice(1);
+    const queryString = window.location.search.slice(1);
+    const frgmtString = window.location.hash.slice(1);
+
+    // URL parameters for setting the state of the content
+    const srchParams = [];
+    const hashParams = [];
+
     const currentUser = this.state.currentUser;
     const changeState = this.changeState;
 
@@ -90,7 +97,7 @@ class App extends Component {
         contentModal = <Login index={0} changeState={changeState} />;
       }
     }
-    // Displays the grenade submission content
+    // Displays the upload forms for submitting grenades
     else if ("upload" === replacePath) {
       if (currentUser) {
         contentMain.type = "Upload";
@@ -100,10 +107,54 @@ class App extends Component {
         contentModal = <Login index={0} changeState={changeState} />;
       }
     }
+    // Displays the media and information content for the grenades
+    else if (/^nades\//.test(replacePath)) {
+      const nadeId = replacePath.slice(6);
+
+      // Verifies the character format for the grenade ID
+      if (/^[a-zA-Z0-9]{6}$/.test(nadeId)) {
+        contentMain.type = "Grenade";
+        contentMain.state = nadeId;
+      }
+      else {
+        replacePath = "";
+      }
+    }
+    // Displays the nade list for the collection and the grenade content
+    else if (/^collections\//.test(replacePath) && currentUser) {
+      const collId = replacePath.slice(12);
+
+      // Verifies the character format for the collection ID
+      if (/^[a-zA-Z]{2}[0-9]{3}[a-zA-Z]{2}[0-9]{1}$/.test(collId)) {
+        contentMain.type = "Collection";
+        contentMain.state = collId;
+
+        // Checks if there is a selected grenade
+        const nadeParam = frgmtString;
+        if (/^[a-zA-Z0-9]{6}$/.test(nadeParam)) hashParams.push(`${nadeParam}`);
+      }
+      else {
+        replacePath = "";
+      }
+    }
+    // Sets the state of the filters for the nade list
+    else if (!replacePath && queryString) {
+      const filterParam = queryString.split("filters=").pop().split("&")[0].toLowerCase();
+
+      // Verifies the character format for the search parameter
+      if (/^[a-fA-F0-9]{8}$/.test(filterParam)) {
+        contentMain.state = filterParam;
+        srchParams.push(`filters=${filterParam}`);
+      }
+    }
     // The default URL if it is invalid
     else {
       replacePath = "";
     }
+
+    // Appends any valid URL parameters
+    if (srchParams.length) replacePath += `?${srchParams.join("&")}`;
+    if (hashParams.length) replacePath += `#${hashParams.join("&")}`;
 
     // Replaces the current history entry if the URL is invalid
     if (replaceState) {
