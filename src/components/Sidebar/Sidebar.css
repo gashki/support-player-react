@@ -60,6 +60,10 @@
   width: 100%;
 }
 
+.sidebar-collections button::-moz-focus-inner {
+  border: none;
+}
+
 .sidebar-collections svg {
   flex-shrink: 0;
   height: 20px;
@@ -120,6 +124,16 @@
 
 .sidebar-filters select:focus, .sidebar-filters select:hover {
   background-color: #424242;
+}
+
+.sidebar-filters select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 #e0e0e0;
+}
+
+.sidebar-filters select:-moz-focusring * {
+  color: #e0e0e0;
+  text-shadow: none;
 }
 
 .sidebar-filters label {

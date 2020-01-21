@@ -19,23 +19,13 @@ class NadeCard extends Component {
   }
 
   render() {
-    const changeState = this.props.changeState;
+    const { nadeData, changeState } = this.props;
+    const { id: nadeId, nade, map, team, views, timestamp } = nadeData;
 
-    // The data for the nade card
-    const nadeData = this.props.nadeData;
-    const nadeId = nadeData.id;
+    const textViews = `${views} view${views === 1 ? "" : "s"}`;
+    const relativeTime = getRelativeTime(timestamp.toMillis());
 
-    const timestamp = nadeData.timestamp.toMillis();
-    const relativeTime = getRelativeTime(timestamp);
-
-    const views = nadeData.views;
-    const viewCount = `${views} view${views === 1 ? "" : "s"}`;
-
-    const map = MAPS[nadeData.map]["title"];
-    const nade = nadeData.nade;
-    const team = nadeData.team;
-
-    let icon = NADES[nade]["icon"];
+    let icon = NADES[nade].icon;
 
     // Determines the appropriate fire grenade icon
     if ("weapon_firegrenade" === nade) {
@@ -75,11 +65,11 @@ class NadeCard extends Component {
           {showPreview && <video src={preview} onCanPlay={handleVideo} autoPlay loop muted playsInline />}
           {mouseover && <ScheduleButton />}
           {mouseover || <div className="nade-card-type">{icon}</div>}
-          {mouseover || <span className="nade-card-map">{map}</span>}
+          {mouseover || <span className="nade-card-map">{MAPS[map].title}</span>}
           <Vertical />
         </a>
         <div className="nade-card-details">
-          <span>{viewCount}&nbsp;&nbsp;&bull;&nbsp;&nbsp;{relativeTime}</span>
+          <span>{textViews}&nbsp;&nbsp;&bull;&nbsp;&nbsp;{relativeTime}</span>
           <Rating width="20" />
         </div>
       </li>
