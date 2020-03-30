@@ -1,0 +1,162 @@
+#grenade-collection-simplebar {
+  height: 504px;
+}
+
+.collection-info {
+  padding: 28px 28px 20px;
+}
+
+.collection-title {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: row;
+}
+
+.collection-title > h2 {
+  flex-grow: 1;
+}
+
+.collection-title > div {
+  position: relative;
+  width: 25px;
+}
+
+.collection-title svg {
+  height: 20px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 20px;
+}
+
+.collection-info > span {
+  color: #bdbdbd;
+  display: block;
+  font-size: 14px;
+  margin: 10px 0 12px;
+}
+
+.permalink {
+  align-items: center;
+  background-color: #f5f5f5;
+  border: 1px solid #424242;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: row;
+  height: 28px;
+  overflow: hidden;
+}
+
+.permalink-icon {
+  align-items: center;
+  background-color: #e0e0e0;
+  border-right: 1px solid #424242;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width: 32px;
+}
+
+.permalink-icon > svg {
+  height: 20px;
+  width: 20px;
+}
+
+.permalink > input {
+  background: none;
+  border: none;
+  flex-grow: 1;
+  font-family: "Roboto", sans-serif;
+  font-size: 13px;
+  margin: 0 8px;
+  outline: none;
+  padding: 0;
+}
+
+.collection-nade-list {
+  background-color: #2f2f2f;
+  font-size: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.collection-nade-list > li:not(:first-of-type):before {
+  background-color: #202020;
+  content: "";
+  display: block;
+  height: 1px;
+  margin: 0 28px;
+}
+
+.collection-card {
+  display: flex;
+  flex-direction: row;
+  padding: 14px 28px;
+  position: relative;
+  text-decoration: none;
+}
+
+.collection-card:hover {
+  background-color: #3e3e3e;
+}
+
+.collection-card:hover > .collection-card-remove {
+  visibility: visible;
+}
+
+.collection-card-media {
+  align-items: center;
+  background-color: #bdbdbd;
+  display: flex;
+  flex-direction: row;
+  height: 72px;
+  width: 128px;
+}
+
+.collection-card-media > img {
+  margin: 0 auto;
+  max-height: 100%;
+  max-width: 100%;
+  pointer-events: none;
+}
+
+.collection-card-details {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding-left: 18px;
+}
+
+.collection-card-details > span {
+  color: #bdbdbd;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.collection-card-details > span:first-child {
+  color: #f5f5f5;
+  font-size: 14px;
+}
+
+.collection-card-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0;
+  height: 18px;
+  margin: 0;
+  outline: none;
+  padding: 0;
+  position: absolute;
+  right: 28px;
+  top: 14px;
+  visibility: hidden;
+  width: 18px;
+}
+
+.collection-card-remove > svg {
+  height: 100%;
+  width: 100%;
+}

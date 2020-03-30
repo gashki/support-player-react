@@ -124,14 +124,20 @@ class App extends Component {
     else if (/^collections\//.test(replacePath) && currentUser) {
       const collId = replacePath.slice(12);
 
+      // TODO: Add check for default collections
+
       // Verifies the character format for the collection ID
       if (/^[a-zA-Z]{2}[0-9]{3}[a-zA-Z]{2}[0-9]{1}$/.test(collId)) {
+        const nadeParam = frgmtString;
+
         contentMain.type = "Collection";
         contentMain.state = collId;
 
         // Checks if there is a selected grenade
-        const nadeParam = frgmtString;
-        if (/^[a-zA-Z0-9]{6}$/.test(nadeParam)) hashParams.push(`${nadeParam}`);
+        if (/^[a-zA-Z0-9]{6}$/.test(nadeParam)) {
+          contentMain.state += `#${nadeParam}`;
+          hashParams.push(`${nadeParam}`);
+        }
       }
       else {
         replacePath = "";
