@@ -23,14 +23,14 @@ class Collection extends Component {
   }
 
   render() {
-    const { collData } = this.props;
+    const { collData, changeState } = this.props;
 
     let collInfo = null;
     let nadeList = null;
 
     // Checks if there is collection data
     if (collData) {
-      const { docId: collId, name, grenades, modified } = collData;
+      const { docId: collId, name, grenades, activeId, modified } = collData;
 
       const tempDate = modified.toDate();
       const nadeDate = tempDate.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
@@ -69,7 +69,20 @@ class Collection extends Component {
 
       // The list of collection nade cards
       nadeList =
-        nadeSort.map(nade => <CollectionCard key={nade.docId} collId={collId} nadeData={nade} />);
+        nadeSort.map(nade => {
+          const nadeId = nade.docId;
+          const active = nadeId === activeId;
+
+          return (
+            <CollectionCard
+              key={nadeId}
+              collId={collId}
+              active={active}
+              nadeData={nade}
+              changeState={changeState}
+            />
+          );
+        });
     }
 
     return (
@@ -87,13 +100,30 @@ class Collection extends Component {
 
 
 // The card used to display nades in the collection
-function CollectionCard({ collId, nadeData }) {
+function CollectionCard({ collId, active, nadeData, changeState }) {
   const { id: nadeId, nade, map, location, thumbnail } = nadeData;
-  const href = `/collections/${collId}#${nadeId}`;
+
+  const collState = `${collId}#${nadeId}`;
+  const href = `/collections/${collState}`;
+
+  // Sets the grenade to display in the collection
+  const handleClick = (e) => {
+    e.preventDefault();
+    changeState("contentMain", { type: "Collection", state: collState }, href);
+  };
+
+  // Removes the grenade from the collection
+  const handleRemove = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  // The attributes for the remove button
+  const attributes = { title: "Remove from collection", type: "button", onClick: handleRemove };
 
   return (
     <li>
-      <a className="collection-card" href={href}>
+      <a className="collection-card" href={href} onClick={handleClick}>
         <div className="collection-card-media">
           <img src={thumbnail} />
         </div>
@@ -102,9 +132,10 @@ function CollectionCard({ collId, nadeData }) {
           <span>{MAPS[map].title}</span>
           <span>{`${location.start} to ${location.end}`}</span>
         </div>
-        <button className="collection-card-remove" title="Remove from collection" type="button">
+        <button className="collection-card-remove" {...attributes}>
           <SvgClose color="#bdbdbd" />
         </button>
+        {active && <span className="collection-card-active"></span>}
       </a>
     </li>
   );

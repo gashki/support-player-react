@@ -26,6 +26,14 @@ class Grenade extends Component {
     this.queryNadeData();
   }
 
+  componentDidUpdate(prevProps) {
+    const prevNade = prevProps.contentState;
+    const nextNade = this.props.contentState;
+
+    // Checks if the nade data needs to be updated
+    if (prevNade !== nextNade) this.queryNadeData();
+  }
+
   // Performs the nade data queries to Firestore
   queryNadeData = async () => {
     const { contentType, contentState, currentUser } = this.props;
@@ -88,6 +96,9 @@ class Grenade extends Component {
     const { contentType, currentUser, changeState } = this.props;
     const { nadeData, collData } = this.state;
 
+    // Sets the active nade for the collection
+    if (nadeData && collData) collData.activeId = nadeData.docId;
+
     const collContent = /^(Collection|Permalink)$/.test(contentType);
     const grenadeTabs = [
       <input key="GrenadeTab-input-collection" id="grenade-radio-collection" name="grenade-tab" type="radio" defaultChecked={true} />,
@@ -103,7 +114,13 @@ class Grenade extends Component {
           <div className="grenade-sidebar">
             <div className="grenade-sidebar-inner">
               {collContent && grenadeTabs}
-              {collContent && <Collection collData={collData} />}
+              {collContent &&
+                <Collection
+                  collData={collData}
+                  currentUser={currentUser}
+                  changeState={changeState}
+                />
+              }
               <Details
                 nadeData={nadeData}
                 currentUser={currentUser}

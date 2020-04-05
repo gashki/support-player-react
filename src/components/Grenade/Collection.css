@@ -143,20 +143,38 @@
 .collection-card-remove {
   background: none;
   border: none;
+  border-radius: 50%;
+  box-sizing: content-box;
   cursor: pointer;
   font-size: 0;
   height: 18px;
   margin: 0;
   outline: none;
-  padding: 0;
+  padding: 4px;
   position: absolute;
-  right: 28px;
-  top: 14px;
+  right: 24px;
+  top: 10px;
   visibility: hidden;
   width: 18px;
+}
+
+.collection-card-remove:active {
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .collection-card-remove > svg {
   height: 100%;
   width: 100%;
+}
+
+.collection-card-active {
+  background-color: #d4006a;
+  border-radius: 50%;
+  bottom: 0;
+  height: 8px;
+  left: 10px;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  width: 8px;
 }
