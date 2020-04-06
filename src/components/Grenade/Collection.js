@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import firebase, { firestore } from "../../firebase";
 import { MAPS, NADES } from "../../constants";
 import "./Collection.css";
 
@@ -12,17 +13,34 @@ import { SvgClose, SvgDelete, SvgEdit, SvgLink } from "../SvgIcons";
 
 // The content for the user collection
 class Collection extends Component {
-  // eslint-disable-next-line
   constructor(props) {
     super(props);
+
+    // The default state of the collection
+    this.state = {
+      collInfo: null,
+      nadeList: null
+    };
   }
 
   componentDidMount() {
+    // Initializes the collection data
+    this.setCollectionData();
+
     // Initializes the custom scroll bar
     new SimpleBar(document.getElementById("grenade-collection-simplebar"));
   }
 
-  render() {
+  componentDidUpdate(prevProps) {
+    const prevColl = prevProps.collData;
+    const nextColl = this.props.collData;
+
+    // Checks if the collection data needs to be updated
+    if (prevColl !== nextColl) this.setCollectionData();
+  }
+
+  // Builds the collection components and sets the state
+  setCollectionData = () => {
     const { collData, changeState } = this.props;
 
     let collInfo = null;
@@ -69,9 +87,12 @@ class Collection extends Component {
 
       // The list of collection nade cards
       nadeList =
-        nadeSort.map(nade => {
+        nadeSort.map((nade, index) => {
           const nadeId = nade.docId;
           const active = nadeId === activeId;
+
+          // Removes the collection card and updates Firestore
+          const handleRemove = (e) => this.handleRemove(e, index);
 
           return (
             <CollectionCard
@@ -79,11 +100,62 @@ class Collection extends Component {
               collId={collId}
               active={active}
               nadeData={nade}
+              handleRemove={handleRemove}
               changeState={changeState}
             />
           );
         });
     }
+
+    // Sets the content for the collection components
+    this.setState({ collInfo, nadeList });
+  };
+
+  // Removes the grenade from the collection
+  handleRemove = (e, index) => {
+    const { collData, currentUser } = this.props;
+    const nadeList = this.state.nadeList;
+    const nadeData = nadeList[index];
+
+    // Prevents the content from changing
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Checks for user, collection, and grenade data
+    if (!nadeData || !collData || !currentUser) return null;
+
+    const userId = currentUser.uid;
+    const collId = collData.docId;
+    const nadeId = nadeData.key;
+
+    // Sentinel values used for writing to document fields
+    const svrTime = firebase.firestore.FieldValue.serverTimestamp();
+    const deleKey = firebase.firestore.FieldValue.delete();
+
+    // References to the user's Firestore documents
+    const collRef = firestore.doc(`users/${userId}/collections/${collId}`);
+    const connRef = firestore.doc(`users/${userId}/connections/${nadeId}`);
+
+    // The data for the Firestore documents
+    const collDoc = { modified: svrTime, recent: nadeId, grenades: { [nadeId]: deleKey } };
+    const connDoc = { modified: svrTime, recent: collId, collections: { [collId]: deleKey } };
+
+    // Removes the grenade from the collection document
+    return collRef.set(collDoc, { merge: true }).then((_) => {
+      // Updates the connection between the grenade and the collection
+      return connRef.set(connDoc, { merge: true });
+    }).then((_) => {
+      // Removes the collection card from the nade list
+      const tempList = [...nadeList.slice(0, index), ...nadeList.slice(index + 1)];
+      this.setState({ nadeList: tempList });
+    }).catch(error => {
+      console.log(error);
+      return error;
+    });
+  };
+
+  render() {
+    const { collInfo, nadeList } = this.state;
 
     return (
       <div className="grenade-collection">
@@ -100,7 +172,8 @@ class Collection extends Component {
 
 
 // The card used to display nades in the collection
-function CollectionCard({ collId, active, nadeData, changeState }) {
+function CollectionCard(props) {
+  const { collId, active, nadeData, handleRemove, changeState } = props;
   const { id: nadeId, nade, map, location, thumbnail } = nadeData;
 
   const collState = `${collId}#${nadeId}`;
@@ -110,12 +183,6 @@ function CollectionCard({ collId, active, nadeData, changeState }) {
   const handleClick = (e) => {
     e.preventDefault();
     changeState("contentMain", { type: "Collection", state: collState }, href);
-  };
-
-  // Removes the grenade from the collection
-  const handleRemove = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
   };
 
   // The attributes for the remove button
