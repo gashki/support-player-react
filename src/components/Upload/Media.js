@@ -104,8 +104,8 @@ function UploadImage(props) {
 
       // Checks the file type and size
       if (/^image\/(jpeg|png)$/.test(file.type) && (file.size < 1024 * 1024 * maxSize)) {
-        images.push(file);
-        onChange(input, images);
+        const files = [...images, file];
+        onChange(input, files);
       }
       else {
         // The content of the error message
@@ -124,8 +124,8 @@ function UploadImage(props) {
 
   // Removes the image from display
   const removeMedia = (index) => {
-    images.splice(index, 1);
-    onChange(input, images);
+    const files = [...images.slice(0, index), ...images.slice(index + 1)];
+    onChange(input, files);
   };
 
   // Stores the comment input
