@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import firebase, { firestore } from "../../firebase";
 import { MAPS, NADES } from "../../constants";
+import { throttle } from "../../utility";
 import "./Collection.css";
 
 // Custom scroll bar library
@@ -92,7 +93,13 @@ class Collection extends Component {
           const active = nadeId === activeId;
 
           // Removes the collection card and updates Firestore
-          const handleRemove = (e) => this.handleRemove(e, index);
+          const handleRemove = (e) => {
+            // Prevents the content from changing
+            e.preventDefault();
+            e.stopPropagation();
+
+            this.handleRemove(index);
+          };
 
           return (
             <CollectionCard
@@ -112,14 +119,10 @@ class Collection extends Component {
   };
 
   // Removes the grenade from the collection
-  handleRemove = (e, index) => {
+  handleRemove = throttle((index) => {
     const { collData, currentUser } = this.props;
     const nadeList = this.state.nadeList;
     const nadeData = nadeList[index];
-
-    // Prevents the content from changing
-    e.preventDefault();
-    e.stopPropagation();
 
     // Checks for user, collection, and grenade data
     if (!nadeData || !collData || !currentUser) return null;
@@ -152,7 +155,7 @@ class Collection extends Component {
       console.log(error);
       return error;
     });
-  };
+  }, 5000);
 
   render() {
     const { collInfo, nadeList } = this.state;
