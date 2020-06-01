@@ -1,22 +1,28 @@
 // Generates a unique ID for Firestore documents
-export const generateDocId = () => {
+export const generateDocId = (format) => {
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   const numbers = "0123456789";
   let docId = "";
 
-  // Appends random characters from the given character set
-  const appendChars = (set, num) => {
-    for (let i = 0; i < num; i++) {
-      let index = Math.floor(Math.random() * set.length);
-      docId += set[index];
-    }
-  };
+  // Appends random characters based on the given format
+  for (let i = 0; i < format.length; i++) {
+    let set = null;
 
-  // The character format for the document ID
-  appendChars(letters, 2);
-  appendChars(numbers, 3);
-  appendChars(letters, 2);
-  appendChars(numbers, 1);
+    // Determines the current character set
+    switch (format[i]) {
+      case "L":
+        set = letters;
+        break;
+      case "N":
+        set = numbers;
+        break;
+      default:
+        set = letters + numbers;
+    }
+
+    const index = Math.floor(Math.random() * set.length);
+    docId += set[index];
+  }
 
   return docId;
 };

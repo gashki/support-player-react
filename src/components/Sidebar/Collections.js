@@ -59,7 +59,7 @@ class Collections extends Component {
     const { currentUser, changeState } = this.props;
     const collList = this.state.collList;
     const title = "New Collection";
-    const message = "Collections allow you to group grenades together and share them. Enter the name of your new collection.";
+    const message = "Collections allow you to group grenades together and share them. Enter a name for your new collection.";
 
     // Creates a new collection in Firestore
     const onSubmit = (input) => {
@@ -67,7 +67,7 @@ class Collections extends Component {
       if (!currentUser) return null;
 
       const userId = currentUser.uid;
-      const collId = generateDocId();
+      const collId = generateDocId("LLNNNLLN");
 
       // References to the user's Firestore document and collections
       const userRef = firestore.doc(`users/${userId}`);
