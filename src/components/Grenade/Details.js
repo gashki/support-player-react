@@ -360,13 +360,13 @@ class CollListDialog extends Component {
       // The data for the Firestore document
       const collName = input.trim();
       const collTime = firebase.firestore.FieldValue.serverTimestamp();
+
       const collDoc = { name: collName, created: collTime, grenades: {}, modified: collTime, recent: "" };
+      const userDoc = { collections: { [collId]: collName }, modified: collTime, recent: collId };
 
       // Adds the new collection document in Firestore
       return collRef.set(collDoc).then((_) => {
-        const userDoc = { collections: { [collId]: collName }, modified: collTime, recent: collId };
-
-        // Updates the user's document with the new collection ID
+        // Updates the user document with the new collection ID
         return userRef.set(userDoc, { merge: true }).then((_) => {
           // The attributes for the dialog
           const attributes = { nadeData, currentUser, changeState };
