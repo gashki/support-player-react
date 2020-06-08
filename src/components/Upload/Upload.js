@@ -317,9 +317,7 @@ class UploadLoader extends Component {
       );
     }).then((_) => {
       this.setState({ complete: true });
-    }).catch(error => {
-      console.log(error);
-    });
+    }).catch(error => console.log(error));
   }
 
   // Prevents the loading modal from closing

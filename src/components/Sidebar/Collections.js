@@ -88,10 +88,7 @@ class Collections extends Component {
           const collItem = { id: collId, title: collName };
           this.setState({ collList: [collItem, ...collList], showMore: true });
         });
-      }).catch(error => {
-        console.log(error);
-        return error;
-      });
+      }).catch(error => error);
     };
 
     // The attributes for the dialog

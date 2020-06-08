@@ -56,9 +56,7 @@ class NadeList extends Component {
       const loadMore = !!(searchParam && tempList.length === NADE_LIMIT);
 
       this.setState({ nadeList, loadMore });
-    }).catch(error => {
-      console.log(error);
-    });
+    }).catch(error => console.log(`${error.name} (${error.code}): ${error.message}`));
   };
 
   render() {

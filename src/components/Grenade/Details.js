@@ -374,10 +374,7 @@ class CollListDialog extends Component {
           // Reopens the "Add to Collection" dialog
           changeState("contentModal", <CollListDialog {...attributes} />);
         });
-      }).catch(error => {
-        console.log(error);
-        return error;
-      });
+      }).catch(error => error);
     };
 
     // The attributes for the dialog
@@ -430,10 +427,7 @@ class CollListDialog extends Component {
         return collRef.set(collDoc, { merge: true }).then((_) => {
           // Updates the connection between the grenade and the collection
           return connRef.set(connDoc, { merge: true });
-        }).catch(error => {
-          console.log(error);
-          return error;
-        });
+        }).catch(error => console.log(`${error.name} (${error.code}): ${error.message}`));
       }, 500);
 
       // Calls a debounce function to update the Firestore documents

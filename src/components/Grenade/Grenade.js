@@ -68,9 +68,7 @@ class Grenade extends Component {
 
         // Checks if there is a selected grenade
         nadeId = tempId || nadeSort[0].id;
-      }).catch(error => {
-        console.log(error);
-      });
+      }).catch(error => console.log(`${error.name} (${error.code}): ${error.message}`));
     }
     else {
       nadeId = contentState;
@@ -87,9 +85,7 @@ class Grenade extends Component {
     }).then((_) => {
       // Sets the data for the grenade page
       this.setState({ nadeData, collData });
-    }).catch(error => {
-      console.log(error);
-    });
+    }).catch(error => console.log(`${error.name} (${error.code}): ${error.message}`));
   };
 
   render() {

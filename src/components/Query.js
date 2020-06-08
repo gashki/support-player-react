@@ -188,7 +188,7 @@ export const getUserCollections = (userId) => {
 
     return collList;
   }).catch(error => {
-    console.log(error);
+    console.log(`${error.name} (${error.code}): ${error.message}`);
     return [];
   });
 };
@@ -209,7 +209,7 @@ export const getNadeConnections = (userId, nadeId) => {
 
     return collections;
   }).catch(error => {
-    console.log(error);
+    console.log(`${error.name} (${error.code}): ${error.message}`);
     return {};
   });
 };

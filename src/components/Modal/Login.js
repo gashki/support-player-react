@@ -66,10 +66,7 @@ class LoginForm extends Component {
     // Authenticates the user and closes the modal
     authenticateUser(email, password).then((_) => {
       changeState("contentModal", null);
-    }).catch(error => {
-      console.log(error);
-      this.setState({ error });
-    });
+    }).catch(error => this.setState({ error }));
   };
 
   // Opens the "Reset Password" dialog
@@ -79,12 +76,7 @@ class LoginForm extends Component {
     const message = "Enter your email address and we'll send you a link to reset your password.";
 
     // Sends an email to reset the user's password
-    const onSubmit = (input) => {
-      return auth.sendPasswordResetEmail(input).catch(error => {
-        console.log(error);
-        return error;
-      });
-    };
+    const onSubmit = (input) => auth.sendPasswordResetEmail(input).catch(error => error);
 
     // The attributes for the dialog
     const attributes = { title, message, action: "Send", type: "email", onSubmit, changeState };

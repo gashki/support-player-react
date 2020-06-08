@@ -81,10 +81,7 @@ class SettingsForm extends Component {
       return currentUser.updatePassword(newPassword);
     }).then(() => {
       changeState("contentModal", null);
-    }).catch(error => {
-      console.log(error);
-      this.setState({ error });
-    });
+    }).catch(error => this.setState({ error }));
   };
 
   render() {
