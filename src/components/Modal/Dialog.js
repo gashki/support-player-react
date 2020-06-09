@@ -28,6 +28,7 @@ class Dialog extends Component {
   handleSubmit = async (e) => {
     const { close = true, onSubmit, changeState } = this.props;
     const { value, error } = this.state;
+    const input = value.trim();
 
     // Prevents the form from being submitted
     e.preventDefault();
@@ -35,10 +36,13 @@ class Dialog extends Component {
     // Resets the error message
     if (error) this.setState({ error: null });
 
+    // Prevents submitting invalid input
+    if (!input) return null;
+
     // TODO: Add loading icon
     // TODO: Add success message
 
-    const result = await onSubmit(value);
+    const result = await onSubmit(input);
 
     // Sets the error message or closes the modal
     if (result) this.setState({ error: result });

@@ -85,6 +85,7 @@
   background-color: rgba(0, 0, 0, 0.6);
   border: none;
   cursor: pointer;
+  font-size: 0;
   height: 40px;
   margin: 0;
   outline: none;

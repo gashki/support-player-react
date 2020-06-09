@@ -14,19 +14,41 @@
 
 .collection-title > h2 {
   flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .collection-title > div {
+  flex-shrink: 0;
   position: relative;
-  width: 25px;
+  width: 30px;
 }
 
-.collection-title svg {
-  height: 20px;
+.collection-title button {
+  background: none;
+  border: none;
+  border-radius: 50%;
+  box-sizing: content-box;
+  cursor: pointer;
+  font-size: 0;
+  height: 22px;
+  margin: 0;
+  outline: none;
+  padding: 4px;
   position: absolute;
-  right: 0;
-  top: 0;
-  width: 20px;
+  right: -5px;
+  top: -5px;
+  width: 22px;
+}
+
+.collection-title button:focus {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.collection-title button > svg {
+  height: 100%;
+  width: 100%;
 }
 
 .collection-info > span {

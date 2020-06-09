@@ -9,6 +9,8 @@ import "../../lib/simplebar.min.css";
 import SimpleBar from "../../lib/simplebar.min.js";
 
 // React components
+import Dialog from "../Modal/Dialog";
+import Login from "../Modal/Login";
 import { SvgClose, SvgDelete, SvgEdit, SvgLink } from "../SvgIcons";
 
 
@@ -43,6 +45,8 @@ class Collection extends Component {
   // Builds the collection components and sets the state
   setCollectionData = () => {
     const { collData, changeState } = this.props;
+    const openRenameDialog = this.openRenameDialog;
+    const openDeleteDialog = this.openDeleteDialog;
 
     let collInfo = null;
     let nadeList = null;
@@ -59,12 +63,16 @@ class Collection extends Component {
       collInfo =
         <div className="collection-info">
           <div className="collection-title">
-            <h2>{name}</h2>
+            <h2 title={name}>{name}</h2>
             <div>
-              <SvgEdit color="#bdbdbd" />
+              <button title="Rename collection" onClick={openRenameDialog}>
+                <SvgEdit color="#bdbdbd" />
+              </button>
             </div>
             <div>
-              <SvgDelete color="#bdbdbd" />
+              <button title="Delete collection" onClick={openDeleteDialog}>
+                <SvgDelete color="#bdbdbd" />
+              </button>
             </div>
           </div>
           <span>{textDate}</span>
@@ -92,13 +100,16 @@ class Collection extends Component {
           const nadeId = nade.docId;
           const active = nadeId === activeId;
 
+          // Prevents additional calls from being invoked
+          const throttleFunc = throttle(() => this.handleRemove(nadeId), 5000);
+
           // Removes the collection card and updates Firestore
           const handleRemove = (e) => {
             // Prevents the content from changing
             e.preventDefault();
             e.stopPropagation();
 
-            this.handleRemove(index);
+            throttleFunc();
           };
 
           return (
@@ -119,17 +130,15 @@ class Collection extends Component {
   };
 
   // Removes the grenade from the collection
-  handleRemove = throttle((index) => {
+  handleRemove = (nadeId) => {
     const { collData, currentUser } = this.props;
     const nadeList = this.state.nadeList;
-    const nadeData = nadeList[index];
 
-    // Checks for user, collection, and grenade data
-    if (!nadeData || !collData || !currentUser) return null;
+    // Checks for user and collection data
+    if (!collData || !currentUser) return null;
 
     const userId = currentUser.uid;
     const collId = collData.docId;
-    const nadeId = nadeData.key;
 
     // Sentinel values used for writing to document fields
     const svrTime = firebase.firestore.FieldValue.serverTimestamp();
@@ -149,13 +158,63 @@ class Collection extends Component {
       return connRef.set(connDoc, { merge: true });
     }).then((_) => {
       // Removes the collection card from the nade list
-      const tempList = [...nadeList.slice(0, index), ...nadeList.slice(index + 1)];
+      const tempList = nadeList.filter(nadeData => nadeId !== nadeData.key);
       this.setState({ nadeList: tempList });
-    }).catch(error => {
-      console.log(error);
-      return error;
-    });
-  }, 5000);
+    }).catch(error => console.log(`${error.name} (${error.code}): ${error.message}`));
+  };
+
+  // Opens the "Rename Collection" dialog
+  openRenameDialog = () => {
+    const { collData, currentUser, changeState } = this.props;
+    const title = "Rename Collection";
+    const message = "Collections allow you to group grenades together and share them. Enter a new name for your collection.";
+
+    // Updates the collection in Firestore
+    const onSubmit = (input) => {
+      // Checks if there is a user is signed in
+      if (!currentUser) return null;
+
+      const userId = currentUser.uid;
+      const collId = collData.docId;
+
+      // References to the user's Firestore document and collections
+      const userRef = firestore.doc(`users/${userId}`);
+      const collRef = firestore.doc(`users/${userId}/collections/${collId}`);
+
+      // The data for the Firestore document
+      const collName = input.trim();
+      const collTime = firebase.firestore.FieldValue.serverTimestamp();
+
+      const collDoc = { name: collName, modified: collTime };
+      const userDoc = { collections: { [collId]: collName }, modified: collTime, recent: collId };
+
+      // Checks for valid input for the collection name
+      if (collName === collData.name) return changeState("contentModal", null);
+
+      // Updates the name of the collection in the collection document
+      return collRef.set(collDoc, { merge: true }).then((_) => {
+        // Updates the name of the collection in the user document
+        return userRef.set(userDoc, { merge: true }).then((_) => {
+          // The ID for the active nade of the collection
+          const nadeId = collData.activeId.split("-")[1];
+
+          // Forces a requery of the collection data
+          changeState("contentMain", { type: "Collection", state: `${collId}#${nadeId}#${collName}` });
+        });
+      }).catch(error => error);
+    };
+
+    // The attributes for the dialog
+    const attributes = { title, message, action: "Update", onSubmit, changeState };
+
+    // Displays the dialog if there is a user signed in
+    if (currentUser) changeState("contentModal", <Dialog {...attributes} />);
+    else changeState("contentModal", <Login index={0} changeState={changeState} />);
+  };
+
+  openDeleteDialog = () => {
+
+  };
 
   render() {
     const { collInfo, nadeList } = this.state;
