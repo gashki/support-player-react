@@ -170,7 +170,7 @@ class Collection extends Component {
     const message = "Collections allow you to group grenades together and share them. Enter a new name for your collection.";
 
     // Updates the collection in Firestore
-    const onSubmit = (input) => {
+    const onSubmit = throttle((input) => {
       // Checks if there is a user is signed in
       if (!currentUser) return null;
 
@@ -202,7 +202,7 @@ class Collection extends Component {
           changeState("contentMain", { type: "Collection", state: `${collId}#${nadeId}#${collName}` });
         });
       }).catch(error => error);
-    };
+    }, 5000);
 
     // The attributes for the dialog
     const attributes = { title, message, action: "Update", onSubmit, changeState };
@@ -212,8 +212,46 @@ class Collection extends Component {
     else changeState("contentModal", <Login index={0} changeState={changeState} />);
   };
 
+  // Opens the "Delete Collection" dialog
   openDeleteDialog = () => {
+    const { collData, currentUser, changeState } = this.props;
+    const title = "Delete Collection";
+    const message = "Are you sure you want to delete this collection? This action cannot be undone.";
 
+    // Deletes the collection in Firestore
+    const onSubmit = throttle((_) => {
+      // Checks if there is a user is signed in
+      if (!currentUser) return null;
+
+      const userId = currentUser.uid;
+      const collId = collData.docId;
+
+      // Sentinel values used for writing to document fields
+      const svrTime = firebase.firestore.FieldValue.serverTimestamp();
+      const deleKey = firebase.firestore.FieldValue.delete();
+
+      // References to the user's Firestore document and collections
+      const userRef = firestore.doc(`users/${userId}`);
+      const collRef = firestore.doc(`users/${userId}/collections/${collId}`);
+
+      const userDoc = { collections: { [collId]: deleKey }, modified: svrTime, recent: collId };
+
+      // Removes the collection document in Firestore
+      return collRef.delete().then((_) => {
+        // Removes the collection from the user document
+        return userRef.set(userDoc, { merge: true }).then((_) => {
+          // Returns the user to the home page
+          changeState("contentMain", { type: "NadeList", state: null }, "/");
+        });
+      }).catch(error => error);
+    }, 5000);
+
+    // The attributes for the dialog
+    const attributes = { title, message, action: "Delete", type: "", onSubmit, changeState };
+
+    // Displays the dialog if there is a user signed in
+    if (currentUser) changeState("contentModal", <Dialog {...attributes} />);
+    else changeState("contentModal", <Login index={0} changeState={changeState} />);
   };
 
   render() {
