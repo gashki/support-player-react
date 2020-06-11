@@ -96,7 +96,7 @@ class Collection extends Component {
 
       // The list of collection nade cards
       nadeList =
-        nadeSort.map((nade, index) => {
+        nadeSort.map(nade => {
           const nadeId = nade.docId;
           const active = nadeId === activeId;
 
@@ -135,7 +135,7 @@ class Collection extends Component {
     const nadeList = this.state.nadeList;
 
     // Checks for user and collection data
-    if (!collData || !currentUser) return null;
+    if (!currentUser || !collData) return null;
 
     const userId = currentUser.uid;
     const collId = collData.docId;
@@ -171,8 +171,8 @@ class Collection extends Component {
 
     // Updates the collection in Firestore
     const onSubmit = throttle((input) => {
-      // Checks if there is a user is signed in
-      if (!currentUser) return null;
+      // Checks for user and collection data
+      if (!currentUser || !collData) return null;
 
       const userId = currentUser.uid;
       const collId = collData.docId;
@@ -220,8 +220,8 @@ class Collection extends Component {
 
     // Deletes the collection in Firestore
     const onSubmit = throttle((_) => {
-      // Checks if there is a user is signed in
-      if (!currentUser) return null;
+      // Checks for user and collection data
+      if (!currentUser || !collData) return null;
 
       const userId = currentUser.uid;
       const collId = collData.docId;

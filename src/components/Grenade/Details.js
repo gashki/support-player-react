@@ -386,8 +386,8 @@ class CollListDialog extends Component {
   };
 
   render() {
-    const { collList, connList, loadList } = this.state;
     const { nadeData, currentUser, changeState } = this.props;
+    const { collList, connList, loadList } = this.state;
 
     const preventClose = this.preventClose;
     const openDialog = this.openDialog;
@@ -404,8 +404,8 @@ class CollListDialog extends Component {
         // Checks for user and grenade data
         if (!nadeData || !currentUser) return null;
 
-        const userId = currentUser.uid;
         const { docId: nadeId, id, nade, map, location, images } = nadeData;
+        const userId = currentUser.uid;
 
         // Sentinel values used for writing to document fields
         const svrTime = firebase.firestore.FieldValue.serverTimestamp();
