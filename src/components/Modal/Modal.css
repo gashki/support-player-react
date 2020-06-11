@@ -125,7 +125,7 @@
 .modal-form-error {
   color: #ff4755;
   font-size: 13px;
-  line-height: 16px;
+  line-height: 18px;
   margin: 0;
 }
 
@@ -172,12 +172,16 @@
 .modal-dialog-message {
   color: #bdbdbd;
   font-size: 14px;
-  line-height: 18px;
-  margin: 14px 0;
+  line-height: 20px;
+  margin: 14px 0 0;
 }
 
 .modal-dialog > p:first-of-type {
   margin-top: 0;
+}
+
+.modal-dialog > .modal-form-input {
+  margin-top: 14px;
 }
 
 .modal-dialog button {

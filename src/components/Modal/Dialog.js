@@ -26,7 +26,7 @@ class Dialog extends Component {
 
   // Submits the user input to be processed
   handleSubmit = async (e) => {
-    const { close = true, onSubmit, changeState } = this.props;
+    const { type = "text", close = true, onSubmit, changeState } = this.props;
     const { value, error } = this.state;
     const input = value.trim();
 
@@ -37,7 +37,7 @@ class Dialog extends Component {
     if (error) this.setState({ error: null });
 
     // Prevents submitting invalid input
-    if (!input) return null;
+    if (type && !input) return null;
 
     // TODO: Add loading icon
     // TODO: Add success message
@@ -71,7 +71,7 @@ class Dialog extends Component {
         <h3>{title}</h3>
         {error && <ModalError error={error} />}
         <p className="modal-dialog-message">{message}</p>
-        <input className="modal-form-input" {...attributes} autoFocus required />
+        {type && <input className="modal-form-input" {...attributes} autoFocus required />}
         <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
           <button type="button" onClick={closeDialog}>Cancel</button>
           <button type="submit">{action}</button>
