@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import firebase, { firestore } from "../../firebase";
 import { MAPS, NADES } from "../../constants";
-import { generateDocId, debounce } from "../../utility";
+import { generateDocId, debounce, throttle } from "../../utility";
 import { getUserCollections, getNadeConnections } from "../Query";
 
 // Custom scroll bar library
@@ -346,7 +346,7 @@ class CollListDialog extends Component {
     const message = "Collections allow you to group grenades together and share them. Enter a name for your new collection.";
 
     // Creates a new collection in Firestore
-    const onSubmit = (input) => {
+    const onSubmit = throttle((input) => {
       // Checks if there is a user is signed in
       if (!currentUser) return null;
 
@@ -375,7 +375,7 @@ class CollListDialog extends Component {
           changeState("contentModal", <CollListDialog {...attributes} />);
         });
       }).catch(error => error);
-    };
+    }, 5000);
 
     // The attributes for the dialog
     const attributes = { title, message, action: "Create", close: false, onSubmit, changeState };

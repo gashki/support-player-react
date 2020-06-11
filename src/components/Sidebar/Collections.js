@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import firebase, { firestore } from "../../firebase";
-import { generateDocId } from "../../utility";
+import { generateDocId, throttle } from "../../utility";
 import { getUserCollections } from "../Query";
 
 // React components
@@ -62,7 +62,7 @@ class Collections extends Component {
     const message = "Collections allow you to group grenades together and share them. Enter a name for your new collection.";
 
     // Creates a new collection in Firestore
-    const onSubmit = (input) => {
+    const onSubmit = throttle((input) => {
       // Checks if there is a user is signed in
       if (!currentUser) return null;
 
@@ -89,7 +89,7 @@ class Collections extends Component {
           this.setState({ collList: [collItem, ...collList], showMore: true });
         });
       }).catch(error => error);
-    };
+    }, 5000);
 
     // The attributes for the dialog
     const attributes = { title, message, action: "Create", onSubmit, changeState };
