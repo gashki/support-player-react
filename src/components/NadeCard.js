@@ -1,9 +1,12 @@
 import React, { Component } from "react";
+import firebase, { firestore } from "../firebase";
 import { MAPS, NADES } from "../constants";
+import { throttle } from "../utility";
 import "./NadeCard.css";
 
 // React components
 import Loader from "./Loader";
+import Login from "./Modal/Login";
 import Rating from "./Rating";
 import { SvgSchedule } from "./SvgIcons";
 import Vertical from "./Vertical";
@@ -19,11 +22,15 @@ class NadeCard extends Component {
   }
 
   render() {
-    const { nadeData, changeState } = this.props;
+    const { nadeData, currentUser, changeState } = this.props;
+    const mouseover = this.state.mouseover;
+
     const { id: nadeId, nade, map, team, views, timestamp } = nadeData;
 
+    // The data for building the nade card
+    const href = `/nades/${nadeId}`;
     const textViews = `${views} view${views === 1 ? "" : "s"}`;
-    const relativeTime = getRelativeTime(timestamp.toMillis());
+    const textTime = getRelativeTime(timestamp.toMillis());
 
     let icon = NADES[nade].icon;
 
@@ -33,16 +40,15 @@ class NadeCard extends Component {
       icon = icon[type];
     }
 
+    // The storage URLs to the thumbnail and preview
     const thumbnail = nadeData["images"]["thumb_medium"];
     const preview = nadeData["videos"]["preview"];
-
-    const mouseover = this.state.mouseover;
     const showPreview = mouseover && preview;
 
     // Sets the content of the main page to the grenade
     const handleClick = (e) => {
       e.preventDefault();
-      changeState("contentMain", { type: "Grenade", state: nadeId }, `/nades/${nadeId}`);
+      changeState("contentMain", { type: "Grenade", state: nadeId }, href);
     };
 
     // Adds a background color for previews that are not 16:9
@@ -55,7 +61,7 @@ class NadeCard extends Component {
       <li className="nade-card">
         <a
           className="nade-card-media unselectable"
-          href={`/nades/${nadeId}`}
+          href={href}
           onClick={handleClick}
           onMouseEnter={() => this.setState({ mouseover: true })}
           onMouseLeave={() => this.setState({ mouseover: false })}
@@ -63,13 +69,19 @@ class NadeCard extends Component {
           <img src={thumbnail} alt="Grenade thumbnail" />
           {showPreview && <div className="nade-card-loader"><Loader size="small" /></div>}
           {showPreview && <video src={preview} onCanPlay={handleVideo} autoPlay loop muted playsInline />}
-          {mouseover && <ScheduleButton />}
+          {mouseover &&
+            <ScheduleButton
+              nadeData={nadeData}
+              currentUser={currentUser}
+              changeState={changeState}
+            />
+          }
           {mouseover || <div className="nade-card-type">{icon}</div>}
           {mouseover || <span className="nade-card-map">{MAPS[map].title}</span>}
           <Vertical />
         </a>
         <div className="nade-card-details">
-          <span>{textViews}&nbsp;&nbsp;&bull;&nbsp;&nbsp;{relativeTime}</span>
+          <span>{textViews}&nbsp;&nbsp;&bull;&nbsp;&nbsp;{textTime}</span>
           <Rating width="20" />
         </div>
       </li>
@@ -79,13 +91,43 @@ class NadeCard extends Component {
 
 
 // The button used for adding the nade to the "View later" collection
-function ScheduleButton() {
+function ScheduleButton({ nadeData, currentUser, changeState }) {
+  // Prevents additional calls from being invoked
+  const throttleFunc = throttle(() => {
+    // Checks for user and grenade data
+    if (!nadeData || !currentUser) return null;
+
+    const { docId: nadeId, id, nade, map, location, images } = nadeData;
+    const userId = currentUser.uid;
+    const collId = "view-later";
+
+    // References to the user's Firestore documents
+    const collRef = firestore.doc(`users/${userId}/collections/${collId}`);
+    const connRef = firestore.doc(`users/${userId}/connections/${nadeId}`);
+
+    // The data for the Firestore documents
+    const svrTime = firebase.firestore.FieldValue.serverTimestamp();
+    const nadeDoc = { id, nade, map, location, thumbnail: images["thumb_small"], added: svrTime };
+
+    const collDoc = { modified: svrTime, recent: nadeId, grenades: { [nadeId]: nadeDoc } };
+    const connDoc = { modified: svrTime, recent: collId, collections: { [collId]: svrTime } };
+
+    // Adds the grenade to the collection document
+    return collRef.set(collDoc, { merge: true }).then((_) => {
+      // Updates the connection between the grenade and the collection
+      return connRef.set(connDoc, { merge: true });
+    }).catch(error => console.log(`${error.name} (${error.code}): ${error.message}`));
+  }, 5000);
+
+  // Adds the grenade to the "View later" collection
   const handleClick = (e) => {
-    //TODO: FIX COMMENT; prevents a link from opening
+    // Prevents the content from changing
     e.preventDefault();
-    //TODO: FIX COMMENT; prevents card from changing content
     e.stopPropagation();
-    console.log("schedule button clicked");
+
+    // Updates the collection if there is a user signed in
+    if (currentUser) throttleFunc();
+    else changeState("contentModal", <Login index={0} changeState={changeState} />);
   };
 
   // The attributes for the schedule button

@@ -60,7 +60,7 @@ class NadeList extends Component {
   };
 
   render() {
-    const changeState = this.props.changeState;
+    const { currentUser, changeState } = this.props;
     const { nadeList, loadMore } = this.state;
 
     // TODO: Add note if the nadeList is empty
@@ -68,7 +68,19 @@ class NadeList extends Component {
 
     // The list of nade cards
     const nadeCards =
-      nadeList.map(nade => <NadeCard key={nade.id} nadeData={nade.data()} changeState={changeState} />);
+      nadeList.map(nade => {
+        const nadeData = nade.data();
+        nadeData.docId = nade.id;
+
+        return (
+          <NadeCard
+            key={nadeData.docId}
+            nadeData={nadeData}
+            currentUser={currentUser}
+            changeState={changeState}
+          />
+        );
+      });
 
     // Does not work in Internet Explorer
     //const blankList = new Array(4).fill(<li className="nade-card-blank"></li>);
