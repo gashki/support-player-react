@@ -127,7 +127,7 @@ class DisplayImage extends Component {
         <p>{description}</p>
         {comment && <p>User Comment: {comment}</p>}
         <div className="grenade-display-media">
-          <img src={images[index]} />
+          <img src={images[index]} alt={`${header} screenshot`} />
           {nextImage && <NextImageButton direction={0} nextIndex={nextIndex} />}
           {nextImage && <NextImageButton direction={1} nextIndex={nextIndex} />}
         </div>

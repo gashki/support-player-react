@@ -292,7 +292,7 @@ function CollectionCard(props) {
     <li>
       <a className="collection-card" href={href} onClick={handleClick}>
         <div className="collection-card-media">
-          <img src={thumbnail} />
+          <img src={thumbnail} alt="Grenade thumbnail" />
         </div>
         <div className="collection-card-details">
           <span>{NADES[nade].title}</span>
