@@ -8,7 +8,7 @@ import "./NadeCard.css";
 import Loader from "./Loader";
 import Login from "./Modal/Login";
 import Rating from "./Rating";
-import { SvgSchedule } from "./SvgIcons";
+import { SvgDone, SvgSchedule } from "./SvgIcons";
 import Vertical from "./Vertical";
 
 
@@ -69,13 +69,12 @@ class NadeCard extends Component {
           <img src={thumbnail} alt="Grenade thumbnail" />
           {showPreview && <div className="nade-card-loader"><Loader size="small" /></div>}
           {showPreview && <video src={preview} onCanPlay={handleVideo} autoPlay loop muted playsInline />}
-          {mouseover &&
-            <ScheduleButton
-              nadeData={nadeData}
-              currentUser={currentUser}
-              changeState={changeState}
-            />
-          }
+          <ScheduleButton
+            showBtn={mouseover}
+            nadeData={nadeData}
+            currentUser={currentUser}
+            changeState={changeState}
+          />
           {mouseover || <div className="nade-card-type">{icon}</div>}
           {mouseover || <span className="nade-card-map">{MAPS[map].title}</span>}
           <Vertical />
@@ -91,9 +90,18 @@ class NadeCard extends Component {
 
 
 // The button used for adding the nade to the "View later" collection
-function ScheduleButton({ nadeData, currentUser, changeState }) {
-  // Prevents additional calls from being invoked
-  const throttleFunc = throttle(() => {
+class ScheduleButton extends Component {
+  constructor(props) {
+    super(props);
+
+    // The default state of the button
+    this.state = { complete: false };
+  }
+
+  // Updates the "View later" collection in Firestore
+  handleUpdate = () => {
+    const { nadeData, currentUser } = this.props;
+
     // Checks for user and grenade data
     if (!nadeData || !currentUser) return null;
 
@@ -116,28 +124,41 @@ function ScheduleButton({ nadeData, currentUser, changeState }) {
     return collRef.set(collDoc, { merge: true }).then((_) => {
       // Updates the connection between the grenade and the collection
       return connRef.set(connDoc, { merge: true });
-    }).catch(error => console.log(`${error.name} (${error.code}): ${error.message}`));
-  }, 5000);
-
-  // Adds the grenade to the "View later" collection
-  const handleClick = (e) => {
-    // Prevents the content from changing
-    e.preventDefault();
-    e.stopPropagation();
-
-    // Updates the collection if there is a user signed in
-    if (currentUser) throttleFunc();
-    else changeState("contentModal", <Login index={0} changeState={changeState} />);
+    }).catch(error => console.log(`${error.name} (${error.code}): ${error.message}`))
+      .finally((_) => this.setState({ complete: true }));
   };
 
-  // The attributes for the schedule button
-  const attributes = { title: "View later", type: "button", onClick: handleClick };
+  render() {
+    const { showBtn, currentUser, changeState } = this.props;
+    const complete = this.state.complete;
 
-  return (
-    <button className="nade-card-button" {...attributes}>
-      <SvgSchedule color="#f5f5f5" />
-    </button>
-  );
+    const style = { display: showBtn ? "" : "none" };
+    const svg = complete ? <SvgDone color="#00e080" /> : <SvgSchedule color="#f5f5f5" />;
+
+    // Prevents additional calls from being invoked
+    const throttleFunc = throttle(() => this.handleUpdate(), 5000);
+
+    // Adds the grenade to the "View later" collection
+    const handleClick = (e) => {
+      // Prevents the content from changing
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Checks if the action has already completed once
+      if (complete) return null;
+
+      // Updates the collection if there is a user signed in
+      if (currentUser) throttleFunc();
+      else changeState("contentModal", <Login index={0} changeState={changeState} />);
+    };
+
+    // The attributes for the schedule button
+    const attributes = { style, title: "View later", type: "button", onClick: handleClick };
+
+    return (
+      <button className="nade-card-button" {...attributes}>{svg}</button>
+    );
+  }
 }
 
 
