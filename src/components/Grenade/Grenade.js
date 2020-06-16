@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { firestore } from "../../firebase";
+import firebase, { firestore } from "../../firebase";
 import "./Grenade.css";
 
 // React components
@@ -85,6 +85,17 @@ class Grenade extends Component {
     }).then((_) => {
       // Sets the data for the grenade page
       this.setState({ nadeData, collData });
+
+      // Checks for grenade data
+      if (!nadeData) return null;
+
+      // The data for the Firestore documents
+      const svrTime = firebase.firestore.FieldValue.serverTimestamp();
+      const nadeRef = firestore.doc(`nades/${nadeData.docId}`);
+      const nadeDoc = { views: nadeData.views + 1, modified: svrTime };
+
+      // Updates the view count for the grenade
+      return nadeRef.update(nadeDoc);
     }).catch(error => console.log(`${error.name} (${error.code}): ${error.message}`));
   };
 
