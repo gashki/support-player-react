@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import firebase, { firestore } from "../../firebase";
+import { COLLECTIONS } from "../../constants";
 import "./Grenade.css";
 
 // React components
@@ -67,6 +68,9 @@ class Grenade extends Component {
 
         collData = collection.data();
         collData.docId = collection.id;
+
+        // Adds a collection name for default collections
+        if (COLLECTIONS[collId]) collData.name = COLLECTIONS[collId].title;
 
         // Sorts the nades by the date they were added to the collection
         const grenades = collData.grenades;

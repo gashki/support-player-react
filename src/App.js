@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { auth } from "./firebase";
+import { COLLECTIONS } from "./constants";
 import "./App.css";
 
 // React components
@@ -123,11 +124,11 @@ class App extends Component {
     // Displays the nade list for the collection and the grenade content
     else if (/^collections\//.test(replacePath) && currentUser) {
       const collId = replacePath.slice(12);
-
-      // TODO: Add check for default collections
+      const isDefault = !!COLLECTIONS[collId];
+      const isCreated = /^[a-zA-Z]{2}[0-9]{3}[a-zA-Z]{2}[0-9]{1}$/.test(collId);
 
       // Verifies the character format for the collection ID
-      if (/^[a-zA-Z]{2}[0-9]{3}[a-zA-Z]{2}[0-9]{1}$/.test(collId)) {
+      if (isDefault || isCreated) {
         const nadeParam = frgmtString;
 
         contentMain.type = "Collection";
