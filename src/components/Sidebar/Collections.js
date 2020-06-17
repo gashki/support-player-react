@@ -29,6 +29,9 @@ class Collections extends Component {
   }
 
   componentDidMount() {
+    // Tracks the mounted status of the component
+    this._isMounted = true;
+
     // Initializes the collections
     this.queryCollections();
   }
@@ -41,6 +44,11 @@ class Collections extends Component {
     if (prevUser !== nextUser) this.queryCollections();
   }
 
+  componentWillUnmount() {
+    // Prevents updates to unmounted components
+    this._isMounted = false;
+  }
+
   // Performs the collections query to Firestore
   queryCollections = async () => {
     const currentUser = this.props.currentUser;
@@ -51,7 +59,7 @@ class Collections extends Component {
     const userId = currentUser.uid;
     const collList = await getUserCollections(userId);
 
-    this.setState({ collList });
+    if (this._isMounted) this.setState({ collList });
   };
 
   // Opens the "New Collection" dialog
@@ -86,7 +94,7 @@ class Collections extends Component {
         return userRef.set(userDoc, { merge: true }).then((_) => {
           // Adds the new collection to the sidebar
           const collItem = { id: collId, title: collName };
-          this.setState({ collList: [collItem, ...collList], showMore: true });
+          if (this._isMounted) this.setState({ collList: [collItem, ...collList], showMore: true });
         });
       }).catch(error => error);
     }, 5000);

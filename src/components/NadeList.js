@@ -21,6 +21,9 @@ class NadeList extends Component {
   }
 
   componentDidMount() {
+    // Tracks the mounted status of the component
+    this._isMounted = true;
+
     // Initializes the nade list
     this.queryNadeList();
   }
@@ -31,6 +34,11 @@ class NadeList extends Component {
 
     // Checks if the nade list needs to be updated
     if (prevSearchParam !== nextSearchParam) this.queryNadeList();
+  }
+
+  componentWillUnmount() {
+    // Prevents updates to unmounted components
+    this._isMounted = false;
   }
 
   // Performs the nade list query to Firestore
@@ -55,7 +63,7 @@ class NadeList extends Component {
       // Determines if the "Load More" button should be shown
       const loadMore = !!(searchParam && tempList.length === NADE_LIMIT);
 
-      this.setState({ nadeList, loadMore });
+      if (this._isMounted) this.setState({ nadeList, loadMore });
     }).catch(error => console.log(`${error.name} (${error.code}): ${error.message}`));
   };
 

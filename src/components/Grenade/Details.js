@@ -296,6 +296,9 @@ class CollListDialog extends Component {
   }
 
   componentDidMount() {
+    // Tracks the mounted status of the component
+    this._isMounted = true;
+
     // Initializes the user data
     this.queryUserData();
   }
@@ -306,6 +309,11 @@ class CollListDialog extends Component {
 
     // Checks if the user data needs to be updated
     if (prevUser !== nextUser) this.queryUserData();
+  }
+
+  componentWillUnmount() {
+    // Prevents updates to unmounted components
+    this._isMounted = false;
   }
 
   // Prevents the modal from closing when the content is clicked
@@ -332,6 +340,8 @@ class CollListDialog extends Component {
 
     const collList = results[0];
     const connList = results[1];
+
+    if (!this._isMounted) return null;
 
     this.setState({ collList, connList, loadList });
 

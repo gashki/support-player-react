@@ -48,6 +48,16 @@ class SettingsForm extends Component {
     }
   }
 
+  componentDidMount() {
+    // Tracks the mounted status of the component
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    // Prevents updates to unmounted components
+    this._isMounted = false;
+  }
+
   // Changes the value of the text inputs
   handleChange = (e, input) => {
     this.setState({ [input]: e.currentTarget.value });
@@ -81,7 +91,9 @@ class SettingsForm extends Component {
       return currentUser.updatePassword(newPassword);
     }).then(() => {
       changeState("contentModal", null);
-    }).catch(error => this.setState({ error }));
+    }).catch(error => {
+      if (this._isMounted) this.setState({ error });
+    });
   };
 
   render() {

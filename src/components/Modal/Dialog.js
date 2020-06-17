@@ -13,6 +13,16 @@ class Dialog extends Component {
     };
   }
 
+  componentDidMount() {
+    // Tracks the mounted status of the component
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    // Prevents updates to unmounted components
+    this._isMounted = false;
+  }
+
   // Prevents the modal from closing when the content is clicked
   preventClose = (e) => {
     e.stopPropagation();
@@ -43,6 +53,8 @@ class Dialog extends Component {
     // TODO: Add success message
 
     const result = await onSubmit(input);
+
+    if (!this._isMounted) return null;
 
     // Sets the error message or closes the modal
     if (result) this.setState({ error: result });

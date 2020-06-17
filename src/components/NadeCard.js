@@ -98,6 +98,16 @@ class ScheduleButton extends Component {
     this.state = { complete: false };
   }
 
+  componentDidMount() {
+    // Tracks the mounted status of the component
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    // Prevents updates to unmounted components
+    this._isMounted = false;
+  }
+
   // Updates the "View later" collection in Firestore
   handleUpdate = () => {
     const { nadeData, currentUser } = this.props;
@@ -125,7 +135,9 @@ class ScheduleButton extends Component {
       // Updates the connection between the grenade and the collection
       return connRef.set(connDoc, { merge: true });
     }).catch(error => console.log(`${error.name} (${error.code}): ${error.message}`))
-      .finally((_) => this.setState({ complete: true }));
+      .finally((_) => {
+        if (this._isMounted) this.setState({ complete: true });
+      });
   };
 
   render() {

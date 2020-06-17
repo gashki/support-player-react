@@ -22,6 +22,9 @@ class Grenade extends Component {
   }
 
   componentDidMount() {
+    // Tracks the mounted status of the component
+    this._isMounted = true;
+
     // Initializes the nade data
     this.queryNadeData();
   }
@@ -32,6 +35,11 @@ class Grenade extends Component {
 
     // Checks if the nade data needs to be updated
     if (prevNade !== nextNade) this.queryNadeData();
+  }
+
+  componentWillUnmount() {
+    // Prevents updates to unmounted components
+    this._isMounted = false;
   }
 
   // Performs the nade data queries to Firestore
@@ -83,6 +91,8 @@ class Grenade extends Component {
       nadeData = snapshot.docs[0].data();
       nadeData.docId = snapshot.docs[0].id;
     }).then((_) => {
+      if (!this._isMounted) return null;
+
       // Sets the data for the grenade page
       this.setState({ nadeData, collData });
 

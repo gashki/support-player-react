@@ -27,6 +27,9 @@ class Collection extends Component {
   }
 
   componentDidMount() {
+    // Tracks the mounted status of the component
+    this._isMounted = true;
+
     // Initializes the collection data
     this.setCollectionData();
 
@@ -40,6 +43,11 @@ class Collection extends Component {
 
     // Checks if the collection data needs to be updated
     if (prevColl !== nextColl) this.setCollectionData();
+  }
+
+  componentWillUnmount() {
+    // Prevents updates to unmounted components
+    this._isMounted = false;
   }
 
   // Builds the collection components and sets the state
@@ -159,7 +167,7 @@ class Collection extends Component {
     }).then((_) => {
       // Removes the collection card from the nade list
       const tempList = nadeList.filter(nadeData => nadeId !== nadeData.key);
-      this.setState({ nadeList: tempList });
+      if (this._isMounted) this.setState({ nadeList: tempList });
     }).catch(error => console.log(`${error.name} (${error.code}): ${error.message}`));
   };
 
