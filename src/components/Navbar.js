@@ -33,7 +33,7 @@ function Navbar({ currentUser, changeState }) {
 // The user account section of the navigation bar
 function NavbarAccount({ currentUser, changeState }) {
   // Returns an SVG button used in the user account section
-  function AccountButton({ svg, href, title, onClick }) {
+  function AccountButton({ icon, href, title, onClick }) {
     const handleClick = (e) => {
       e.preventDefault();
       onClick();
@@ -43,7 +43,7 @@ function NavbarAccount({ currentUser, changeState }) {
     const attributes = { href, title, onClick: handleClick };
 
     return (
-      <a className="navbar-account-button" {...attributes}>{svg}</a>
+      <a className="navbar-account-button" {...attributes}>{icon}</a>
     );
   }
 
@@ -67,19 +67,19 @@ function NavbarAccount({ currentUser, changeState }) {
       <h2 className="navbar-user">{currentUser.email}</h2>
       <div className="navbar-divider"></div>
       <AccountButton
-        svg={<SvgUpload color="#f5f5f5" />}
+        icon={<SvgUpload color="#f5f5f5" />}
         href="/upload"
         title="Upload"
         onClick={handleUpload}
       />
       <AccountButton
-        svg={<SvgSettings color="#f5f5f5" />}
+        icon={<SvgSettings color="#f5f5f5" />}
         href="/settings"
         title="Settings"
         onClick={handleSettings}
       />
       <AccountButton
-        svg={<SvgExit color="#f5f5f5" />}
+        icon={<SvgExit color="#f5f5f5" />}
         href="/logout"
         title="Log out"
         onClick={authSignOut}

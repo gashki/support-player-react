@@ -75,7 +75,7 @@ class Grenade extends Component {
         nadeSort.sort((a, b) => a.added.toMillis() - b.added.toMillis());
 
         // Checks if there is a selected grenade
-        nadeId = tempId || nadeSort[0].id;
+        nadeId = tempId || (nadeSort.length ? nadeSort[0].id : "");
       }).catch(error => console.log(`${error.name} (${error.code}): ${error.message}`));
     }
     else {

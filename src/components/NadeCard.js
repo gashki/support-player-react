@@ -145,7 +145,7 @@ class ScheduleButton extends Component {
     const complete = this.state.complete;
 
     const style = { display: showBtn ? "" : "none" };
-    const svg = complete ? <SvgDone color="#00e080" /> : <SvgSchedule color="#f5f5f5" />;
+    const icon = complete ? <SvgDone color="#00e080" /> : <SvgSchedule color="#f5f5f5" />;
 
     // Prevents additional calls from being invoked
     const throttleFunc = throttle(() => this.handleUpdate(), 5000);
@@ -168,7 +168,7 @@ class ScheduleButton extends Component {
     const attributes = { style, title: "View later", type: "button", onClick: handleClick };
 
     return (
-      <button className="nade-card-button" {...attributes}>{svg}</button>
+      <button className="nade-card-button" {...attributes}>{icon}</button>
     );
   }
 }

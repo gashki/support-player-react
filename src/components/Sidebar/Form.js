@@ -4,7 +4,7 @@ import React from "react";
 import Rating from "../Rating";
 
 // The component for the collection list links
-export function CollectionLink({ svg, href, title, onClick }) {
+export function CollectionLink({ icon, href, title, onClick }) {
   const handleClick = (e) => {
     e.preventDefault();
     onClick();
@@ -16,14 +16,14 @@ export function CollectionLink({ svg, href, title, onClick }) {
   return (
     <li>
       <a className="sidebar-collections-item" {...attributes}>
-        {svg}<span>{title}</span>
+        {icon}<span>{title}</span>
       </a>
     </li>
   );
 }
 
 // The component for the collection list buttons
-export function CollectionButton({ svg, title, onClick }) {
+export function CollectionButton({ icon, title, onClick }) {
   // The attributes for the collection button
   const attributes = { title, type: "button", onClick };
 
@@ -31,7 +31,7 @@ export function CollectionButton({ svg, title, onClick }) {
     <li>
       <button {...attributes}>
         <div className="sidebar-collections-item">
-          {svg}<span>{title}</span>
+          {icon}<span>{title}</span>
         </div>
       </button>
     </li>
