@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import firebase, { firestore } from "../../firebase";
+import { COLLECTIONS, sortObject } from "../../constants";
 import { generateDocId, throttle } from "../../utility";
 import { getUserCollections } from "../Query";
 
@@ -7,13 +8,7 @@ import { getUserCollections } from "../Query";
 import { CollectionLink, CollectionButton } from "./Form";
 import Dialog from "../Modal/Dialog";
 import Login from "../Modal/Login";
-import {
-  SvgFavorite,
-  SvgFolder,
-  SvgNewFolder,
-  SvgSchedule,
-  SvgUpload
-} from "../SvgIcons";
+import { SvgFolder, SvgNewFolder } from "../SvgIcons";
 
 
 // The collections to display on the sidebar
@@ -112,41 +107,23 @@ class Collections extends Component {
     const { collList, showMore } = this.state;
     const openDialog = this.openDialog;
 
-    // The default collections to show on the sidebar
-    const defaultItems = [
-      {
-        field: "favorites",
-        title: "Favorites",
-        svg: <SvgFavorite color="#f5f5f5" />
-      },
-      {
-        field: "uploaded",
-        title: "Uploaded",
-        svg: <SvgUpload color="#f5f5f5" />
-      },
-      {
-        field: "view-later",
-        title: "View later",
-        svg: <SvgSchedule color="#f5f5f5" />
-      }
-    ];
-
     // Builds the components for the default collections
+    const defaultItems = sortObject(COLLECTIONS, 1);
     const defaultLinks = defaultItems.map(item => {
-      const { field, title, svg } = item;
-      const key = `collection-basic-${field}`;
+      const { id, title, icon } = item;
+      const key = `collection-default-${id}`;
 
       // Sets the href if there is a user logged in
-      const href = currentUser ? `/collections/${field}` : "/login";
+      const href = currentUser ? `/collections/${id}` : "/login";
 
       // Sets the content when the default link is clicked
       const handleClick = () => {
-        if (currentUser) changeState("contentMain", { type: "Collection", state: field }, href);
+        if (currentUser) changeState("contentMain", { type: "Collection", state: id }, href);
         else changeState("contentModal", <Login index={0} changeState={changeState} />);
       };
 
       // The attributes for the collection link
-      const attributes = { key, svg, href, title, onClick: handleClick };
+      const attributes = { key, icon, href, title, onClick: handleClick };
 
       return (
         <CollectionLink {...attributes} />
@@ -157,7 +134,7 @@ class Collections extends Component {
     const userLinks = collList.map(item => {
       const { id, title } = item;
       const key = `collection-user-${id}`;
-      const svg = <SvgFolder color="#f5f5f5" />;
+      const icon = <SvgFolder color="#f5f5f5" />;
       const href = `/collections/${id}`;
 
       // Opens the collection page
@@ -166,7 +143,7 @@ class Collections extends Component {
       };
 
       // The attributes for the collection link
-      const attributes = { key, svg, href, title, onClick: handleClick };
+      const attributes = { key, icon, href, title, onClick: handleClick };
 
       return (
         <CollectionLink {...attributes} />
@@ -183,7 +160,7 @@ class Collections extends Component {
         <ul className="sidebar-collections">
           {defaultLinks}
           <CollectionButton
-            svg={<SvgNewFolder color="#f5f5f5" />}
+            icon={<SvgNewFolder color="#f5f5f5" />}
             title="Create new collection"
             onClick={openDialog}
           />

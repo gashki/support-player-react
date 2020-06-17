@@ -1,5 +1,8 @@
 import React from "react";
+
+// React components
 import * as SvgWeapons from "./components/Weapons";
+import { SvgFavorite, SvgSchedule, SvgUpload } from "./components/SvgIcons";
 
 export const NADE_LIMIT = 30;
 
@@ -92,6 +95,24 @@ export const NADES = {
     icon: <SvgWeapons.SmokeGrenade />,
     verb: "smoke",
     sort: 0
+  }
+};
+
+export const COLLECTIONS = {
+  "favorites": {
+    title: "Favorites",
+    icon: <SvgFavorite color="#f5f5f5" />,
+    sort: 0
+  },
+  "uploaded": {
+    title: "Uploaded",
+    icon: <SvgUpload color="#f5f5f5" />,
+    sort: 1
+  },
+  "view-later": {
+    title: "View later",
+    icon: <SvgSchedule color="#f5f5f5" />,
+    sort: 2
   }
 };
 
