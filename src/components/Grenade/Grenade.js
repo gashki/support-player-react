@@ -53,24 +53,49 @@ class Grenade extends Component {
 
     // Checks if the content to display is a collection
     if (/^(Collection|Permalink)$/.test(contentType)) {
-      const userId = currentUser.uid;
+      let collRef = null;
 
       // Parses the content state of the collection
       const collState = contentState.split("#");
       const collId = collState[0];
       const tempId = collState[1];
 
-      const collRef = firestore.doc(`users/${userId}/collections/${collId}`);
+      // Determines the type of collection
+      const isDflt = !!COLLECTIONS[collId];
+      const isPerm = "Permalink" === contentType;
+
+      if (isPerm) {
+        collRef = firestore.collectionGroup("collections").where("permalink", "==", collId).limit(1);
+      }
+      else {
+        // Checks for user data
+        if (!currentUser) return null;
+
+        const userId = currentUser.uid;
+        collRef = firestore.doc(`users/${userId}/collections/${collId}`);
+      }
 
       // Performs a Firestore query to get the collection data
-      await collRef.get().then(collection => {
-        if (!collection.exists) return null;
+      await collRef.get().then(result => {
+        let document = null;
 
-        collData = collection.data();
-        collData.docId = collection.id;
+        if (isPerm) {
+          if (result.empty) return null;
+          document = result.docs[0];
+        }
+        else {
+          if (!result.exists) return null;
+          document = result;
+        }
+
+        collData = document.data();
+        collData.docId = document.id;
+
+        collData.isDflt = isDflt;
+        collData.isPerm = isPerm;
 
         // Adds a collection name for default collections
-        if (COLLECTIONS[collId]) collData.name = COLLECTIONS[collId].title;
+        if (isDflt) collData.name = COLLECTIONS[collId].title;
 
         // Sorts the nades by the date they were added to the collection
         const grenades = collData.grenades;

@@ -108,7 +108,7 @@ class App extends Component {
         contentModal = <Login index={0} changeState={changeState} />;
       }
     }
-    // Displays the media and information content for the grenades
+    // Displays the media and details for the grenades
     else if (/^nades\//.test(replacePath)) {
       const nadeId = replacePath.slice(6);
 
@@ -121,17 +121,20 @@ class App extends Component {
         replacePath = "";
       }
     }
-    // Displays the nade list for the collection and the grenade content
-    else if (/^collections\//.test(replacePath) && currentUser) {
-      const collId = replacePath.slice(12);
-      const isDefault = !!COLLECTIONS[collId];
-      const isCreated = /^[a-zA-Z]{2}[0-9]{3}[a-zA-Z]{2}[0-9]{1}$/.test(collId);
+    // Displays the grenade collection and the grenade content
+    else if (/^(collections|permalink)\//.test(replacePath)) {
+      const collId = replacePath.split("/")[1];
+
+      // Determines the type of collection
+      const isDflt = !!COLLECTIONS[collId];
+      const isColl = /^[a-zA-Z]{2}[0-9]{3}[a-zA-Z]{2}[0-9]{1}$/.test(collId);
+      const isPerm = /^[a-zA-Z]{1}[0-9]{1}[a-zA-Z]{2}[0-9]{3}[a-zA-Z]{1}[0-9]{1}[a-zA-Z]{1}$/.test(collId);
 
       // Verifies the character format for the collection ID
-      if (isDefault || isCreated) {
+      if ((currentUser && (isDflt || isColl)) || isPerm) {
         const nadeParam = frgmtString;
 
-        contentMain.type = "Collection";
+        contentMain.type = isPerm ? "Permalink" : "Collection";
         contentMain.state = collId;
 
         // Checks if there is a selected grenade

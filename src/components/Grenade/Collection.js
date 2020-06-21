@@ -61,7 +61,12 @@ class Collection extends Component {
 
     // Checks if there is collection data
     if (collData) {
-      const { docId: collId, name, grenades, activeId, modified } = collData;
+      const { docId: collId, isDflt, isPerm, name, grenades, activeId, permalink, modified } = collData;
+
+      const editable = !isDflt && !isPerm;
+      const collLink = isDflt ?
+        "Non-user generated collections cannot be shared" :
+        `${window.location.protocol}//${window.location.host}/permalink/${permalink}`;
 
       const tempDate = modified.toDate();
       const nadeDate = tempDate.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
@@ -72,16 +77,20 @@ class Collection extends Component {
         <div className="collection-info">
           <div className="collection-title">
             <h2 title={name}>{name}</h2>
-            <div>
-              <button title="Rename collection" onClick={openRenameDialog}>
-                <SvgEdit color="#bdbdbd" />
-              </button>
-            </div>
-            <div>
-              <button title="Delete collection" onClick={openDeleteDialog}>
-                <SvgDelete color="#bdbdbd" />
-              </button>
-            </div>
+            {editable &&
+              <div>
+                <button title="Rename collection" onClick={openRenameDialog}>
+                  <SvgEdit color="#bdbdbd" />
+                </button>
+              </div>
+            }
+            {editable &&
+              <div>
+                <button title="Delete collection" onClick={openDeleteDialog}>
+                  <SvgDelete color="#bdbdbd" />
+                </button>
+              </div>
+            }
           </div>
           <span>{textDate}</span>
           <div className="permalink">
@@ -90,7 +99,7 @@ class Collection extends Component {
             </div>
             <input
               type="text"
-              value="http://localhost:3000/collections/lT218Td5"
+              value={collLink}
               onClick={(e) => e.currentTarget.select()}
               readOnly
             />
@@ -124,6 +133,7 @@ class Collection extends Component {
             <CollectionCard
               key={nadeId}
               collId={collId}
+              isPerm={isPerm}
               active={active}
               nadeData={nade}
               handleRemove={handleRemove}
@@ -281,7 +291,7 @@ class Collection extends Component {
 
 // The card used to display nades in the collection
 function CollectionCard(props) {
-  const { collId, active, nadeData, handleRemove, changeState } = props;
+  const { collId, isPerm, active, nadeData, handleRemove, changeState } = props;
   const { id: nadeId, nade, map, location, thumbnail } = nadeData;
 
   const collState = `${collId}#${nadeId}`;
@@ -307,9 +317,11 @@ function CollectionCard(props) {
           <span>{MAPS[map].title}</span>
           <span>{`${location.start} to ${location.end}`}</span>
         </div>
-        <button className="collection-card-remove" {...attributes}>
-          <SvgClose color="#bdbdbd" />
-        </button>
+        {isPerm ||
+          <button className="collection-card-remove" {...attributes}>
+            <SvgClose color="#bdbdbd" />
+          </button>
+        }
         {active && <span className="collection-card-active"></span>}
       </a>
     </li>
