@@ -7,6 +7,21 @@
   padding: 20px 20px 80px;
 }
 
+.nade-list-none {
+  align-items: center;
+  color: #bdbdbd;
+  display: flex;
+  flex-direction: column;
+  font-size: 18px;
+  height: 100%;
+  justify-content: center;
+}
+
+.nade-list-none > div {
+  flex-basis: 0;
+  flex-grow: 1;
+}
+
 .load-more-button {
   background: none;
   border: 1px solid #bdbdbd;

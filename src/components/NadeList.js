@@ -16,6 +16,7 @@ class NadeList extends Component {
     // The default state of the nade list
     this.state = {
       nadeList: [],
+      initLoad: true,
       loadMore: false
     };
   }
@@ -44,6 +45,7 @@ class NadeList extends Component {
   // Performs the nade list query to Firestore
   queryNadeList = (startAfter) => {
     const tempList = [];
+    const initLoad = false;
     const searchParam = this.props.contentState;
 
     // Builds the Firestore query from the search parameter
@@ -63,19 +65,16 @@ class NadeList extends Component {
       // Determines if the "Load More" button should be shown
       const loadMore = !!(searchParam && tempList.length === NADE_LIMIT);
 
-      if (this._isMounted) this.setState({ nadeList, loadMore });
+      if (this._isMounted) this.setState({ nadeList, initLoad, loadMore });
     }).catch(error => console.log(`${error.name} (${error.code}): ${error.message}`));
   };
 
   render() {
     const { currentUser, changeState } = this.props;
-    const { nadeList, loadMore } = this.state;
-
-    // TODO: Add note if the nadeList is empty
-    // TODO: Add a loading icon on initial load
+    const { nadeList, initLoad, loadMore } = this.state;
 
     // The list of nade cards
-    const nadeCards =
+    const cardList =
       nadeList.map(nade => {
         const nadeData = nade.data();
         nadeData.docId = nade.id;
@@ -90,13 +89,18 @@ class NadeList extends Component {
         );
       });
 
-    // Does not work in Internet Explorer
-    //const blankList = new Array(4).fill(<li className="nade-card-blank"></li>);
+    // Blank cards for the initial load
+    if (initLoad) {
+      for (let i = 0; i < NADE_LIMIT; i++) {
+        cardList.push(<li key={`load-nade-${i}`} className="nade-card"></li>);
+      }
+    }
 
-    // Blank cards to fill the nade list
-    const blankList = [];
-    for (let i = 0; i < 4; i++) {
-      blankList.push(<li key={`blank-nade-${i}`} className="nade-card-blank"></li>);
+    // Extra cards to fill the nade list
+    if (cardList.length) {
+      for (let i = 0; i < 4; i++) {
+        cardList.push(<li key={`fill-nade-${i}`} className="nade-card-fill"></li>);
+      }
     }
 
     // Queries more nades to add to the nade list
@@ -107,17 +111,31 @@ class NadeList extends Component {
       this.queryNadeList(lastNadeId);
     };
 
+    const emptyList = !initLoad && !cardList.length;
+
+    // The component for displaying the nade list
+    const nadeCards =
+      <ul className="nade-list">
+        {cardList}
+        {loadMore &&
+          <button className="load-more-button" type="button" onClick={handleClick}>
+            {"Load More"}
+          </button>
+        }
+      </ul>;
+
+    // Displays a message if the nade list is empty
+    const noResults =
+      <div className="nade-list-none">
+        <div></div>
+        <span>No results found</span>
+        <div></div>
+        <div></div>
+      </div>;
+
     return (
       <Scroll>
-        <ul className="nade-list">
-          {nadeCards}
-          {blankList}
-          {loadMore &&
-            <button className="load-more-button" type="button" onClick={handleClick}>
-              {"Load More"}
-            </button>
-          }
-        </ul>
+        {emptyList ? noResults : nadeCards}
       </Scroll>
     );
   }
