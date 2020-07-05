@@ -156,7 +156,7 @@ class Grenade extends Component {
     return (
       <Scroll>
         <div className="grenade">
-          <Display nadeData={nadeData} />
+          <Display nadeData={nadeData} changeState={changeState} />
           <div className="grenade-sidebar">
             <div className="grenade-sidebar-inner">
               {collContent && grenadeTabs}

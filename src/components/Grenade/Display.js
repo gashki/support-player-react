@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import { MAPS, NADES } from "../../constants";
 
 // React components
+import Close from "../Modal/Close";
 import { SvgNext, SvgPrevious } from "../SvgIcons";
 
 
 // The media section of the grenade content
-function Display({ nadeData }) {
+function Display({ nadeData, changeState }) {
   const components = [];
 
   // Checks if there is grenade data
@@ -43,6 +44,7 @@ function Display({ nadeData }) {
       imageUrls[imageSet] = [];
 
       // Sorts the images into the appropriate image section
+      // eslint-disable-next-line
       for (let i = 0; imageUrl = images[`${imageSet}_${i}`]; i++) {
         imageUrls[imageSet].push(imageUrl);
       }
@@ -77,6 +79,7 @@ function Display({ nadeData }) {
           description={imageDesc[imageSet]}
           comment={comments[imageSet]}
           images={imageUrls[imageSet]}
+          changeState={changeState}
         />
       );
     });
@@ -113,13 +116,26 @@ class DisplayImage extends Component {
     this.setState({ index: nextIndex });
   };
 
+  // Opens the image in the modal
+  zoomImage = () => {
+    const { images, changeState } = this.props;
+    const index = this.state.index;
+    const image = images[index];
+
+    changeState("contentModal", <ModalImage image={image} changeState={changeState} />);
+  };
+
   render() {
     const { header, description, comment, images } = this.props;
     const index = this.state.index;
+    const image = images[index];
 
     // Used for cycling through the image set when there are multiple images
     const nextImage = images.length > 1;
     const nextIndex = this.nextIndex;
+
+    // Enlarges the image when it is clicked
+    const zoomImage = this.zoomImage;
 
     return (
       <div>
@@ -127,7 +143,7 @@ class DisplayImage extends Component {
         <p>{description}</p>
         {comment && <p>User Comment: {comment}</p>}
         <div className="grenade-display-media">
-          <img src={images[index]} alt={`${header} screenshot`} />
+          <img src={image} alt={`${header} screenshot`} onClick={zoomImage} />
           {nextImage && <NextImageButton direction={0} nextIndex={nextIndex} />}
           {nextImage && <NextImageButton direction={1} nextIndex={nextIndex} />}
         </div>
@@ -150,6 +166,24 @@ function NextImageButton({ direction, nextIndex }) {
   return (
     <div>
       <button title={title} type="button" onClick={handleClick}>{image}</button>
+    </div>
+  );
+}
+
+
+// An enlarged grenade image displayed in the modal
+function ModalImage({ image, changeState }) {
+  // Prevents the modal from closing when the content is clicked
+  const preventClose = (e) => {
+    e.stopPropagation();
+  };
+
+  return (
+    <div className="grenade-display-modal">
+      <div style={{ position: "relative" }} onMouseDown={preventClose}>
+        <img src={image} alt="Enlarged screenshot" />
+        <Close changeState={changeState} />
+      </div>
     </div>
   );
 }
