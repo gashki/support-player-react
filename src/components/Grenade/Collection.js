@@ -64,9 +64,9 @@ class Collection extends Component {
       const { docId: collId, isDflt, isPerm, name, grenades, activeId, permalink, modified } = collData;
 
       const editable = !isDflt && !isPerm;
-      const collLink = isDflt ?
-        "Non-user generated collections cannot be shared" :
-        `${window.location.protocol}//${window.location.host}/permalink/${permalink}`;
+      const collLink = isDflt
+        ? "Non-user generated collections cannot be shared"
+        : `${window.location.protocol}//${window.location.host}/permalink/${permalink}`;
 
       const tempDate = modified.toDate();
       const nadeDate = tempDate.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });

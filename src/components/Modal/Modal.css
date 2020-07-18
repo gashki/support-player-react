@@ -213,3 +213,9 @@
 .modal-dialog button:last-of-type:focus, .modal-dialog button:last-of-type:hover {
   box-shadow: 0 0 2px #d4006a;
 }
+
+@supports (-webkit-touch-callout: none) {
+  .modal {
+    cursor: pointer;
+  }
+}

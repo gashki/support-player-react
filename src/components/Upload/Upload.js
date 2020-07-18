@@ -164,7 +164,7 @@ class Upload extends Component {
         result: result.length
       };
 
-      details.video = video ? true : false;
+      details.video = !!video;
 
       // Displays the loading icon
       changeState("contentModal", <UploadLoader details={details} media={media} changeState={changeState} />);
