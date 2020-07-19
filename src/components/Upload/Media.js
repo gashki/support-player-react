@@ -135,9 +135,7 @@ function UploadImage(props) {
   };
 
   // Prevents the label from opening the help message
-  const preventOpen = (e) => {
-    e.preventDefault();
-  };
+  const preventOpen = (e) => e.preventDefault();
 
   return (
     <section className="upload-media">
@@ -220,9 +218,7 @@ function UploadVideo(props) {
   };
 
   // Prevents the label from opening the help message
-  const preventOpen = (e) => {
-    e.preventDefault();
-  };
+  const preventOpen = (e) => e.preventDefault();
 
   return (
     <section className="upload-media">

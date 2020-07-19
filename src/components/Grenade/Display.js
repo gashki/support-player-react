@@ -159,9 +159,7 @@ function NextImageButton({ direction, nextIndex }) {
   const title = direction ? "Next" : "Previous";
   const image = direction ? <SvgNext color={color} /> : <SvgPrevious color={color} />;
 
-  const handleClick = () => {
-    nextIndex(direction);
-  };
+  const handleClick = () => nextIndex(direction);
 
   return (
     <div>
@@ -174,9 +172,7 @@ function NextImageButton({ direction, nextIndex }) {
 // An enlarged grenade image displayed in the modal
 function ModalImage({ image, changeState }) {
   // Prevents the modal from closing when the content is clicked
-  const preventClose = (e) => {
-    e.stopPropagation();
-  };
+  const preventClose = (e) => e.stopPropagation();
 
   return (
     <div className="grenade-display-modal">

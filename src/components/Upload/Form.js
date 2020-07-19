@@ -60,9 +60,7 @@ export function UploadInput(props) {
   };
 
   // Prevents the label from opening the help message
-  const preventOpen = (e) => {
-    e.preventDefault();
-  };
+  const preventOpen = (e) => e.preventDefault();
 
   return (
     <div>
@@ -111,9 +109,7 @@ export function UploadRadio(props) {
   });
 
   // Prevents the label from opening the help message
-  const preventOpen = (e) => {
-    e.preventDefault();
-  };
+  const preventOpen = (e) => e.preventDefault();
 
   return (
     <div>
@@ -167,9 +163,7 @@ export function UploadSubmit({ value }) {
 // The error/help message used for the upload page
 export function UploadMessage({ title, message, content, changeState }) {
   // Prevents the modal from closing when the content is clicked
-  const preventClose = (e) => {
-    e.stopPropagation();
-  };
+  const preventClose = (e) => e.stopPropagation();
 
   const closeModal = () => {
     changeState("contentModal", null);

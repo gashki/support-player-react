@@ -29,7 +29,7 @@ class App extends Component {
 
   componentDidMount() {
     // Observes changes to the user's sign-in state
-    auth.onAuthStateChanged((user) => {
+    auth.onAuthStateChanged(user => {
       // Checks for Firebase authentication
       if (user) {
         const currentUser = user.isAnonymous ? null : user;

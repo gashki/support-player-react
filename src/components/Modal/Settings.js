@@ -9,9 +9,7 @@ import { ModalLabel, ModalInput, ModalSubmit, ModalError } from "./Form";
 // The settings content for the modal
 function Settings({ currentUser, changeState }) {
   // Prevents the modal from closing when the content is clicked
-  const preventClose = (e) => {
-    e.stopPropagation();
-  };
+  const preventClose = (e) => e.stopPropagation();
 
   return (
     <div className="modal-content-tabs" onMouseDown={preventClose}>
