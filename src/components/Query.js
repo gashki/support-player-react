@@ -145,7 +145,7 @@ export const buildSearchQuery = (searchParam) => {
         // The minimum star rating for the grenade
         const starRating = (filterLength - tempRating) + 1;
 
-        nadeListRef = nadeListRef.where(`rating.${starRating}-star`, "==", true);
+        nadeListRef = nadeListRef.where(`rating.filter.${starRating}-star`, "==", true);
       }
       else if ("feature" === filterKey) {
         nadeListRef = nadeListRef.where("feature.oneway", "==", true);

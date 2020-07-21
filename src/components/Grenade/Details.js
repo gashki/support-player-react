@@ -29,14 +29,12 @@ function Details({ nadeData, currentUser, changeState }) {
       location,
       movement,
       feature,
-      rating,
       source,
       team,
       throw: thrw,
       tickrate,
       timestamp,
       viewmodel,
-      views,
       vsettings
     } = nadeData;
 
@@ -86,13 +84,21 @@ function Details({ nadeData, currentUser, changeState }) {
       );
     });
 
-    const nadeMvmt = movement["100"] ? "Stationary" : (movement["001"] ? (movement["010"] ? "Run & Jump" : "Jump") : "Run/Walk");
+    const nadeMvmt = movement["100"]
+      ? "Stationary"
+      : movement["001"]
+        ? movement["010"]
+          ? "Run & Jump"
+          : "Jump"
+        : "Run/Walk";
 
     // Determines if a link should be displayed for the grenade source
     const hrefReg = /^http(s?):\/\//i;
     const hrefSrc = hrefReg.test(source);
     const tempSrc = hrefSrc && source.replace(hrefReg, "");
-    const nadeSrc = hrefSrc ? <a href={source} title={tempSrc} target="_blank" rel="noopener noreferrer"><span>{tempSrc}</span></a> : source;
+    const nadeSrc = hrefSrc
+      ? <a href={source} title={tempSrc} target="_blank" rel="noopener noreferrer"><span>{tempSrc}</span></a>
+      : source;
 
     // Dictionaries for converting the Firestore data
     const tickDict = { 1: "64 Tick", 2: "64 & 128 Tick", 3: "128 Tick" };
@@ -186,7 +192,11 @@ function Details({ nadeData, currentUser, changeState }) {
       <div>
         <h2>{nadeInfo}</h2>
         <p>{nadeDate}</p>
-        <DetailsStats nadeData={{ rating, views }} userData={{ rating: 0 }} />
+        <DetailsStats
+          nadeData={nadeData}
+          currentUser={currentUser}
+          changeState={changeState}
+        />
         <hr />
         <div className="grenade-details-buttons">
           {nadeBtnList}
@@ -215,15 +225,95 @@ class DetailsStats extends Component {
     // The default state of the rating system
     this.state = {
       mouseover: false,
-      overRating: 0,
-      userRating: 0
+      nextRating: 0,
+      overRating: 0
     };
   }
 
-  // TODO: Might need to check componentDidUpdate if nadeRating or userRating updates
+  // Updates the ratings collection in Firestore
+  updateRating = debounce(() => {
+    const { nadeData, currentUser } = this.props;
+    const { nextRating } = this.state;
+
+    const nadeRating = nadeData.rating;
+    const prevRating = nadeRating.user;
+
+    // Checks for user and grenade data
+    if (!nadeData || !currentUser) return null;
+
+    // Checks for a valid user rating
+    if (!nextRating || nextRating < 1 || nextRating > 5) return null;
+
+    // Prevents unnecessary calls to Firestore
+    if (nextRating === prevRating) return null;
+
+    const { docId: nadeId, id, nade, map, location, images } = nadeData;
+    const userId = currentUser.uid;
+    const collId = "ratings";
+
+    const rating = nextRating;
+    const previous = prevRating || nextRating;
+
+    const rateCounts = nadeRating.counts;
+    const rateFilter = nadeRating.filter;
+
+    // Updates the rating counts
+    rateCounts[`${nextRating}-star`]++;
+    if (prevRating) rateCounts[`${prevRating}-star`]--;
+
+    let ratingCnt = 0;
+    let ratingSum = 0;
+
+    // Calculates the average rating of the grenade
+    for (let i = 1; i <= 5; i++) {
+      const tempStar = `${i}-star`;
+      const tempCount = rateCounts[tempStar];
+
+      ratingCnt += tempCount;
+      ratingSum += tempCount * i;
+    }
+
+    const ratingAvg = ratingSum / ratingCnt;
+
+    // Determines the rating filters
+    for (let i = 1; i < 5; i++) {
+      const tempStar = `${i}-star`;
+      rateFilter[tempStar] = ratingAvg >= i;
+    }
+
+    // References to the user's Firestore documents
+    const collRef = firestore.doc(`users/${userId}/collections/${collId}`);
+    const nadeRef = firestore.doc(`nades/${nadeId}`);
+
+    // The data for the Firestore documents
+    const svrTime = firebase.firestore.FieldValue.serverTimestamp();
+    const nadeDoc = { id, nade, map, location, thumbnail: images["thumb_small"], rating, previous, added: svrTime };
+    const rateMap = { counts: rateCounts, filter: rateFilter, recent: userId };
+
+    const collDoc = { modified: svrTime, recent: nadeId, grenades: { [nadeId]: nadeDoc } };
+    const rateDoc = { modified: svrTime, rating: rateMap };
+
+    // Adds the grenade to the collection document
+    return collRef.set(collDoc, { merge: true }).then((_) => {
+      return nadeRef.set(rateDoc, { merge: true }).then((_) => console.log("finished"));
+    }).catch(error => console.log(`${error.name} (${error.code}): ${error.message}`));
+  }, 2000);
+
+  // Saves the rating for the grenade and calls the update to Firestore
+  handleRating = () => {
+    const { currentUser, changeState } = this.props;
+    const { overRating } = this.state;
+
+    // Checks if there is a rating selected
+    if (!overRating) return null;
+
+    // Updates the collection if there is a user signed in
+    if (currentUser) this.setState({ nextRating: overRating }, this.updateRating);
+    else changeState("contentModal", <Login index={0} changeState={changeState} />);
+  };
 
   // Calculates the star rating on mouseover
-  handleRating = (e) => {
+  calculateRating = (e) => {
     const currentRect = e.currentTarget.getBoundingClientRect();
     const parentRect = e.currentTarget.parentNode.getBoundingClientRect();
 
@@ -231,28 +321,41 @@ class DetailsStats extends Component {
     const percRating = (parentRect.right - currentRect.right) / parentRect.width;
 
     // The star rating on mouseover
-    const overRating = 100 - (percRating * 100);
+    const overRating = (100 - (percRating * 100)) / 20;
 
     this.setState({ overRating });
   };
 
   render() {
-    const { nadeData, userData } = this.props;
-    const { mouseover, overRating, userRating } = this.state;
-    const { average: avgRating, count: numRating } = nadeData.rating;
+    const { nadeData } = this.props;
+    const { mouseover, nextRating, overRating } = this.state;
+
     const handleRating = this.handleRating;
+    const calculateRating = this.calculateRating;
 
     // Adds an -s to the end of plural nouns
     const grammarNumber = (num) => num === 1 ? "" : "s";
 
-    let prevRating, tempRating = "You have not rated this grenade";
+    const nadeRating = nadeData.rating;
+    const prevRating = nadeRating.user;
+
+    // Recalculates the values to account for new rating
+    const cntRating = nadeRating.count + (nextRating && +!prevRating);
+    const numRating = `${cntRating} rating${grammarNumber(cntRating)}`;
+    const avgRating = nextRating
+      ? (nadeRating.average * nadeRating.count + nextRating - prevRating) / cntRating
+      : nadeRating.average;
 
     // Checks if the user has rated the grenade
-    if (userRating) tempRating = `You rated this ${userRating} star${grammarNumber(userRating)}`;
-    else if (prevRating = userData.rating) tempRating = `You previously rated this ${prevRating} star${grammarNumber(prevRating)}`;
+    const userRating = nextRating
+      ? `You rated this ${nextRating} star${grammarNumber(nextRating)}`
+      : prevRating
+        ? `You previously rated this ${prevRating} star${grammarNumber(prevRating)}`
+        : "You have not rated this grenade";
 
-    const nadeRating = mouseover ? overRating : avgRating * 20;
-    const textRating = mouseover ? tempRating : `${numRating} rating${grammarNumber(numRating)}`;
+    // Determines the values based on mouseover
+    const starRating = mouseover ? overRating : avgRating;
+    const textRating = mouseover ? userRating : numRating;
 
     const tempViews = nadeData.views + 1;
     const textViews = mouseover ? null : <span>{tempViews} view{grammarNumber(tempViews)}</span>
@@ -261,7 +364,7 @@ class DetailsStats extends Component {
     const ratingOutline = [];
     for (let i = 0; i < 5; i++) {
       const key = `grenade-details-star-outline-${i}`;
-      ratingOutline.push(<div key={key} onMouseEnter={handleRating}></div>);
+      ratingOutline.push(<div key={key} onMouseEnter={calculateRating}></div>);
     }
 
     return (
@@ -270,8 +373,9 @@ class DetailsStats extends Component {
           className="grenade-details-rating"
           onMouseEnter={() => this.setState({ mouseover: true })}
           onMouseLeave={() => this.setState({ mouseover: false })}
+          onClick={handleRating}
         >
-          <Rating width={nadeRating} />
+          <Rating width={starRating * 20} />
           {mouseover && <div className="rating-outline">{ratingOutline}</div>}
         </div>
         <span style={{ flexGrow: 1 }}>&nbsp;&nbsp;{textRating}</span>

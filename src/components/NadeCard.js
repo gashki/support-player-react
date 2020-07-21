@@ -19,11 +19,32 @@ class NadeCard extends Component {
 
     // The default state of the card
     this.state = { mouseover: false };
+
+    this.calculateRating();
   }
+
+  // Calculates the average rating of the grenade
+  calculateRating = () => {
+    const rating = this.props.nadeData.rating;
+
+    let ratingCnt = 0;
+    let ratingSum = 0;
+
+    for (let i = 1; i <= 5; i++) {
+      const tempStar = `${i}-star`;
+      const tempCount = rating.counts[tempStar];
+
+      ratingCnt += tempCount;
+      ratingSum += tempCount * i;
+    }
+
+    this.rating = ratingCnt && ratingSum / ratingCnt;
+  };
 
   render() {
     const { nadeData, currentUser, changeState } = this.props;
     const mouseover = this.state.mouseover;
+    const rating = this.rating;
 
     const { id: nadeId, nade, map, team, views, timestamp } = nadeData;
 
@@ -81,7 +102,7 @@ class NadeCard extends Component {
         </a>
         <div className="nade-card-details">
           <span>{textViews}&nbsp;&nbsp;&bull;&nbsp;&nbsp;{textTime}</span>
-          <Rating width="20" />
+          <Rating width={rating * 20} />
         </div>
       </li>
     );

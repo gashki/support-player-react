@@ -51,6 +51,8 @@ class Grenade extends Component {
     let collData = null;
     let nadeId = "";
 
+    const queries = [];
+
     // Checks if the content to display is a collection
     if (/^(Collection|Permalink)$/.test(contentType)) {
       let collRef = null;
@@ -111,14 +113,41 @@ class Grenade extends Component {
       nadeId = contentState;
     }
 
-    const nadeRef = firestore.collection("nades").where("status", "==", "public").where("id", "==", nadeId).limit(1);
+    queries.push(firestore.collection("nades").where("status", "==", "public").where("id", "==", nadeId).limit(1));
+    if (currentUser) queries.push(firestore.doc(`users/${currentUser.uid}/collections/ratings`));
 
-    // Performs a Firestore query to get the grenade data
-    return nadeRef.get().then(snapshot => {
-      if (snapshot.empty) return null;
+    // Performs Firestore queries to get the grenade and user data
+    return Promise.all(queries.map(query => query.get())).then(results => {
+      const nadeResult = results[0];
+      const userResult = results[1];
 
-      nadeData = snapshot.docs[0].data();
-      nadeData.docId = snapshot.docs[0].id;
+      if (nadeResult.empty) return null;
+
+      nadeData = nadeResult.docs[0].data();
+      nadeData.docId = nadeResult.docs[0].id;
+
+      nadeData.rating.user = 0;
+
+      let ratingCnt = 0;
+      let ratingSum = 0;
+
+      // Calculates the rating count and average for the grenade
+      for (let i = 1; i <= 5; i++) {
+        const tempStar = `${i}-star`;
+        const tempCount = nadeData.rating.counts[tempStar];
+
+        ratingCnt += tempCount;
+        ratingSum += tempCount * i;
+      }
+
+      nadeData.rating.count = ratingCnt;
+      nadeData.rating.average = ratingCnt && ratingSum / ratingCnt;
+
+      // Gets the user's previous rating for the grenade
+      if (currentUser && userResult.exists) {
+        const nadeRate = userResult.data().grenades[nadeData.docId];
+        if (nadeRate) nadeData.rating.user = nadeRate.rating;
+      }
     }).then((_) => {
       if (!this._isMounted) return null;
 
