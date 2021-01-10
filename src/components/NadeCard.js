@@ -46,12 +46,12 @@ class NadeCard extends Component {
     const mouseover = this.state.mouseover;
     const rating = this.rating;
 
-    const { id: nadeId, nade, map, team, views, timestamp } = nadeData;
+    const { id: nadeId, nade, map, team, views, submitted } = nadeData;
 
     // The data for building the nade card
     const href = `/nades/${nadeId}`;
     const textViews = `${views} view${views === 1 ? "" : "s"}`;
-    const textTime = getRelativeTime(timestamp.toMillis());
+    const textTime = getRelativeTime(submitted.toMillis());
 
     let icon = NADES[nade].icon;
 

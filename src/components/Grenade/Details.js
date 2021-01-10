@@ -33,7 +33,7 @@ function Details({ nadeData, currentUser, changeState }) {
       team,
       throw: thrw,
       tickrate,
-      timestamp,
+      submitted,
       viewmodel,
       vsettings
     } = nadeData;
@@ -41,7 +41,7 @@ function Details({ nadeData, currentUser, changeState }) {
     // The title for the header of the details section
     const nadeInfo = `${NADES[nade].title}\u00A0\u00A0|\u00A0\u00A0${MAPS[map].title}`;
 
-    const tempDate = timestamp.toDate();
+    const tempDate = submitted.toDate();
     const nadeDate = tempDate.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 
     // Opens the "Add to Collection" dialog for saving grenades
