@@ -115,6 +115,7 @@ class Collection extends Component {
       nadeList =
         nadeSort.map(nade => {
           const nadeId = nade.docId;
+          const tempId = isPerm ? permalink : collId;
           const active = nadeId === activeId;
 
           // Prevents additional calls from being invoked
@@ -132,7 +133,7 @@ class Collection extends Component {
           return (
             <CollectionCard
               key={nadeId}
-              collId={collId}
+              collId={tempId}
               isPerm={isPerm}
               active={active}
               nadeData={nade}
@@ -294,13 +295,16 @@ function CollectionCard(props) {
   const { collId, isPerm, active, nadeData, handleRemove, changeState } = props;
   const { id: nadeId, nade, map, location, thumbnail } = nadeData;
 
+  const collType = isPerm ? "Permalink" : "Collection";
+  const collLink = isPerm ? "permalink" : "collections";
   const collState = `${collId}#${nadeId}`;
-  const href = `/collections/${collState}`;
+
+  const href = `/${collLink}/${collState}`;
 
   // Sets the grenade to display in the collection
   const handleClick = (e) => {
     e.preventDefault();
-    changeState("contentMain", { type: "Collection", state: collState }, href);
+    changeState("contentMain", { type: collType, state: collState }, href);
   };
 
   // The attributes for the remove button
