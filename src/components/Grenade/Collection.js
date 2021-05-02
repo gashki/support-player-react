@@ -307,6 +307,8 @@ function CollectionCard(props) {
     changeState("contentMain", { type: collType, state: collState }, href);
   };
 
+  const removeable = !isPerm && "uploaded" !== collId;
+
   // The attributes for the remove button
   const attributes = { title: "Remove from collection", type: "button", onClick: handleRemove };
 
@@ -321,7 +323,7 @@ function CollectionCard(props) {
           <span>{MAPS[map].title}</span>
           <span>{`${location.start} to ${location.end}`}</span>
         </div>
-        {isPerm ||
+        {removeable &&
           <button className="collection-card-remove" {...attributes}>
             <SvgClose color="#bdbdbd" />
           </button>
