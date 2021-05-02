@@ -2,26 +2,34 @@ import React from "react";
 import "./Content.css";
 
 // React components
+import Grenade from "./Grenade/Grenade";
 import NadeList from "./NadeList";
 import Sidebar from "./Sidebar/Sidebar";
 import Upload from "./Upload/Upload";
 
 
+// Displays the content components for the current state
 function Content(props) {
-  const contentType = props.contentMain.type;
-  const contentState = props.contentMain.state;
-  const changeState = props.changeState;
-  //types of content: browse(default/null),search,upload,nade,collection,error
-  function renderContent() {
+  const { contentMain, currentUser, changeState } = props;
+  const contentType = contentMain.type;
+  const contentState = contentMain.state;
+
+  // Determines the components to render
+  function renderState() {
     switch (contentType) {
-      case "Collection":
-        return <div></div>;
       case "Grenade":
-        return <div></div>;
+      case "Collection":
+      case "Permalink":
+        return <Grenade
+          contentType={contentType}
+          contentState={contentState}
+          currentUser={currentUser}
+          changeState={changeState}
+        />;
       case "NadeList":
         return [
-          <Sidebar key={1} contentState={contentState} changeState={changeState} />,
-          <NadeList key={2} contentState={contentState} changeState={changeState} />
+          <Sidebar key={"content-sidebar"} contentState={contentState} currentUser={currentUser} changeState={changeState} />,
+          <NadeList key={"content-nadelist"} contentState={contentState} currentUser={currentUser} changeState={changeState} />
         ];
       case "Upload":
         return <Upload changeState={changeState} />;
@@ -32,10 +40,9 @@ function Content(props) {
 
   return (
     <div className="content">
-      {renderContent()}
+      {renderState()}
     </div>
   );
 }
-
 
 export default Content;
