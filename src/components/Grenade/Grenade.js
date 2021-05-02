@@ -109,9 +109,7 @@ class Grenade extends Component {
         nadeId = tempId || (nadeSort.length ? nadeSort[0].id : "");
       }).catch(error => console.log(`${error.name} (${error.code}): ${error.message}`));
     }
-    else {
-      nadeId = contentState;
-    }
+    else nadeId = contentState;
 
     queries.push(firestore.collection("nades").where("status", "==", "public").where("id", "==", nadeId).limit(1));
     if (currentUser) queries.push(firestore.doc(`users/${currentUser.uid}/collections/ratings`));

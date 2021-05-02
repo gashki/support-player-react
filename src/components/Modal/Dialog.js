@@ -49,9 +49,6 @@ class Dialog extends Component {
     // Prevents submitting invalid input
     if (type && !input) return null;
 
-    // TODO: Add loading icon
-    // TODO: Add success message
-
     const result = await onSubmit(input);
 
     if (!this._isMounted) return null;
