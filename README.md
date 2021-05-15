@@ -2,6 +2,8 @@
 
 Support Player is a web application that aims to teach players of the video game Counter-Strike: Global Offensive (CS:GO).
 
+[https://www.supportplayer.com/](https://www.supportplayer.com/)
+
 ## Description
 
 CS:GO is a multiplayer first-person shooter in which teams use in-game currency to buy weapons and utility to secure objective-based rounds.
