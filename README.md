@@ -4,7 +4,7 @@ Support Player is a web application that aims to teach players of the video game
 
 ## Description
 
-CS:GO is a multiplayer first-person shooter in which teams use in-game currency to buy weapons and utility to secure multiple objective-based rounds to win the match.
+CS:GO is a multiplayer first-person shooter in which teams use in-game currency to buy weapons and utility to secure objective-based rounds.
 
 Support Player allows you to search, upload, and catalog in-game grenade placements to help you gain a competitive advantage over your opponents.
 
